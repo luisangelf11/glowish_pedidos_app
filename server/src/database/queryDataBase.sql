@@ -1,0 +1,82 @@
+/*CREATE THE DATABASE*/
+CREATE DATABASE Glowish_Pedidos_App;
+
+/*USE THE DATABASE*/
+USE Glowish_Pedidos_App;
+
+/*CREATE EVERY TABLES FOR THE DATABASE*/
+/*USERS*/
+CREATE TABLE Usuarios(
+Id INT AUTO_INCREMENT PRIMARY KEY,
+Correo VARCHAR(50),
+Contrasena VARCHAR(25),
+Nombre VARCHAR(30),
+Apellido VARCHAR(30),
+Avatar VARCHAR(10000),
+Direccion VARCHAR(300),
+Telefono VARCHAR(12),
+Rol VARCHAR(6)
+);
+
+SELECT * FROM Usuarios;
+
+/*PEDIDOS*/
+CREATE TABLE Pedidos(
+Id INT AUTO_INCREMENT PRIMARY KEY,
+Fecha DATETIME,
+Monto FLOAT,
+Estado VARCHAR(15),
+Id_Usuario INT,
+FOREIGN KEY (Id_Usuario) REFERENCES Usuarios(Id)
+);
+
+SELECT * FROM Pedidos;
+
+/*CATEGORIA*/
+CREATE TABLE Categorias(
+Id INT AUTO_INCREMENT PRIMARY KEY,
+Nombre VARCHAR(20),
+Descripcion VARCHAR(300)
+); 
+
+SELECT * FROM Categorias;
+
+/*PRODUCTOS*/
+CREATE TABLE Productos(
+Id INT AUTO_INCREMENT PRIMARY KEY,
+Nombre VARCHAR(30),
+Descripcion VARCHAR(300),
+Unidades INT,
+Precio FLOAT,
+Imagen VARCHAR(10000),
+Descuento FLOAT,
+Id_Categoria INT,
+FOREIGN KEY (Id_Categoria) REFERENCES Categorias(Id)
+);
+
+SELECT * FROM Productos;
+
+/*DETALLE*/
+CREATE TABLE Detalle(
+Id INT AUTO_INCREMENT PRIMARY KEY,
+Id_Producto INT,
+Unidades INT,
+Descuento FLOAT,
+SubTotal FLOAT,
+Id_Pedido INT,
+FOREIGN KEY (Id_Producto) REFERENCES Productos(Id),
+FOREIGN KEY (Id_Pedido) REFERENCES Pedidos(Id)
+);
+
+SELECT * FROM Detalle;
+
+/*CARRITO*/
+CREATE TABLE Carrito(
+Id INT AUTO_INCREMENT PRIMARY KEY,
+Id_Producto INT,
+Id_Usuario INT,
+FOREIGN KEY (Id_Producto) REFERENCES Productos(Id),
+FOREIGN KEY (Id_Usuario) REFERENCES Usuarios(Id)
+);
+
+SELECT * FROM Carrito;
