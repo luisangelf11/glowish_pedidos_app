@@ -17,7 +17,7 @@ export const comparePass = async (password, hash) =>{
     try{
       //The hash is the password that is save in the DB
       //Password is the params that is send for the user 
-      const compare = await bcrypt.compare(password, hash); //This return true or false
+      let compare = await bcrypt.compare(password, hash); //This return true or false
       return compare;
     }
     catch(err){
