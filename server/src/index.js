@@ -2,7 +2,8 @@ import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
 import routerCategoria from './routes/categorias.routes.js';
-import routerProductos from './routes/productos.routes.js'
+import routerProductos from './routes/productos.routes.js';
+import {generateAdminUser} from './middlewares/userAdmin.js'
 
 //Initializations
 const app = express();
@@ -20,5 +21,7 @@ app.use(routerCategoria);
 app.use(routerProductos);
 
 //Run Server
-app.listen(app.get('PORT'), ()=>
-    console.log(`The server running on port ${app.get('PORT')}`));
+app.listen(app.get('PORT'), ()=>{
+    generateAdminUser();
+    console.log(`The server running on port ${app.get('PORT')}`);
+});

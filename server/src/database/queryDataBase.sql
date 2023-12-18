@@ -9,7 +9,7 @@ USE Glowish_Pedidos_App;
 CREATE TABLE Usuarios(
 Id INT AUTO_INCREMENT PRIMARY KEY,
 Correo VARCHAR(50),
-Contrasena VARCHAR(25),
+Contrasena VARCHAR(1000),
 Nombre VARCHAR(30),
 Apellido VARCHAR(30),
 Avatar VARCHAR(10000),
@@ -19,6 +19,9 @@ Rol VARCHAR(6)
 );
 
 SELECT * FROM Usuarios;
+
+ALTER TABLE Usuarios
+MODIFY COLUMN Contrasena VARCHAR(1000);
 
 /*PEDIDOS*/
 CREATE TABLE Pedidos(
@@ -54,7 +57,8 @@ Id_Categoria INT,
 FOREIGN KEY (Id_Categoria) REFERENCES Categorias(Id)
 );
 
-SELECT * FROM Productos;
+SELECT p.Id, p.Nombre, p.Descripcion, p.Unidades, p.Precio, p.Imagen, p.Descuento, c.Nombre AS Categoria FROM Productos AS p
+INNER JOIN Categorias AS c ON p.Id_Categoria = c.Id;
 
 /*DETALLE*/
 CREATE TABLE Detalle(
