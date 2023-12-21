@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { createSize, deleteSize, getSize, getSizes, updateSize } from '../controllers/router.controllers.js';
+import { createSize, deleteSize, getSize, getSizes, updateSize } from '../controllers/sizes.controllers.js';
 
 //Initializations
 const router = Router();
