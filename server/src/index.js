@@ -6,6 +6,7 @@ import routerProductos from './routes/productos.routes.js';
 import routerUsuarios from './routes/usuarios.routes.js';
 import routerSizes from './routes/sizes.routes.js';
 import routerColores from './routes/colores.routes.js';
+import routerCarrito from './routes/carrito.routes.js';
 import {generateAdminUser} from './middlewares/userAdmin.js';
 
 //Initializations
@@ -25,6 +26,7 @@ app.use(routerProductos);
 app.use(routerUsuarios);
 app.use(routerSizes);
 app.use(routerColores);
+app.use(routerCarrito);
 
 //Run Server
 app.listen(app.get('PORT'), ()=>{
