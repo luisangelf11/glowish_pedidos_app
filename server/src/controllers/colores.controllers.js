@@ -36,12 +36,13 @@ export const getColor = async (req, res) => {
 //Create a new color
 export const createColor = async (req, res) => {
     try {
-        const { id_producto, color, estado } = req.body;
-        const [result] = await pool.query('INSERT INTO Colores(color, estado, id_producto)VALUES(?,?,?)', [color, estado, id_producto]);
+        const { id_producto, color, estado, rgb } = req.body;
+        const [result] = await pool.query('INSERT INTO Colores(color, rgb,estado, id_producto)VALUES(?,?,?,?)', [color, rgb,estado, id_producto]);
         if (!result.affectedRows) return res.status(404).json({ "message": "Error in the query (create a new color)" });
         res.json({
             id: result.insertId,
             color,
+            rgb,
             estado,
             id_producto
         });
