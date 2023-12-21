@@ -66,6 +66,8 @@ Id INT AUTO_INCREMENT PRIMARY KEY,
 Id_Producto INT,
 Unidades INT,
 Descuento FLOAT,
+Size VARCHAR(15),
+Color VARCHAR(25),
 SubTotal FLOAT,
 Id_Pedido INT,
 FOREIGN KEY (Id_Producto) REFERENCES Productos(Id),
@@ -84,3 +86,25 @@ FOREIGN KEY (Id_Usuario) REFERENCES Usuarios(Id)
 );
 
 SELECT * FROM Carrito;
+
+/*SIZES*/
+CREATE TABLE Sizes(
+Id INT AUTO_INCREMENT PRIMARY KEY,
+Size VARCHAR(15),
+Estado VARCHAR(15),
+Id_Producto INT,
+FOREIGN KEY (Id_Producto) REFERENCES Productos(Id)
+);
+
+SELECT * FROM Sizes;
+
+/*COLORES*/
+CREATE TABLE Colores(
+Id INT AUTO_INCREMENT PRIMARY KEY,
+Color VARCHAR(25),
+Estado VARCHAR(20),
+Id_Producto INT,
+FOREIGN KEY (Id_Producto) REFERENCES Productos(Id)
+);
+
+SELECT * FROM Colores;
