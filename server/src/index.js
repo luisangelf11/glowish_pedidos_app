@@ -8,6 +8,7 @@ import routerSizes from './routes/sizes.routes.js';
 import routerColores from './routes/colores.routes.js';
 import routerCarrito from './routes/carrito.routes.js';
 import routerPedidos from './routes/pedidos.routes.js';
+import routerDetalle from './routes/detalle.routes.js';
 import {generateAdminUser} from './middlewares/userAdmin.js';
 
 //Initializations
@@ -29,6 +30,7 @@ app.use(routerSizes);
 app.use(routerColores);
 app.use(routerCarrito);
 app.use(routerPedidos);
+app.use(routerDetalle);
 
 //Run Server
 app.listen(app.get('PORT'), ()=>{
