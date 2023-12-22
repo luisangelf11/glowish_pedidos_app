@@ -37,7 +37,7 @@ export const getPedido = async(req, res)=>{
 export const createPedido = async(req, res)=>{
     try{
         const {fecha, monto, estado, id_usuario} = req.body;
-        const [result] = await pool.query('INSERT INTO Pedidos (fecha, monto, estado, id_usuario) VALUES (?, ?, ?, ?)');
+        const [result] = await pool.query('INSERT INTO Pedidos (fecha, monto, estado, id_usuario) VALUES (?, ?, ?, ?)', [fecha, monto, estado, id_usuario]);
         if(!result.affectedRows) return res.status(404).json({"message": "Error in the query (create a new order)"});
         res.json({
             id: result.insertId,
