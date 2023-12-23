@@ -1,22 +1,23 @@
-import {Router} from 'express'
+import { Router } from 'express'
 import { createColor, deleteColor, getColor, getColores, updateColor } from '../controllers/colores.controllers.js';
+import { validateToken } from '../auth/authentication.js'
 
 //Initializations
 const router = Router();
 
 //Endpoint for get all colors
-router.get('/api/v1/colores', getColores);
+router.get('/api/v1/colores', validateToken, getColores);
 
 //Endpoint for get a color
-router.get('/api/v1/colores/:id', getColor);
+router.get('/api/v1/colores/:id', validateToken, getColor);
 
 //Endpoint for create a new color
-router.post('/api/v1/colores', createColor);
+router.post('/api/v1/colores', validateToken, createColor);
 
 //Endpoint for update a color
-router.put('/api/v1/colores/:id', updateColor);
+router.put('/api/v1/colores/:id', validateToken, updateColor);
 
 //Endpoint for delete a color
-router.delete('/api/v1/colores/:id', deleteColor);
+router.delete('/api/v1/colores/:id', validateToken, deleteColor);
 
 export default router;
