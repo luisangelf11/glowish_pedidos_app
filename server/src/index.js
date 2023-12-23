@@ -1,6 +1,6 @@
-import express from 'express'
-import morgan from 'morgan'
-import cors from 'cors'
+import express from 'express';
+import morgan from 'morgan';
+import cors from 'cors';
 import routerCategoria from './routes/categorias.routes.js';
 import routerProductos from './routes/productos.routes.js';
 import routerUsuarios from './routes/usuarios.routes.js';
@@ -9,6 +9,7 @@ import routerColores from './routes/colores.routes.js';
 import routerCarrito from './routes/carrito.routes.js';
 import routerPedidos from './routes/pedidos.routes.js';
 import routerDetalle from './routes/detalle.routes.js';
+import routerDashboard from './routes/dashboard.routes.js';
 import {generateAdminUser} from './middlewares/userAdmin.js';
 
 //Initializations
@@ -31,6 +32,7 @@ app.use(routerColores);
 app.use(routerCarrito);
 app.use(routerPedidos);
 app.use(routerDetalle);
+app.use(routerDashboard);
 
 //Run Server
 app.listen(app.get('PORT'), ()=>{
