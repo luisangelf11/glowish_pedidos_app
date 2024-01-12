@@ -109,3 +109,16 @@ FOREIGN KEY (Id_Producto) REFERENCES Productos(Id)
 );
 
 SELECT * FROM Colores;
+
+/*COMENTARIOS*/
+CREATE TABLE Comentarios(
+Id INT AUTO_INCREMENT PRIMARY KEY,
+Comentario VARCHAR(250),
+Fecha DATETIME,
+Id_Producto INT,
+Id_Usuario INT,
+FOREIGN KEY (Id_producto) REFERENCES Productos(Id),
+FOREIGN KEY (Id_Usuario) REFERENCES Usuarios(Id)
+);
+
+SELECT * FROM Comentarios;
