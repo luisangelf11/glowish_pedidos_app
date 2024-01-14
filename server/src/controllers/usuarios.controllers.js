@@ -123,7 +123,8 @@ export const signIn = async (req, res) => {
             if (signIn) {
                 //Create a new token for de new session
                 const token = generateToken(result[0]);
-                const user = { id: result[0].Id, token }
+                const {Id, Correo, Nombre, Apellido, Rol, Avatar} = result[0];
+                const user = { Id, Correo, Nombre, Apellido, Rol, Avatar, Token: token }
                 res.json(user);
             } else res.status(404).json({ "message": "E-mail or password is incorrect" });
         } else res.status(404).json({ "message": "The endpoint need a query for sign in" });
