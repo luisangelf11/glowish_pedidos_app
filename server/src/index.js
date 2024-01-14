@@ -14,6 +14,7 @@ import routerCarrito from './routes/carrito.routes.js';
 import routerPedidos from './routes/pedidos.routes.js';
 import routerDetalle from './routes/detalle.routes.js';
 import routerDashboard from './routes/dashboard.routes.js';
+import routerComentarios from './routes/comentarios.routes.js';
 //Proyect middlwares
 import { generateAdminUser } from './middlewares/userAdmin.js';
 
@@ -47,7 +48,7 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan('dev'));
 
-//Routes
+//Routes API
 app.use(routerCategoria);
 app.use(routerProductos);
 app.use(routerUsuarios);
@@ -57,6 +58,7 @@ app.use(routerCarrito);
 app.use(routerPedidos);
 app.use(routerDetalle);
 app.use(routerDashboard);
+app.use(routerComentarios);
 
 //Route for upload files
 app.post('/api/v1/upload', upload.single('file'), (req, res) => {
