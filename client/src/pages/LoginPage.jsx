@@ -1,9 +1,43 @@
+/* eslint-disable no-unused-vars */
 import LoginIMG from "../assets/login-bg.png";
-import GW from '../assets/GW.png';
-import { Link} from 'react-router-dom'
-import '../assets/css/animation.css'
+import GW from "../assets/GW.png";
+import { Link, useNavigate } from "react-router-dom";
+import "../assets/css/animation.css";
+import { useState } from "react";
+import {login} from '../api/user.js'
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function LoginPage() {
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit =async(e)=>{
+    e.preventDefault();
+    try{
+      const res = await login(form);
+      toast.success(`Credenciales correctas. Redireccionando a la página principal.`);
+      setTimeout(()=>{
+        if(res.data.Rol === 'client') navigate('/');
+        else navigate('/dashboard');
+      }, 2000);
+    }
+    catch(err){
+      toast.error(`${err.response.data.message}`)
+      //console.log(err)
+    }
+  }
+
   return (
     <section className="flex items-center justify-center h-screen w-screen">
       <div className="flex items-center justify-center h-auto w-auto shadow-2xl scale-up-center">
@@ -14,8 +48,8 @@ export default function LoginPage() {
             ¿Qué esperas para iniciar sesión?
           </p>
         </div>
-        <form className="flex flex-col gap-2 items-center p-2">
-          <img src={GW} alt="logo-gw" className=" w-20"/>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-2 items-center p-2">
+          <img src={GW} alt="logo-gw" className=" w-20" />
           <h2 className="uppercase text-red-500 text-xl font-bold">
             Iniciar sesión
           </h2>
@@ -31,6 +65,8 @@ export default function LoginPage() {
               type="email"
               name="email"
               id="email"
+              value={form.email}
+              onChange={handleChange}
               style={{
                 transition: "all .1s ease-in-out",
               }}
@@ -39,13 +75,19 @@ export default function LoginPage() {
             />
           </div>
           <div className="flex flex-col">
-            <label htmlFor="password" className="p-2 font-bold text-sm text-red-400 uppercase">
-            <i className="fas fa-unlock-alt p-1"></i>
-              Contraseña</label>
+            <label
+              htmlFor="password"
+              className="p-2 font-bold text-sm text-red-400 uppercase"
+            >
+              <i className="fas fa-unlock-alt p-1"></i>
+              Contraseña
+            </label>
             <input
               type="password"
               name="password"
               id="password"
+              value={form.password}
+              onChange={handleChange}
               style={{
                 transition: "all .1s ease-in-out",
               }}
@@ -54,11 +96,17 @@ export default function LoginPage() {
             />
           </div>
           <div className="flex justify-center gap-2 mt-4">
-          <button className="uppercase font-bold text-center text-sm text-white bg-blue-600 h-8 p-1 w-20 rounded transition-all hover:bg-blue-400">Login</button>
-          <Link to='/register' className="text-sm w-36 block text-center">¿Aún no tienes una cuenta? <span className="font-bold text-red-400">Registrate Aquí</span></Link>
+            <button className="uppercase font-bold text-center text-sm text-white bg-blue-600 h-8 p-1 w-20 rounded transition-all hover:bg-blue-400">
+              Login
+            </button>
+            <Link to="/register" className="text-sm w-36 block text-center">
+              ¿Aún no tienes una cuenta?{" "}
+              <span className="font-bold text-red-400">Registrate Aquí</span>
+            </Link>
           </div>
         </form>
       </div>
+      <Toaster position="top-center" />
     </section>
   );
 }
