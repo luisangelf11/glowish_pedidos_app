@@ -1,8 +1,18 @@
 import NotFoundImg from "../assets/404-page-animation-example.gif";
-import { Link } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import '../assets/css/animation.css'
+import { useAuthContext } from "../context/authContext";
 
 export default function NotFound() {
+  const navigate = useNavigate();
+  const {user} = useAuthContext();
+
+  const handleClick =(e)=>{
+    if(user.Rol === 'admin') navigate('/dashboard');
+    else navigate('/');
+
+  }
+
   return (
     <section
       style={{ width: "100%" }}
@@ -18,12 +28,12 @@ export default function NotFound() {
         Página no encontrada
       </h2>
       <p className='scale-up-center'>La ruta a la que estás tratando de acceder no existe.</p>
-      <Link
-        to="/"
+      <button
+      onClick={handleClick}
         className="p-2 bg-red-500 rounded scale-up-center text-white mt-2  transition-all hover:bg-red-400"
       >
         <i className="fas fa-hand-point-left p-1"></i>Regresar
-      </Link>
+      </button>
     </section>
   );
 }
