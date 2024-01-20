@@ -8,7 +8,7 @@ export const generateToken= (user)=>
 export const validateToken = (req, res, next) =>{
     //if there is no token in the request header else validate the token using a query parameter
     const accessToken = req.header['authorization'] || req.query.accessToken;
-    if(!accessToken) return res.json({
+    if(!accessToken) return res.status(404).json({
         "message": "Access denied"
     });
     //the function verify from the jwt module validate the token

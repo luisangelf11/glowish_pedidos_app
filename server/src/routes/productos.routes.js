@@ -6,7 +6,7 @@ import { validateToken } from '../auth/authentication.js';
 const router = Router();
 
 //Endpoint for get products (pagination is active)
-router.get('/api/v1/productos', validateToken, getProductos);
+router.get('/api/v1/productos', validateToken,getProductos);
 
 //Endpoint for get a product
 router.get('/api/v1/productos/:id', validateToken, getProducto);
