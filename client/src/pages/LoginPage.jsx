@@ -44,7 +44,7 @@ export default function LoginPage() {
 
   return (
     <section className="flex items-center justify-center h-screen w-screen bg-pink-100">
-      <div className="flex items-center justify-center h-auto w-auto shadow-2xl scale-up-center bg-white">
+      <div className="flex items-center justify-center h-auto w-auto shadow-2xl scale-up-center rounded-md bg-white">
         <div className="flex flex-col items-center p-2">
           <img src={LoginIMG} alt="login" className=" w-96" />
           <p className="text-center text-sm block w-64 p-2 text-slate-800">

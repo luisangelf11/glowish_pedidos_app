@@ -12,7 +12,7 @@ router.get('/api/v1/usuarios', validateToken, getUsuarios);
 router.get('/api/v1/usuarios/:id', validateToken, getUsuario);
 
 //Endpoint for create a new user
-router.post('/api/v1/usuarios', validateToken, createUsuario);
+router.post('/api/v1/usuarios', createUsuario);
 
 //Endpoint for update a user
 router.put('/api/v1/usuarios/:id', validateToken, updateUsuario);
