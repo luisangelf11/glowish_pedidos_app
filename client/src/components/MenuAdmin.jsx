@@ -1,7 +1,14 @@
 import Logo from "../assets/GW.png";
 import { NavLink } from "react-router-dom";
+import { useAuthContext } from "../context/authContext";
 
 export default function MenuAdmin() {
+  const {logout} = useAuthContext();
+  const handleClick =(e)=>{
+    const response = confirm(`¿Deseas cerrar sesión?`);
+   if(response) logout();
+
+  }
   return (
     <nav className="bg-white flex flex-col justify-start items-center gap-2 w-48 h-screen border-r">
       <img className=" w-28 h-28 p-1 object-cover" src={Logo} alt="logo" />
@@ -122,13 +129,14 @@ export default function MenuAdmin() {
         <i className="fas fa-users mr-3"></i>
         Usuarios
       </NavLink>
-      <p
+      <button
+      onClick={handleClick}
         className="bg-red-500 p-2 
         rounded-md w-36 text-left text-white transition-all hover:bg-red-300 cursor-pointer text-sm"
       >
         <i className="fas fa-sign-out-alt mr-3"></i>
         Cerrar Sesión
-      </p>
+      </button>
     </nav>
   );
 }

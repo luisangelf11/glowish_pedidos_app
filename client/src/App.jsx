@@ -7,22 +7,46 @@ import Register from "./pages/Register";
 import Products from "./pages/products/Products";
 import NewProduct from "./pages/products/NewProduct";
 import { AuthContextProvider } from "./context/authContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
-    <AuthContextProvider>
-      <section className="flex w-screen">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<Register />}/>
-          <Route path="*" element={<NotFound />} />
-          <Route path="/dashboard" element={<Dashboard />}/>
-          <Route path="/productos" element={<Products />}/>
-          <Route path="/nuevo-producto" element={<NewProduct />}/>
-        </Routes>
-      </section>
-    </AuthContextProvider>
+    <>
+ 
+        <section className="flex w-screen">
+          <Routes>
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/productos"
+              element={
+                <ProtectedRoute>
+                  <Products />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/nuevo-producto"
+              element={
+                <ProtectedRoute>
+                  <NewProduct />
+                </ProtectedRoute>
+              }
+            />
+            {/*This routes not are protected*/}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </section>
+    </>
   );
 }
 
