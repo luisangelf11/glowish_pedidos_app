@@ -6,6 +6,7 @@ import "../assets/css/animation.css";
 import { useState } from "react";
 import { login } from "../api/user.js";
 import toast, { Toaster } from "react-hot-toast";
+import {useAuthConext} from '../context/authContext.jsx'
 
 export default function LoginPage() {
   const [form, setForm] = useState({
@@ -15,6 +16,7 @@ export default function LoginPage() {
   const [seePass, setSeePass] = useState(false);
 
   const navigate = useNavigate();
+  const {setUser} = useAuthConext();
 
   const handleChange = (e) => {
     setForm({
@@ -32,6 +34,7 @@ export default function LoginPage() {
       toast.success(
         `Credenciales correctas. Redireccionando a la página principal.`
       );
+      setUser(res.data);
       setTimeout(() => {
         if (res.data.Rol === "client") navigate("/");
         else navigate("/dashboard");
