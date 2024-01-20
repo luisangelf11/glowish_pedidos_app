@@ -3,12 +3,12 @@ import { NavLink } from "react-router-dom";
 
 export default function MenuAdmin() {
   return (
-    <nav className="bg-pink-100 flex flex-col justify-start items-center gap-3 w-48 h-screen">
-      <img className=" w-28 h-28" src={Logo} alt="logo" />
+    <nav className="bg-white flex flex-col justify-start items-center gap-2 w-48 h-screen border-r">
+      <img className=" w-28 h-28 p-1 object-cover" src={Logo} alt="logo" />
       <div>
         <h3
           style={{ color: "#222" }}
-          className="text-center p-2 font-bold text-black uppercase"
+          className="text-center p-1 font-bold text-black uppercase"
         >
           Panel de control
         </h3>
@@ -22,9 +22,9 @@ export default function MenuAdmin() {
         className={({ isActive }) =>
           isActive
             ? `bg-red-300 p-2 
-        rounded-md w-36 text-left text-white transition-all hover:bg-pink-300 text-sm`
+        rounded-md w-36 text-left text-white transition-all hover:bg-red-300 text-sm`
             : `bg-red-500 p-2 
-        rounded-md w-36 text-left text-white transition-all hover:bg-pink-300 text-sm`
+        rounded-md w-36 text-left text-white transition-all hover:bg-red-300 text-sm`
         }
         to="/dashboard"
       >
@@ -35,9 +35,9 @@ export default function MenuAdmin() {
         className={({ isActive }) =>
           isActive
             ? `bg-red-300 p-2 
-      rounded-md w-36 text-left text-white transition-all hover:bg-pink-300 text-sm`
+      rounded-md w-36 text-left text-white transition-all hover:bg-red-300 text-sm`
             : `bg-red-500 p-2 
-      rounded-md w-36 text-left text-white transition-all hover:bg-pink-300 text-sm`
+      rounded-md w-36 text-left text-white transition-all hover:bg-red-300 text-sm`
         }
         to="/productos"
       >
@@ -48,9 +48,9 @@ export default function MenuAdmin() {
         className={({ isActive }) =>
           isActive
             ? `bg-red-300 p-2 
-     rounded-md w-36 text-left text-white transition-all hover:bg-pink-300 text-sm`
+     rounded-md w-36 text-left text-white transition-all hover:bg-red-300 text-sm`
             : `bg-red-500 p-2 
-     rounded-md w-36 text-left text-white transition-all hover:bg-pink-300 text-sm`
+     rounded-md w-36 text-left text-white transition-all hover:bg-red-300 text-sm`
         }
         to="/sizes"
       >
@@ -61,9 +61,9 @@ export default function MenuAdmin() {
         className={({ isActive }) =>
           isActive
             ? `bg-red-300 p-2 
-      rounded-md w-36 text-left text-white transition-all hover:bg-pink-300 text-sm`
+      rounded-md w-36 text-left text-white transition-all hover:bg-red-300 text-sm`
             : `bg-red-500 p-2 
-      rounded-md w-36 text-left text-white transition-all hover:bg-pink-300 text-sm`
+      rounded-md w-36 text-left text-white transition-all hover:bg-red-300 text-sm`
         }
         to="/colores"
       >
@@ -74,9 +74,22 @@ export default function MenuAdmin() {
         className={({ isActive }) =>
           isActive
             ? `bg-red-300 p-2 
-         rounded-md w-36 text-left text-white transition-all hover:bg-pink-300 text-sm`
+      rounded-md w-36 text-left text-white transition-all hover:bg-red-300 text-sm`
             : `bg-red-500 p-2 
-         rounded-md w-36 text-left text-white transition-all hover:bg-pink-300 text-sm`
+      rounded-md w-36 text-left text-white transition-all hover:bg-red-300 text-sm`
+        }
+        to="/colores"
+      >
+        <i className="fa-solid fa-layer-group mr-3"></i>
+        Categorias
+      </NavLink>
+      <NavLink
+        className={({ isActive }) =>
+          isActive
+            ? `bg-red-300 p-2 
+         rounded-md w-36 text-left text-white transition-all hover:bg-red-300 text-sm`
+            : `bg-red-500 p-2 
+         rounded-md w-36 text-left text-white transition-all hover:bg-red-300 text-sm`
         }
         to="/pedidos"
       >
@@ -87,9 +100,9 @@ export default function MenuAdmin() {
         className={({ isActive }) =>
           isActive
             ? `bg-red-300 p-2 
-     rounded-md w-36 text-left text-white transition-all hover:bg-pink-300 text-sm`
+     rounded-md w-36 text-left text-white transition-all hover:bg-red-300 text-sm`
             : `bg-red-500 p-2 
-     rounded-md w-36 text-left text-white transition-all hover:bg-pink-300 text-sm`
+     rounded-md w-36 text-left text-white transition-all hover:bg-red-300 text-sm`
         }
         to="/comentarios"
       >
@@ -100,9 +113,9 @@ export default function MenuAdmin() {
         className={({ isActive }) =>
           isActive
             ? `bg-red-300 p-2 
-   rounded-md w-36 text-left text-white transition-all hover:bg-pink-300 text-sm`
+   rounded-md w-36 text-left text-white transition-all hover:bg-red-300 text-sm`
             : `bg-red-500 p-2 
-   rounded-md w-36 text-left text-white transition-all hover:bg-pink-300 text-sm`
+   rounded-md w-36 text-left text-white transition-all hover:bg-red-300 text-sm`
         }
         to="/usuarios"
       >
@@ -111,7 +124,7 @@ export default function MenuAdmin() {
       </NavLink>
       <p
         className="bg-red-500 p-2 
-        rounded-md w-36 text-left text-white transition-all hover:bg-pink-300 cursor-pointer text-sm"
+        rounded-md w-36 text-left text-white transition-all hover:bg-red-300 cursor-pointer text-sm"
       >
         <i className="fas fa-sign-out-alt mr-3"></i>
         Cerrar Sesión

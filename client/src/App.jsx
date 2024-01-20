@@ -8,7 +8,7 @@ import Register from "./pages/Register";
 function App() {
   return (
     <>
-      <section className="flex">
+      <section className="flex w-screen">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
