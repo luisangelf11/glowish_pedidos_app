@@ -15,8 +15,7 @@ export default function NotFound() {
 
   return (
     <section
-      style={{ width: "100%" }}
-      className="h-screen flex justify-center items-center flex-col overflow-hidden"
+      className="h-screen w-screen flex justify-center items-center flex-col overflow-hidden"
     >
       <img
         src={NotFoundImg}

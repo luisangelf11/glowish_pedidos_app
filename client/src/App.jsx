@@ -11,6 +11,7 @@ import AdminRoutes from "./components/AdminRoutes";
 import ClientRoutes from "./components/ClientRoutes";
 import { AuthContextProvider } from "./context/authContext";
 import FormProduct from "./pages/products/FormProduct";
+import NotAuthorized from "./pages/NotAuthorized";
 
 function App() {
   return (
@@ -63,6 +64,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/ruta-privada" element={<NotAuthorized />}/>
         </Routes>
       </section>
       </AuthContextProvider>
