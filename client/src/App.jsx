@@ -5,12 +5,12 @@ import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
 import Products from "./pages/products/Products";
-import NewProduct from "./pages/products/NewProduct";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Catalogue from "./pages/catalogue/Catalogue";
 import AdminRoutes from "./components/AdminRoutes";
 import ClientRoutes from "./components/ClientRoutes";
 import { AuthContextProvider } from "./context/authContext";
+import FormProduct from "./pages/products/FormProduct";
 
 function App() {
   return (
@@ -43,7 +43,7 @@ function App() {
             element={
               <ProtectedRoute>
                 <AdminRoutes>
-                  <NewProduct />
+                  <FormProduct />
                 </AdminRoutes>
               </ProtectedRoute>
             }

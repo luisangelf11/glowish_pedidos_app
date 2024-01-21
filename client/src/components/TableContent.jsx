@@ -1,7 +1,7 @@
 import React from "react";
 import RowsProducts from "./RowsProducts";
 
-export default function TableContent({ data, tableHead }) {
+export default function TableContent({ data, tableHead, deleteData }) {
   return (
     <table className="bg-white h-auto rounded-md shadow-md overflow-scroll scale-up-center "
     style={{width: '90%'}}>
@@ -20,7 +20,7 @@ export default function TableContent({ data, tableHead }) {
       </thead>
       <tbody>
         {data.length ? (
-          data.map((el, index) => <RowsProducts key={index} element={el} />)
+          data.map((el, index) => <RowsProducts key={index} deleteP={deleteData} element={el} />)
         ) : (
           <tr>
             <td className="text-center" colSpan={tableHead.length}>

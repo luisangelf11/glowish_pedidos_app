@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
 import MenuAdmin from "../../components/MenuAdmin";
 import TableContent from "../../components/TableContent";
-import { filterProducts, getProducts } from "../../api/products";
+import { deleteProduct, filterProducts, getProducts } from "../../api/products";
 import { toast, Toaster } from "react-hot-toast";
 import '../../assets/css/animation.css'
 import {Link} from 'react-router-dom'
+import { useAuthContext } from "../../context/authContext";
 
 export default function Products() {
   //State
   const [data, setData] = useState([]);
   const [form, setForm] = useState({filter: ''});
 
+  const {user} = useAuthContext();
+
   const getData = async () => {
     try {
-      const res = await getProducts(10, 0);
+      const res = await getProducts(10, 0, user.Token);
       setData(res.data);
     } catch (err) {
       toast.error(err.response.data.message);
@@ -21,19 +24,21 @@ export default function Products() {
     }
   };
 
-  const filterData =async(name)=>{
+  const filterData =async(name, token)=>{
     try{
-        const res = await filterProducts(name);
+        const res = await filterProducts(name, token);
         setData(res.data);
     }
-    catch{
+    catch(err){
         setData([]);
+        console.log(err)
     }
   }
 
   useEffect(() => {
     if(form.filter === '') getData();
-    else filterData(form.filter)
+    else filterData(form.filter, user.Token)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.filter]);
 
   const handleChange =(e)=>{
@@ -41,6 +46,20 @@ export default function Products() {
         ...form,
         [e.target.name]: e.target.value
     });
+  }
+
+  const deleteData =async(id)=>{
+    try{
+      const response = confirm(`¿Deseas eliminar este producto?`);
+      if(response) {
+        await deleteProduct(id, user.Token);
+        toast.success(`El producto con Id ${id} fue eliminado correctamente`);
+        getData();
+        setForm({filter: ''});
+      }
+    }catch(err){
+      toast.error(err.response.data.message);
+    }
   }
 
   return (
@@ -90,6 +109,7 @@ export default function Products() {
             "Categoría",
             "Acciones",
           ]}
+          deleteData={deleteData}
         />
         <Toaster position="top-center" />
       </section>
