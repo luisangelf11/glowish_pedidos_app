@@ -20,7 +20,7 @@ export default function TableContent({ data, tableHead, deleteData }) {
       </thead>
       <tbody>
         {data.length ? (
-          data.map((el, index) => <RowsProducts key={index} deleteP={deleteData} element={el} />)
+          data.map((el, index) => <RowsProducts key={index} noRow={index} deleteP={deleteData} element={el} />)
         ) : (
           <tr>
             <td className="text-center" colSpan={tableHead.length}>

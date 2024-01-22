@@ -44,11 +44,18 @@ function App() {
             element={
               <ProtectedRoute>
                 <AdminRoutes>
-                  <FormProduct />
+                  <FormProduct edit={false} />
                 </AdminRoutes>
               </ProtectedRoute>
             }
           />
+          <Route path="/editar-producto/:id" element={
+            <ProtectedRoute>
+              <AdminRoutes>
+                <FormProduct edit={true}/>
+              </AdminRoutes>
+            </ProtectedRoute>
+          }/>
           <Route
             path="/catalogo"
             element={

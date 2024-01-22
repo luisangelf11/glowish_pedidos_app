@@ -36,7 +36,7 @@ export const getProductos = async (req, res) => {
 export const getProducto = async (req, res) => {
     try {
         const { id } = req.params;
-        const [result] = await pool.query(`SELECT p.Id, p.Nombre, p.Descripcion, p.Unidades, p.Precio, p.Imagen, p.Descuento, c.Nombre AS Categoria FROM Productos AS p
+        const [result] = await pool.query(`SELECT p.Id, p.Nombre, p.Descripcion, p.Unidades, p.Precio, p.Imagen, p.Descuento, p.Id_Categoria ,c.Nombre AS Categoria FROM Productos AS p
         INNER JOIN Categorias AS c ON p.Id_Categoria = c.Id WHERE p.Id = ?`, [id]);
         if (!result.length) return res.status(404).json({ "message": `The Id ${id} is not found in the table` });
         res.json(result[0]);

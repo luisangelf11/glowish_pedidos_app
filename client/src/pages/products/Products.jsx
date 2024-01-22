@@ -16,7 +16,7 @@ export default function Products() {
 
   const getData = async () => {
     try {
-      const res = await getProducts(10, 0, user.Token);
+      const res = await getProducts(10, 0);
       setData(res.data);
     } catch (err) {
       toast.error(err.response.data.message);
@@ -24,9 +24,9 @@ export default function Products() {
     }
   };
 
-  const filterData =async(name, token)=>{
+  const filterData =async(name)=>{
     try{
-        const res = await filterProducts(name, token);
+        const res = await filterProducts(name);
         setData(res.data);
     }
     catch(err){
@@ -37,7 +37,7 @@ export default function Products() {
 
   useEffect(() => {
     if(form.filter === '') getData();
-    else filterData(form.filter, user.Token)
+    else filterData(form.filter)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.filter]);
 
@@ -73,13 +73,13 @@ export default function Products() {
           className="flex justify-around p-2 scale-up-center "
           style={{ width: "100%" }}
         >
-          <div className="flex flex-col">
+          <div className="flex flex-col w-2/3">
           <h2 className="text-left p-2 uppercase text-red-500 font-bold text-xl">
             Control de productos
           </h2>
           <form
-            className="bg-white p-1 border rounded-xl"
-            style={{ width: "700px" }}
+            className="bg-white border rounded-xl"
+            style={{ width: "90%" }}
           >
             <i className="fas fa-search p-2 text-red-400"></i>
             <input
@@ -92,7 +92,7 @@ export default function Products() {
             />
           </form>
           </div>
-          <Link to='/nuevo-producto' className="bg-green-700 flex justify-center items-center p-1 w-44 h-10 mt-12 rounded-sm text-white font-semibold transition-all hover:bg-green-600">
+          <Link to='/nuevo-producto' className="bg-green-700 flex justify-center items-center p-1 w-44 h-10 mt-10 rounded-sm text-white font-semibold transition-all hover:bg-green-600">
           <i className="fas fa-plus p-1"></i>
             Nuevo Producto
           </Link>

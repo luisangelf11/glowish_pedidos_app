@@ -1,14 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import MenuAdmin from "../../components/MenuAdmin.jsx";
-import { Link } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
 import { getCategorys } from "../../api/category.js";
 import { useAuthContext } from "../../context/authContext.jsx";
-import { createProduct } from "../../api/products.js";
+import { createProduct, getProduct, updateProduct } from "../../api/products.js";
 import '../../assets/css/animation.css'
 
-export default function FormProduct() {
+export default function FormProduct({edit}) {
   const initialForm = {
     nombre: "",
     descripcion: "",
@@ -17,24 +17,47 @@ export default function FormProduct() {
     descuento: "",
     id_categoria: "",
   };
+
+  //State
   const [form, setForm] = useState(initialForm);
   const [file, setFile] = useState(null);
   const [imgUrl, setImgUrl] = useState(null);
   const [categorys, setCategorys] = useState([]);
 
+  //Hooks
   const { user } = useAuthContext();
+  const {id} = useParams();
+  const navigate = useNavigate();
 
   const getCategorysData = async () => {
     try {
-      const res = await getCategorys(user.Token);
+      const res = await getCategorys();
       setCategorys(res.data);
     } catch (err) {
       toast.error(`${err.response.data.message}`);
     }
   };
 
+  const getDataEdit =async(id)=>{
+    try {
+      const res = await getProduct(parseInt(id));
+      console.log(res.data)
+      initialForm.nombre = res.data.Nombre;
+      initialForm.descripcion = res.data.Descripcion;
+      initialForm.unidades = res.data.Unidades;
+      initialForm.descuento = res.data.Descuento;
+      initialForm.precio = res.data.Precio;
+      setImgUrl(res.data.Imagen);
+       initialForm.id_categoria = res.data.Id_Categoria;
+      
+    } catch (err) {
+      toast.error(`${err.response.data.message}`);
+    }
+  }
+
   useEffect(() => {
     getCategorysData();
+    if(edit === true) getDataEdit(id);
   }, []);
 
   const handleFileChange = (e) => {
@@ -73,9 +96,36 @@ export default function FormProduct() {
     }
   }
 
+  const editProduct = async()=>{
+    try{
+      const data = {
+        nombre: form.nombre,
+        descripcion: form.descripcion,
+        unidades: parseInt(form.unidades),
+        precio: parseFloat(form.precio),
+        descuento: parseFloat(form.descuento),
+        id_categoria: parseInt(form.id_categoria),
+        imagen: imgUrl
+      }
+      const res = await updateProduct(id, data, user.Token);
+      console.log(res.data)
+      setForm(initialForm);
+      setImgUrl(null);
+      setFile(null);
+      toast.success(`¡El producto fue modificado correctamente! Redireccionando a la tabla de productos.`);
+      setTimeout(()=>{
+        navigate('/productos');
+      }, 3000);
+    }
+    catch(err){
+      toast.error(`${err.response.data.message}`);
+    }
+  }
+
   const handleSubmit =(e)=>{
     e.preventDefault();
-    addProduct();
+    if(edit === false) addProduct();
+    else editProduct();
   }
 
   const uploadFile = async (e) => {
@@ -103,15 +153,15 @@ export default function FormProduct() {
       <MenuAdmin />
       <section
         style={{ width: "86%" }}
-        className="bg-gray-100 gap-2 flex flex-col justify-center items-center "
+        className="bg-gray-100 gap-2 flex flex-col justify-center items-center"
       >
         <form onSubmit={handleSubmit} className="scale-up-center bg-white w-2/3 shadow rounded-md flex flex-col gap-2 items-center p-2">
           <h2 className="text-xl font-semibold p-2 text-red-500 uppercase">
-            Crear producto
+            {edit === false ? 'Crear producto' : `Editar producto #${id}`}
           </h2>
           <div className="flex justify-center gap-4">
             <div className="flex flex-col">
-              <label htmlFor="nombre" className="text-sm font-bold text-red-400">Nombre</label>
+              <label htmlFor="nombre" className="text-sm font-bold text-red-400">Nombre:</label>
               <input
                 type="text"
                 name="nombre"
@@ -123,7 +173,7 @@ export default function FormProduct() {
               />
             </div>
             <div className="flex flex-col">
-              <label htmlFor="descripcion" className="text-sm font-bold text-red-400">Descripción</label>
+              <label htmlFor="descripcion" className="text-sm font-bold text-red-400">Descripción:</label>
               <input
                 type="text"
                 name="descripcion"
@@ -137,7 +187,7 @@ export default function FormProduct() {
           </div>
           <div className="flex justify-center gap-4">
             <div className="flex flex-col">
-              <label htmlFor="unidades" className="text-sm font-bold text-red-400">Unidades</label>
+              <label htmlFor="unidades" className="text-sm font-bold text-red-400">Unidades:</label>
               <input
                 type="number"
                 name="unidades"
@@ -149,7 +199,7 @@ export default function FormProduct() {
               />
             </div>
             <div className="flex flex-col">
-              <label htmlFor="descuento" className="text-sm font-bold text-red-400">Descuento</label>
+              <label htmlFor="descuento" className="text-sm font-bold text-red-400">Descuento:</label>
               <input
                 type="number"
                 name="descuento"
@@ -163,7 +213,7 @@ export default function FormProduct() {
           </div>
           <div className="flex justify-center gap-4">
             <div className="flex flex-col">
-              <label htmlFor="id_categoria" className="text-sm font-bold text-red-400">Categoría</label>
+              <label htmlFor="id_categoria" className="text-sm font-bold text-red-400">Categoría:</label>
               <select
                 name="id_categoria"
                 id="id_categoria"
@@ -180,7 +230,7 @@ export default function FormProduct() {
               </select>
             </div>
             <div className="flex flex-col">
-              <label htmlFor="precio" className="text-sm font-bold text-red-400">Precio</label>
+              <label htmlFor="precio" className="text-sm font-bold text-red-400">Precio:</label>
               <input
                 type="number"
                 name="precio"
@@ -212,7 +262,7 @@ export default function FormProduct() {
             Cargar Imagen
           </h2>
           <div className="flex gap-4 items-center">
-            <label htmlFor="file" className="text-sm font-bold text-red-400">Imagen</label>
+            <label htmlFor="file" className="text-sm font-bold text-red-400">Imagen:</label>
             <input
               type="file"
               name="file"
@@ -223,7 +273,7 @@ export default function FormProduct() {
             <img
               src={imgUrl}
               alt="Imagen"
-              className=" w-36 object-cover p-2 border-dashed border-2 "
+              className=" w-36 h-36 object-cover p-2 border-dashed border-2 "
             />
           </div>
           <button className="bg-green-600 p-2 mt-4 cursor-pointer text-white rounded-sm transition-all hover:bg-green-500">

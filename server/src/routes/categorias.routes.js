@@ -6,10 +6,10 @@ import { validateToken } from '../auth/authentication.js'
 const router = Router();
 
 //Endpoint for get all categorias
-router.get('/api/v1/categorias', validateToken, getCategorias);
+router.get('/api/v1/categorias', getCategorias);
 
 //Endpoint for get a categoria
-router.get('/api/v1/categorias/:id', validateToken, getCategoria);
+router.get('/api/v1/categorias/:id', getCategoria);
 
 //Endpoint for create a new categoria
 router.post('/api/v1/categorias', validateToken, createCategoria);
