@@ -63,7 +63,7 @@ export default function Products() {
   }
 
   return (
-    <>
+    <section className="flex w-screen">
       <MenuAdmin />
       <section
         style={{ width: "86%" }}
@@ -113,6 +113,6 @@ export default function Products() {
         />
         <Toaster position="top-center" />
       </section>
-    </>
+    </section>
   );
 }

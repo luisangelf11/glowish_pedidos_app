@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import HomePage from "./pages/HomePage";
+import HomePage from "./pages/home/HomePage";
 import LoginPage from "./pages/LoginPage";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
@@ -13,11 +13,11 @@ import { AuthContextProvider } from "./context/authContext";
 import FormProduct from "./pages/products/FormProduct";
 import NotAuthorized from "./pages/NotAuthorized";
 
+
 function App() {
   return (
     <>
     <AuthContextProvider>
-      <section className="flex w-screen">
         <Routes>
           <Route
             path="/dashboard"
@@ -59,11 +59,7 @@ function App() {
           <Route
             path="/catalogo"
             element={
-              <ProtectedRoute>
-                <ClientRoutes>
                   <Catalogue />
-                </ClientRoutes>
-              </ProtectedRoute>
             }
           />
           {/*This routes not are protected*/}
@@ -73,7 +69,6 @@ function App() {
           <Route path="*" element={<NotFound />} />
           <Route path="/ruta-privada" element={<NotAuthorized />}/>
         </Routes>
-      </section>
       </AuthContextProvider>
     </>
   );
