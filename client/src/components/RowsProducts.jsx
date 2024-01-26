@@ -25,7 +25,7 @@ export default function RowsProducts({ element, deleteP, noRow }) {
     >
       <td className="text-left p-2 text-sm">{Id}</td>
       <td className="text-left p-2 text-sm">{Nombre}</td>
-      <td className="text-left p-2 text-sm">{Descripcion}</td>
+      <td className="text-left p-2 text-sm w-48">{Descripcion}</td>
       <td className="text-left p-2 text-sm">{Unidades}</td>
       <td className="text-left p-2 text-sm">{Precio}</td>
       <td className="text-left p-2 text-sm">{Descuento}</td>

@@ -26,7 +26,7 @@ export default function NewProducts() {
         <h2 style={{
             letterSpacing: '10px'
         }} className=' text-left p-2 ml-10 text-xl font-semibold uppercase'>Nuevos productos</h2>
-        <div className='flex  gap-2'>
+        <div className='flex justify-center gap-2'>
         {data.map((el, index)=> <CardProductFive key={index} id={el.Id}/>)}
         </div>
     </section>

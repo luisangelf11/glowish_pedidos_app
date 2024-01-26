@@ -12,7 +12,7 @@ export default function BannerHome() {
             <h1 className='text-xl font-bold text-red-400 uppercase w-96 text-center'>Chicas, bienvenidas a su tienda virtual Glowish Fashion.</h1>
             <Link to='/catalogo' className='border-2 p-2 border-red-500 rounded-sm text-red-500 uppercase font-semibold text-sm hover:text-red-400 hover:border-red-400 transition-all'>Ordenar Ahora</Link>
         </div>
-        <img className='w-80 object-cover' src={imgBannerOne} alt="Image" />
+        <img className='w-96 object-cover' src={imgBannerOne} alt="Image" />
     </section>
   )
 }

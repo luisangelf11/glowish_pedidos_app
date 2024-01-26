@@ -1,36 +1,65 @@
-import React, { useEffect, useState } from 'react'
-import { getProduct } from '../../api/products';
-import {useAuthContext} from '../../context/authContext'
+import React, { useEffect, useState } from "react";
+import { getProduct } from "../../api/products";
+import { useAuthContext } from "../../context/authContext";
+import imgDesc from "../../assets/descuentoIcon.png";
 
-export default function CardProductFive({id}) {
+export default function CardProductFive({ id }) {
   const [product, setProduct] = useState({});
-  const {user} = useAuthContext();
-  const getDataProduct = async()=>{
-    try{
+  const { user } = useAuthContext();
+  const getDataProduct = async () => {
+    try {
       const res = await getProduct(id);
       setProduct(res.data);
-      console.log(res.data)
-    }
-    catch(err){
+      console.log(res.data);
+    } catch (err) {
       console.error(err);
     }
-  }
-  useEffect(()=>{
+  };
+  useEffect(() => {
     getDataProduct();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className='flex flex-col w-56 border rounded-sm mt-4 ml-4 bg-white' data-aos="fade-up">
-     <img className='w-56 h-56 object-cover' src={product.Imagen} alt={product.Id}/>
-      <h3 className='font-bold uppercase text-red-500 p-2'>{product.Nombre}</h3>
-      <p className='text-sm p-1'>{product.Descripcion}</p>
-      <p className='text-sm p-1'><span className='text-red-500 font-semibold'>Descuento: </span>{product.Descuento}%</p>
-      <p className='text-sm p-1'><span className='text-red-500 font-semibold'>Disponibles:</span> {product.Unidades}</p>
-      <p className='p-2'>$RD {product.Precio}</p>
-      <div className='flex gap-2 justify-end p-2'>
-        <button className='bg-red-500 p-2 rounded-sm text-sm text-white transition-all hover:bg-red-400'>Ver</button>
-        {user !== null ? <button className='border-2 text-sm border-red-500 rounded-sm p-2 text-red-600 transition-all hover:bg-red-400'><i className="fa-solid fa-cart-plus"></i></button>: ''}
+    <div
+      className="flex flex-col w-56 border items-left h-auto rounded-xl mt-4 ml-4 bg-white"
+      data-aos="fade-up"
+    >
+      <img
+        className="w-56 h-60 object-cover cursor-pointer hover:grayscale"
+        style={{
+          borderTopLeftRadius: "12px",
+          borderTopRightRadius: "12px",
+        }}
+        src={product.Imagen}
+        alt={product.Id}
+      />
+      <div>
+        <h3 className="font-bold uppercase text-red-500 p-2 border-b">
+          {product.Nombre}
+        </h3>
+        <p className="text-sm p-1" >{product.Descripcion}</p>
+        <p className="p-1 font-semibold text-red-400">$RD {product.Precio}</p>
+      </div>
+      {product.Descuento > 0 ? (
+        <div className="flex items-center gap-1 p-1">
+          <img className="w-6 h-6" src={imgDesc} alt="icon-descuento" />
+          <p className="text-sm font-semibold text-slate-600">{product.Descuento}%</p>
+        </div>
+      ) : (
+        ""
+      )}
+      <div className="flex gap-2 justify-end p-2">
+        <button className="bg-red-500 p-2 w-10 rounded-md text-sm text-white transition-all hover:bg-red-400">
+          Ver
+        </button>
+        {user !== null ? (
+          <button className="border-2 w-10 h-10 text-md border-green-700 p-2 rounded-md text-green-700 transition-all hover:border-gray-600 hover:text-gray-600">
+            <i className="fa-solid fa-cart-plus"></i>
+          </button>
+        ) : (
+          ""
+        )}
       </div>
     </div>
-  )
+  );
 }
