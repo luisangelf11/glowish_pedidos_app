@@ -63,7 +63,7 @@ export default function Products() {
   }
 
   return (
-    <section className="flex">
+    <section className="flex h-screen">
       <MenuAdmin />
       <section
         style={{ width: "86%" }}

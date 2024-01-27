@@ -73,8 +73,15 @@ export default function FormProduct({edit}) {
     });
   };
 
+  const validateData= ()=>{
+    if(form.nombre === '' || form.descuento === '' || form.descripcion === '' || form.precio === ''
+    || form.unidades === '' || form.id_categoria === '') return false;
+    else return true;
+  }
+
   const addProduct =async()=>{
     try{
+      if(!validateData()) return toast.error(`Por favor, complete todos los campos`);
       const data = {
         nombre: form.nombre,
         descripcion: form.descripcion,
@@ -149,11 +156,11 @@ export default function FormProduct({edit}) {
   };
 
   return (
-    <section className="flex w-screen">
+    <section className="flex h-screen">
       <MenuAdmin />
       <section
         style={{ width: "86%" }}
-        className="bg-gray-100 gap-2 flex flex-col justify-center items-center"
+        className="bg-gray-100 gap-2 ml-auto flex flex-col justify-center items-center"
       >
         <form onSubmit={handleSubmit} className="scale-up-center bg-white w-2/3 shadow rounded-md flex flex-col gap-2 items-center p-2">
           <h2 className="text-xl font-semibold p-2 text-red-500 uppercase">
@@ -181,6 +188,7 @@ export default function FormProduct({edit}) {
                 value={form.descripcion}
                 onChange={handleChange}
                 placeholder="Descripción"
+                maxLength={200}
                 className="border rounded-sm text-sm p-1 outline-none border-gray-400 w-56 focus:border-blue-500 focus:border-2"
               />
             </div>
