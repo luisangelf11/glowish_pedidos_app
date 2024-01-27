@@ -21,7 +21,7 @@ export default function CardProductFive({ id }) {
   }, []);
   return (
     <div
-      className="flex flex-col w-56 border items-left h-auto rounded-xl mt-4 ml-4 bg-white"
+      className="flex flex-col w-56 border h-auto rounded-xl mt-4 ml-4 bg-white"
       data-aos="fade-up"
     >
       <img
@@ -48,7 +48,7 @@ export default function CardProductFive({ id }) {
       ) : (
         ""
       )}
-      <div className="flex gap-2 justify-end p-2">
+      <div className="flex gap-2 h-12 justify-end items-end p-2">
         <button className="bg-red-500 p-2 w-10 rounded-md text-sm text-white transition-all hover:bg-red-400">
           Ver
         </button>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MenuAdmin from "../../components/MenuAdmin";
-import TableContent from "../../components/TableContent";
+import TableContent from "./TableContent";
 import { deleteProduct, filterProducts, getProducts } from "../../api/products";
 import { toast, Toaster } from "react-hot-toast";
 import '../../assets/css/animation.css'
@@ -63,14 +63,14 @@ export default function Products() {
   }
 
   return (
-    <section className="flex w-screen">
+    <section className="flex">
       <MenuAdmin />
       <section
         style={{ width: "86%" }}
-        className="bg-gray-100 gap-2 flex flex-col items-center "
+        className="bg-gray-100 ml-auto gap-2 flex flex-col items-center"
       >
         <div
-          className="flex justify-around p-2 scale-up-center "
+          className="flex justify-around p-2 scale-up-center"
           style={{ width: "100%" }}
         >
           <div className="flex flex-col w-2/3">

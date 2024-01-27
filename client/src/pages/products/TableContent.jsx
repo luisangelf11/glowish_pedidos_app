@@ -3,7 +3,7 @@ import RowsProducts from "./RowsProducts";
 
 export default function TableContent({ data, tableHead, deleteData }) {
   return (
-    <table className="bg-white h-auto rounded-md shadow-md overflow-scroll scale-up-center "
+    <table className="bg-white rounded-md overflow-y-scroll shadow-md scale-up-center"
     style={{width: '90%'}}>
       <thead>
         <tr

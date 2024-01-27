@@ -10,7 +10,7 @@ export default function MenuAdmin() {
 
   }
   return (
-    <nav className="bg-white flex flex-col justify-start items-center gap-2 w-48 h-screen border-r">
+    <nav className="bg-white flex flex-col justify-start items-center gap-2 fixed w-48 h-screen border-r">
       <img className=" w-28 h-28 p-1 object-cover" src={Logo} alt="logo" />
       <div>
         <h3
