@@ -85,7 +85,7 @@ export default function MenuAdmin() {
             : `bg-red-500 p-2 
       rounded-md w-36 text-left text-white transition-all hover:bg-red-300 text-sm`
         }
-        to="/colores"
+        to="/categorias"
       >
         <i className="fa-solid fa-layer-group mr-3"></i>
         Categorias

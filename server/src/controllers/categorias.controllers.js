@@ -3,9 +3,22 @@ import pool from '../database/database.js';
 //Select all categorys in the database
 export const getCategorias = async (req, res) => {
     try {
-        const [result] = await pool.query('SELECT * FROM Categorias');
-        if (!result.length) return res.status(404).json({ "message": "The table don't have data" });
-        res.json(result);
+        const { limit, offset, name } = req.query;
+        if ((!limit && !offset) && !name){
+            const [result] = await pool.query('SELECT * FROM Categorias');
+            if (!result.length) return res.status(404).json({ "message": "The table don't have data" });
+            res.json(result);
+        }else if(limit && offset){
+            const [result] = await pool.query(`SELECT * FROM Categorias ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`);
+            if (!result.length) return res.status(404).json({ "message": `The table don't have data (offset: ${offset})` });
+            res.json(result);
+        }else{
+            //Filter the products with the name query
+            let filter = `${name}%`
+            const [result] = await pool.query(`SELECT * FROM Categorias  WHERE nombre LIKE ? ORDER BY id DESC`, [filter]);
+            if (!result.length) return res.status(404).json({ "message": `The category with name ${name} is not found` });
+            res.json(result);
+        }
     }
     catch (err) {
         res.status(500).json({ "message": err.message });

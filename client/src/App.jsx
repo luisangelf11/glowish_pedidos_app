@@ -12,6 +12,8 @@ import ClientRoutes from "./components/ClientRoutes";
 import { AuthContextProvider } from "./context/authContext";
 import FormProduct from "./pages/products/FormProduct";
 import NotAuthorized from "./pages/NotAuthorized";
+import CategorysPage from "./pages/categorys/CategorysPage";
+import FormCategorys from "./pages/categorys/FormCategorys";
 
 
 function App() {
@@ -56,13 +58,35 @@ function App() {
               </AdminRoutes>
             </ProtectedRoute>
           }/>
+          <Route path="/categorias" element={
+            <ProtectedRoute>
+              <AdminRoutes>
+                <CategorysPage />
+              </AdminRoutes>
+            </ProtectedRoute>
+          } />
+           <Route path="/nueva-categoria" element={
+            <ProtectedRoute>
+              <AdminRoutes>
+                <FormCategorys edit={false} />
+              </AdminRoutes>
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/editar-categoria/:id" element={
+            <ProtectedRoute>
+              <AdminRoutes>
+                <FormCategorys edit={true} />
+              </AdminRoutes>
+            </ProtectedRoute>
+          } />
+          {/*This routes not are protected*/}
           <Route
             path="/catalogo"
             element={
                   <Catalogue />
             }
           />
-          {/*This routes not are protected*/}
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Register />} />
