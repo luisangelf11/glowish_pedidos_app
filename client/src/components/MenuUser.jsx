@@ -79,21 +79,6 @@ export default function MenuUser() {
           <i className="fas fa-layer-group p-1"></i>
           Categorías
         </NavLink>
-        {user !== null ? (
-          <NavLink
-            to="/carrito"
-            className={({ isActive }) =>
-              isActive
-              ? `text-gray-500 font-semibold transition-all hover:text-red-400 text-sm p-1 hover:border-red-400 border-b-2 border-white`
-              : `text-red-500 font-semibold transition-all  hover:text-red-400 text-sm p-1 hover:border-red-400 border-b-2 border-white`
-            }
-          >
-            <i className="fas fa-shopping-cart p-1"></i>
-            Carrito
-          </NavLink>
-        ) : (
-          ""
-        )}
       </div>
       <ProfileBar />
     </nav>

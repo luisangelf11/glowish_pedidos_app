@@ -6,10 +6,10 @@ import { validateToken } from "../auth/authentication.js";
 const router = Router();
 
 //Endpoint for get all users
-router.get('/api/v1/usuarios', validateToken, getUsuarios);
+router.get('/api/v1/usuarios', getUsuarios);
 
 //Endpoint for get a user 
-router.get('/api/v1/usuarios/:id', validateToken, getUsuario);
+router.get('/api/v1/usuarios/:id', getUsuario);
 
 //Endpoint for create a new user
 router.post('/api/v1/usuarios', createUsuario);

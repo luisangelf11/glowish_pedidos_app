@@ -21,6 +21,8 @@ export default function ProfileBar() {
     }} className="scale-up-center transition-all flex flex-col shadow-xl rounded-md justify-center items-start fixed w-52 bg-white mt-2">
         <Link to='/perfil' className="p-2 border-b w-full text-gray-600 transition-all hover:text-red-400">
         <i className="fas fa-user-alt p-1"></i>Perfil</Link>
+        <Link to="/carrito" className="p-2 border-b w-full text-gray-600 transition-all hover:text-red-400"><i className="fas fa-shopping-cart p-1"></i>
+            Carrito</Link>
         <Link to='/pedidos' className="p-2 border-b w-full text-gray-600 transition-all hover:text-red-400"><i className="fas fa-truck p-1"></i> Pedidos</Link>
         <Link to='/ayuda' className="p-2 border-b w-full text-gray-600 transition-all hover:text-red-400"><i className="fas fa-question p-1"></i>Ayuda</Link>
         <button onClick={()=> logout()} className="p-2 border-b w-full text-gray-600 transition-all hover:text-red-400 text-left"><i className="fas fa-sign-out-alt p-1"></i>Cerrar Sesión</button>

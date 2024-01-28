@@ -3,14 +3,14 @@ import pool from '../database/database.js';
 //Get all orders
 export const getPedidos = async(req, res)=>{
     try{
-        const {id_usuario } = req.query;
+        const {id_usuario, limit, offset } = req.query;
         //if id_usuario query exist execute this lines code
-        if(id_usuario){
+        if((!limit && !offset) && id_usuario){
             const [result] = await pool.query('SELECT * FROM Pedidos WHERE id_usuario = ?', [id_usuario]);
             if(!result.length) return res.status(404).json({"message": `This user dont have orders`});
             res.json(result);
-        }else{
-            const [result] = await pool.query('SELECT * FROM Pedidos');
+        }else if(limit && offset){
+            const [result] = await pool.query(`SELECT * FROM Pedidos ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`);
             if(!result.length) return res.status(404).json({"message": `This table dont have data`});
             res.json(result);
         }

@@ -6,10 +6,10 @@ import { validateToken } from '../auth/authentication.js'
 const router = Router();
 
 //Endpoint for get all orders
-router.get('/api/v1/pedidos', validateToken, getPedidos);
+router.get('/api/v1/pedidos', getPedidos);
 
 //Endpoint for get an order
-router.get('/api/v1/pedidos/:id', validateToken, getPedido);
+router.get('/api/v1/pedidos/:id', getPedido);
 
 //Endpoint for create a new order
 router.post('/api/v1/pedidos', validateToken, createPedido);

@@ -6,10 +6,10 @@ import { validateToken } from '../auth/authentication.js'
 const router = Router();
 
 //Endpoint for get all colors
-router.get('/api/v1/colores', validateToken, getColores);
+router.get('/api/v1/colores', getColores);
 
 //Endpoint for get a color
-router.get('/api/v1/colores/:id', validateToken, getColor);
+router.get('/api/v1/colores/:id', getColor);
 
 //Endpoint for create a new color
 router.post('/api/v1/colores', validateToken, createColor);

@@ -6,10 +6,10 @@ import { validateToken } from '../auth/authentication.js';
 const router = Router();
 
 //Endpoint for get all sizes
-router.get('/api/v1/sizes', validateToken, getSizes);
+router.get('/api/v1/sizes', getSizes);
 
 //Endpoint for get a size 
-router.get('/api/v1/sizes/:id', validateToken, getSize);
+router.get('/api/v1/sizes/:id', getSize);
 
 //Endpoint for create a new size
 router.post('/api/v1/sizes', validateToken, createSize);

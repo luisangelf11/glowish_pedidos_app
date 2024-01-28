@@ -21,11 +21,11 @@ export default function CardProductFive({ id }) {
   }, []);
   return (
     <div
-      className="flex flex-col w-56 border h-auto rounded-xl mt-4 ml-4 bg-white"
+      className="flex flex-col w-56 border h-full rounded-xl mt-4 ml-4 bg-white"
       data-aos="fade-up"
     >
       <img
-        className="w-56 h-60 object-cover cursor-pointer hover:grayscale"
+        className="w-56 h-60 object-cover cursor-pointer transition-all hover:grayscale hover:scale-75 hover:rounded-xl"
         style={{
           borderTopLeftRadius: "12px",
           borderTopRightRadius: "12px",
@@ -33,7 +33,7 @@ export default function CardProductFive({ id }) {
         src={product.Imagen}
         alt={product.Id}
       />
-      <div>
+      <div className="border-b">
         <h3 className="font-bold uppercase text-red-500 p-2 border-b">
           {product.Nombre}
         </h3>
@@ -52,13 +52,6 @@ export default function CardProductFive({ id }) {
         <button className="bg-red-500 p-2 w-10 rounded-md text-sm text-white transition-all hover:bg-red-400">
           Ver
         </button>
-        {user !== null ? (
-          <button className="border-2 w-10 h-10 text-md border-green-700 p-2 rounded-md text-green-700 transition-all hover:border-gray-600 hover:text-gray-600">
-            <i className="fa-solid fa-cart-plus"></i>
-          </button>
-        ) : (
-          ""
-        )}
       </div>
     </div>
   );

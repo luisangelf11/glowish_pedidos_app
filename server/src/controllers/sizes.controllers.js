@@ -3,14 +3,14 @@ import pool from '../database/database.js';
 //Get all sizes
 export const getSizes = async (req, res) => {
     try {
-        const { id_producto } = req.query;
+        const { id_producto, limit, offset } = req.query;
         //if the query have an id_product use a filter for this id_product
-        if (id_producto) {
+        if ((!limit && !offset) && id_producto) {
             const [result] = await pool.query('SELECT * FROM Sizes WHERE Id_Producto = ?', [id_producto]);
             if (!result.length) return res.status(404).json({ "message": "The table don't have data" });
             res.json(result);
-        } else {
-            const [result] = await pool.query('SELECT * FROM Sizes');
+        } else if(limit && offset) {
+            const [result] = await pool.query(`SELECT * FROM Sizes ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`);
             if (!result.length) return res.status(404).json({ "message": "The table don't have data" });
             res.json(result);
         }
