@@ -7,6 +7,7 @@ import { useState } from "react";
 import { login } from "../api/user.js";
 import toast, { Toaster } from "react-hot-toast";
 import {useAuthContext} from '../context/authContext.jsx'
+import Welcome from "../components/Welcome.jsx";
 
 export default function LoginPage() {
   const [form, setForm] = useState({
@@ -14,6 +15,7 @@ export default function LoginPage() {
     password: "",
   });
   const [seePass, setSeePass] = useState(false);
+  const [welcome,setWelcome] = useState(false);
 
   const navigate = useNavigate();
   const {setUser} = useAuthContext();
@@ -35,10 +37,12 @@ export default function LoginPage() {
         `Credenciales correctas. Redireccionando a la página principal.`
       );
       setUser(res.data);
+      setWelcome(true);
       setTimeout(() => {
+        setWelcome(false);
         if (res.data.Rol === "client") navigate("/");
         else navigate("/dashboard");
-      }, 2000);
+      }, 3000);
     } catch (err) {
       toast.error(`${err.response.data.message}`);
       //console.log(err)
@@ -47,6 +51,7 @@ export default function LoginPage() {
 
   return (
     <section className="flex items-center justify-center h-screen w-screen bg-pink-100">
+      {welcome === true ? <Welcome /> :
       <div className="flex items-center justify-center h-auto w-auto shadow-2xl scale-up-center rounded-md bg-white">
         <div className="flex flex-col items-center p-2">
           <img src={LoginIMG} alt="login" className=" w-96" />
@@ -122,6 +127,7 @@ export default function LoginPage() {
           </div>
         </form>
       </div>
+            }
       <Toaster position="top-center" />
     </section>
   );

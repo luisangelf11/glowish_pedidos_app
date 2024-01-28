@@ -15,6 +15,13 @@ export default function CardProductFive({ id }) {
       console.error(err);
     }
   };
+
+  const generateNewPrice = () => {
+    let desc = parseFloat(product.Precio) * parseFloat(product.Descuento / 100);
+    let newPrice = parseFloat(product.Precio) - parseFloat(desc);
+    return newPrice;
+  };
+
   useEffect(() => {
     getDataProduct();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -37,13 +44,24 @@ export default function CardProductFive({ id }) {
         <h3 className="font-bold uppercase text-red-500 p-2 border-b">
           {product.Nombre}
         </h3>
-        <p className="text-sm p-1" >{product.Descripcion}</p>
-        <p className="p-1 font-semibold text-red-400">$RD {product.Precio}</p>
+        <p className="text-sm p-1">{product.Descripcion}</p>
+        {product.Descuento > 0 ? (
+          <p className="p-1 font-semibold text-red-400">
+            <del>$RD {product.Precio.toFixed(2)}</del> <br />{" "}
+            <span>$RD {generateNewPrice().toFixed(2)}</span>
+          </p>
+        ) : (
+          <p className="p-1 font-semibold text-red-400">
+            <span>$RD {parseFloat(product.Precio).toFixed(2)}</span>
+          </p>
+        )}
       </div>
       {product.Descuento > 0 ? (
-        <div className="flex items-center gap-1 p-1">
+        <div className="flex items-center gap-2 p-2">
           <img className="w-6 h-6" src={imgDesc} alt="icon-descuento" />
-          <p className="text-sm font-semibold text-slate-600">{product.Descuento}%</p>
+          <p className="text-sm font-semibold text-slate-600">
+            {product.Descuento}%
+          </p>
         </div>
       ) : (
         ""
