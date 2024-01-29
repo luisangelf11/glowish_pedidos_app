@@ -22,7 +22,7 @@ export const getProductos = async (req, res) => {
             let filter = `${name}%`
             const [result] = await pool.query(`SELECT p.Id, p.Nombre, p.Descripcion, p.Unidades, p.Precio, p.Imagen, p.Descuento, c.Nombre AS Categoria FROM Productos AS p
             INNER JOIN Categorias AS c ON p.Id_Categoria = c.Id WHERE p.Nombre LIKE ? ORDER BY id DESC`, [filter]);
-            if (!result.length) return res.status(404).json({ "message": `The product with name ${name} is not found` });
+            /* if (!result.length) return res.status(404).json({ "message": `The product with name ${name} is not found` }); */
             res.json(result);
         }
 

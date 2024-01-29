@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Logo from "../assets/GW.png";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../context/authContext";
 import ProfileBar from "./ProfileBar";
 
@@ -10,6 +10,7 @@ export default function MenuUser() {
   });
 
   const { user } = useAuthContext();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({
@@ -18,10 +19,22 @@ export default function MenuUser() {
     });
   };
 
+  const handleSubmit =(e)=>{
+    e.preventDefault();
+    navigate(`/catalogo?search=${form.find}`);
+  }
+
+  const isActiveHandler = (match, location) => {
+    // La lógica personalizada para activar el enlace.
+    // Por ejemplo, puedes comparar la ruta actual con la ruta del NavLink.
+   match !== null ?
+    window.location.reload(): null;
+  };
+
   return (
-    <nav className="flex justify-around gap-2 items-center shadow-md">
+    <nav className="flex justify-around gap-2 items-center shadow-md w-full">
       <img className="w-14 object-cover" src={Logo} alt="GW" />
-      <form>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           name="find"
@@ -42,6 +55,7 @@ export default function MenuUser() {
               ? `text-gray-500 font-semibold transition-all hover:text-red-400 text-sm p-1 hover:border-red-400 border-b-2 border-white`
               : `text-red-500 font-semibold transition-all  hover:text-red-400 text-sm p-1 hover:border-red-400 border-b-2 border-white`
           }
+          reloadDocument
         >
           <i className="fas fa-home p-1"></i>
           Inicio
@@ -53,6 +67,7 @@ export default function MenuUser() {
             ? `text-gray-500 font-semibold transition-all hover:text-red-400 text-sm p-1 hover:border-red-400 border-b-2 border-white`
             : `text-red-500 font-semibold transition-all  hover:text-red-400 text-sm p-1 hover:border-red-400 border-b-2 border-white`
           }
+          reloadDocument
         >
           <i className="fas fa-tshirt p-1"></i>
           Productos
