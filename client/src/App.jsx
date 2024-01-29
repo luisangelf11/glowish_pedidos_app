@@ -6,7 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
 import Products from "./pages/products/Products";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Catalogue from "./pages/catalogue/Catalogue";
+import CataloguePage from "./pages/catalogue/CataloguePage";
 import AdminRoutes from "./components/AdminRoutes";
 import ClientRoutes from "./components/ClientRoutes";
 import { AuthContextProvider } from "./context/authContext";
@@ -84,7 +84,7 @@ function App() {
           <Route
             path="/catalogo"
             element={
-                  <Catalogue />
+                  <CataloguePage />
             }
           />
           <Route path="/" element={<HomePage />} />
