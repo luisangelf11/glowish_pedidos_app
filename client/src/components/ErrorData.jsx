@@ -4,7 +4,7 @@ import "../assets/css/animation.css";
 
 export default function ErrorData() {
   return (
-    <div className="flex flex-col items-center m-auto w-10/12 gap-4 scale-up-center">
+    <div className="flex flex-col items-center m-auto w-10/12 gap-4 scale-up-center mt-16">
       <img src={errorIMG} alt="Error" className=" w-1/2 object-cover" />
       <h3 className="text-xl uppercase text-center font-bold p-2 text-red-500">
         ¡Ups! Algo salió mal 😢

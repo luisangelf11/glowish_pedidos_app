@@ -24,15 +24,10 @@ export default function MenuUser() {
     navigate(`/catalogo?search=${form.find}`);
   }
 
-  const isActiveHandler = (match, location) => {
-    // La lógica personalizada para activar el enlace.
-    // Por ejemplo, puedes comparar la ruta actual con la ruta del NavLink.
-   match !== null ?
-    window.location.reload(): null;
-  };
-
   return (
-    <nav className="flex justify-around gap-2 items-center shadow-md w-full">
+    <nav className="flex justify-around gap-2 items-center shadow-md w-full fixed bg-white" style={{
+      zIndex: 1000
+    }}>
       <img className="w-14 object-cover" src={Logo} alt="GW" />
       <form onSubmit={handleSubmit}>
         <input

@@ -85,7 +85,7 @@ export default function Catalogue() {
       {error ? (
         <ErrorData />
       ) : (
-        <article className="w-full gap-2 flex flex-col items-center">
+        <article className="w-full gap-2 flex flex-col items-center mt-16">
           <h2
             className="p-6 uppercase text-red-400 text-xl font-bold scale-up-center"
             style={{

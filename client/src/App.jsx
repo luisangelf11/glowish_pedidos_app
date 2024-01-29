@@ -14,6 +14,8 @@ import FormProduct from "./pages/products/FormProduct";
 import NotAuthorized from "./pages/NotAuthorized";
 import CategorysPage from "./pages/categorys/CategorysPage";
 import FormCategorys from "./pages/categorys/FormCategorys";
+import NewPage from "./pages/catalogue/NewPage";
+import ListCategoryPage from "./pages/catalogue/ListCategoryPage";
 
 
 function App() {
@@ -81,12 +83,9 @@ function App() {
             </ProtectedRoute>
           } />
           {/*This routes not are protected*/}
-          <Route
-            path="/catalogo"
-            element={
-                  <CataloguePage />
-            }
-          />
+          <Route path="/catalogo" element={<CataloguePage />}/>
+          <Route path="/nuevos-productos" element={<NewPage />}/>
+          <Route path="lista-categorias" element={<ListCategoryPage />}/>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Register />} />
