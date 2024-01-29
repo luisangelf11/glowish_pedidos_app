@@ -15,7 +15,7 @@ export const getProductos = async (req, res) => {
             //If the query params exists execute a query that select the productos with a pagination
             const [result] = await pool.query(`SELECT p.Id, p.Nombre, p.Descripcion, p.Unidades, p.Precio, p.Imagen, p.Descuento, c.Nombre AS Categoria FROM Productos AS p
             INNER JOIN Categorias AS c ON p.Id_Categoria = c.Id ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`);
-            if (!result.length) return res.status(404).json({ "message": `The table don't have data (offset: ${offset})` });
+            /* if (!result.length) return res.status(404).json({ "message": `The table don't have data (offset: ${offset})` }); */
             res.json(result);
         }else{
             //Filter the products with the name query
