@@ -7,6 +7,7 @@ import { getCategorys } from "../../api/category.js";
 import { useAuthContext } from "../../context/authContext.jsx";
 import { createProduct, getProduct, updateProduct } from "../../api/products.js";
 import '../../assets/css/animation.css'
+import icoIMG from "../../assets/icoImg.jpg"
 
 export default function FormProduct({edit}) {
   const initialForm = {
@@ -21,7 +22,7 @@ export default function FormProduct({edit}) {
   //State
   const [form, setForm] = useState(initialForm);
   const [file, setFile] = useState(null);
-  const [imgUrl, setImgUrl] = useState(null);
+  const [imgUrl, setImgUrl] = useState(icoIMG);
   const [categorys, setCategorys] = useState([]);
 
   //Hooks
@@ -94,7 +95,7 @@ export default function FormProduct({edit}) {
       const res = await createProduct(data, user.Token);
       console.log(res.data)
       setForm(initialForm);
-      setImgUrl(null);
+      setImgUrl(icoIMG);
       setFile(null);
       toast.success(`¡El producto se fue creado correctamente!`);
     }
