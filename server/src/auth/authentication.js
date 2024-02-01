@@ -13,7 +13,7 @@ export const validateToken = (req, res, next) =>{
     });
     //the function verify from the jwt module validate the token
     jwt.verify(accessToken, 'TOKEN_KEY', (err, user)=>{
-        if(err) return res.status(404).json({"message": "Access denied, token expired or incorrect"});
+        if(err) return res.status(401).json({"message": "Access denied, token expired or incorrect"});
         else next();
     });
 }    

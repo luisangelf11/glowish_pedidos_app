@@ -81,6 +81,9 @@ CREATE TABLE Carrito(
 Id INT AUTO_INCREMENT PRIMARY KEY,
 Id_Producto INT,
 Id_Usuario INT,
+Unidades INT,
+Size VARCHAR(15),
+Color VARCHAR(15),
 FOREIGN KEY (Id_Producto) REFERENCES Productos(Id),
 FOREIGN KEY (Id_Usuario) REFERENCES Usuarios(Id)
 );
@@ -122,3 +125,20 @@ FOREIGN KEY (Id_Usuario) REFERENCES Usuarios(Id)
 );
 
 SELECT * FROM Comentarios;
+
+/*RANKING*/
+CREATE TABLE Valoraciones(
+Id INT AUTO_INCREMENT PRIMARY KEY,
+Id_Producto INT,
+Id_Usuario INT,
+Puntos INT,
+FOREIGN KEY (Id_producto) REFERENCES Productos(Id),
+FOREIGN KEY (Id_Usuario) REFERENCES Usuarios(Id)
+);
+
+SELECT * FROM Valoraciones;
+
+ALTER TABLE Carrito
+ADD COLUMN Unidades INT,
+ADD COLUMN Size VARCHAR(15),
+ADD COLUMN Color VARCHAR(15);

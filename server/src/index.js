@@ -15,6 +15,7 @@ import routerPedidos from './routes/pedidos.routes.js';
 import routerDetalle from './routes/detalle.routes.js';
 import routerDashboard from './routes/dashboard.routes.js';
 import routerComentarios from './routes/comentarios.routes.js';
+import routerRankings from './routes/ranking.routes.js'
 //Proyect middlwares
 import { generateAdminUser } from './middlewares/userAdmin.js';
 
@@ -59,6 +60,7 @@ app.use(routerPedidos);
 app.use(routerDetalle);
 app.use(routerDashboard);
 app.use(routerComentarios);
+app.use(routerRankings);
 
 //Route for upload files
 app.post('/api/v1/upload', upload.single('file'), (req, res) => {

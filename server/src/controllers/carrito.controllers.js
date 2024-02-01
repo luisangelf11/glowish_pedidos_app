@@ -23,8 +23,8 @@ export const getCarritos = async (req, res) => {
 //Create a new shopping cart
 export const createCarrito = async (req, res) => {
     try {
-        const { id_usuario, id_producto } = req.body;
-        const [result] = await pool.query('INSERT INTO Carrito (id_producto, id_usuario) VALUES (?, ?)', [id_producto, id_usuario]);
+        const { id_usuario, id_producto, unidades, color, size } = req.body;
+        const [result] = await pool.query('INSERT INTO Carrito (id_producto, id_usuario, unidades, color, size) VALUES (?, ?, ?, ?, ?)', [id_producto, id_usuario, unidades, color, size]);
         if (!result.affectedRows) return res.status.json({ "message": "Error in the query (create a new shopping cart)" });
         res.json({
             id: result.insertId,
