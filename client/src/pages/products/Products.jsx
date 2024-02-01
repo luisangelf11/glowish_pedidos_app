@@ -75,7 +75,7 @@ export default function Products() {
         >
           <div className="flex flex-col w-2/3">
           <h2 className="text-left p-2 uppercase text-red-500 font-bold text-xl">
-            Control de productos
+            Inventario de productos
           </h2>
           <form
             className="bg-white border rounded-xl"
