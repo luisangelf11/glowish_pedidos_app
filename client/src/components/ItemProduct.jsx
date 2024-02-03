@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import imgDesc from "../assets/descuentoIcon.png";
+import { useNavigate } from "react-router-dom";
 
 export default function ItemProduct({ data }) {
   const {
@@ -22,6 +23,12 @@ export default function ItemProduct({ data }) {
   const handleClickImg = () => {
     window.location.href = `${Imagen}`;
   };
+
+  const navigate = useNavigate();
+
+  const handleClick =(e)=>{
+    navigate(`/catalogo/${Id}`);
+  } 
 
   return (
     <div
@@ -78,7 +85,7 @@ export default function ItemProduct({ data }) {
         </div>
       </div>
       <div className="flex gap-2 justify-end items-end p-2">
-        <button className="bg-red-500 p-2 w-10 rounded-md text-sm text-white transition-all hover:bg-red-400">
+        <button onClick={handleClick} className="bg-red-500 p-2 w-10 rounded-md text-sm text-white transition-all hover:bg-red-400">
           Ver
         </button>
       </div>

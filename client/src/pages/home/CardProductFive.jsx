@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getProduct } from "../../api/products";
 import { useAuthContext } from "../../context/authContext";
 import imgDesc from "../../assets/descuentoIcon.png";
+import { useNavigate } from "react-router-dom";
 
 export default function CardProductFive({ id }) {
   const [product, setProduct] = useState({});
@@ -26,6 +27,13 @@ export default function CardProductFive({ id }) {
     getDataProduct();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const navigate = useNavigate();
+
+  const handleClick =(e)=>{
+    navigate(`/catalogo/${product.Id}`);
+  } 
+
   return (
     <div
       className="flex flex-col w-56 border h-full rounded-xl mt-4 ml-4 bg-white"
@@ -67,7 +75,7 @@ export default function CardProductFive({ id }) {
         ""
       )}
       <div className="flex gap-2 h-12 justify-end items-end p-2">
-        <button className="bg-red-500 p-2 w-10 rounded-md text-sm text-white transition-all hover:bg-red-400">
+        <button onClick={handleClick} className="bg-red-500 p-2 w-10 rounded-md text-sm text-white transition-all hover:bg-red-400">
           Ver
         </button>
       </div>

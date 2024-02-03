@@ -7,7 +7,7 @@ export const getComentarios = async (req, res) => {
         if (id_producto) {
             //Select all comments where the id_producto is the params query
             const [result] = await pool.query('SELECT * FROM Comentarios WHERE id_producto = ?', [id_producto]);
-            if (!result.length) return res.status(404).json({ "message": `Don't exist comments for the product with id ${id_producto}` });
+            /* if (!result.length) return res.status(404).json({ "message": `Don't exist comments for the product with id ${id_producto}` }); */
             res.json(result);
         } else {
             //Select all comments in the table
