@@ -46,6 +46,19 @@ export const getProducto = async (req, res) => {
     }
 } 
 
+export const getProductsCategorys = async(req, res)=>{
+    try{
+        const {id_categoria} = req.query;
+        if(id_categoria){
+            const [result] = await pool.query(`SELECT * FROM Productos WHERE id_categoria = ?`, [id_categoria]);
+            res.json(result);
+        }else res.status(404).json({"message": "The query params is not exist"});
+    }
+    catch(err){
+        res.status(500).json({ "message": err.message });
+    }
+}
+
 //Create a new product
 export const createProducto = async(req, res)=>{
     try{

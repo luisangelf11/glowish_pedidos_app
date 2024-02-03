@@ -2,12 +2,18 @@ import React, { useEffect, useState } from "react";
 import MenuUser from "../../components/MenuUser";
 import ErrorData from "../../components/ErrorData";
 import { getCategorys } from "../../api/category";
+import { getProductCategorys } from "../../api/products";
+import NoneData from '../../components/NoneData'
+import ItemProduct from "../../components/ItemProduct";
+import Loader from "../../components/Loader";
 
 export default function ListCategoryPage() {
   const [categorys, setCategorys] = useState([]);
   const [error, setError] = useState(false);
   const [form, setForm] = useState({ id: "" });
   const [data, setData] = useState([]);
+  const [empty, setEmpty] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getCategorysData = async () => {
     try {
@@ -18,16 +24,40 @@ export default function ListCategoryPage() {
     }
   };
 
+  const getProducts = async(id)=>{
+    try{
+      if(id !== ""){
+        setData([]);
+        setEmpty(false);
+        const res = await getProductCategorys(id);
+        setIsLoading(true);
+        setTimeout(()=> {
+          setIsLoading(false)
+            setData(res.data);
+            if(res.data.length) setEmpty(false);
+            else setEmpty(true);
+          }, 3000);
+      }else{
+        setData([]);
+        setEmpty(true);
+      }
+    }
+    catch(err){
+      setError(false);
+    }
+  }
+
   const handleChange=(e)=>{
     setForm({
         ...form,
         [e.target.name]: e.target.value
     });
   }
-
+  
   useEffect(()=>{
     getCategorysData()
-  }, []);
+    getProducts(form.id);
+  }, [form.id]);
 
   return (
     <section className="flex flex-col h-screen">
@@ -61,6 +91,9 @@ export default function ListCategoryPage() {
               ))}
             </select>
           </form>
+          {isLoading && <Loader />}
+          {empty && <NoneData />}
+          {data.length > 0 ? data.map((el, index)=> <ItemProduct key={index} data={el}/>) : ''}
         </article>
       )}
     </section>
