@@ -18,12 +18,12 @@ import NewPage from "./pages/catalogue/NewPage";
 import ListCategoryPage from "./pages/catalogue/ListCategoryPage";
 import ProductCatalogue from "./pages/catalogue/ProductCatalogue";
 import Profile from "./pages/Profile";
-
+import Help from "./pages/Help";
 
 function App() {
   return (
     <>
-    <AuthContextProvider>
+      <AuthContextProvider>
         <Routes>
           <Route
             path="/dashboard"
@@ -55,53 +55,78 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/editar-producto/:id" element={
-            <ProtectedRoute>
-              <AdminRoutes>
-                <FormProduct edit={true}/>
-              </AdminRoutes>
-            </ProtectedRoute>
-          }/>
-          <Route path="/categorias" element={
-            <ProtectedRoute>
-              <AdminRoutes>
-                <CategorysPage />
-              </AdminRoutes>
-            </ProtectedRoute>
-          } />
-           <Route path="/nueva-categoria" element={
-            <ProtectedRoute>
-              <AdminRoutes>
-                <FormCategorys edit={false} />
-              </AdminRoutes>
-            </ProtectedRoute>
-          } />
-          
-          <Route path="/editar-categoria/:id" element={
-            <ProtectedRoute>
-              <AdminRoutes>
-                <FormCategorys edit={true} />
-              </AdminRoutes>
-            </ProtectedRoute>
-          } />
+          <Route
+            path="/editar-producto/:id"
+            element={
+              <ProtectedRoute>
+                <AdminRoutes>
+                  <FormProduct edit={true} />
+                </AdminRoutes>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/categorias"
+            element={
+              <ProtectedRoute>
+                <AdminRoutes>
+                  <CategorysPage />
+                </AdminRoutes>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/nueva-categoria"
+            element={
+              <ProtectedRoute>
+                <AdminRoutes>
+                  <FormCategorys edit={false} />
+                </AdminRoutes>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/editar-categoria/:id"
+            element={
+              <ProtectedRoute>
+                <AdminRoutes>
+                  <FormCategorys edit={true} />
+                </AdminRoutes>
+              </ProtectedRoute>
+            }
+          />
           {/*This routes are protected for user client*/}
-          <Route path="/perfil" element={
-            <ProtectedRoute>
-              <ClientRoutes>
-                <Profile />
-              </ClientRoutes>
-            </ProtectedRoute>
-          }/>
+          <Route
+            path="/perfil"
+            element={
+              <ProtectedRoute>
+                <ClientRoutes>
+                  <Profile />
+                </ClientRoutes>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/ayuda"
+            element={
+              <ProtectedRoute>
+                <ClientRoutes>
+                  <Help />
+                </ClientRoutes>
+              </ProtectedRoute>
+            }
+          />
           {/*This routes not are protected*/}
-          <Route path="/catalogo" element={<CataloguePage />}/>
-          <Route path="/catalogo/:id" element={<ProductCatalogue />}/>
-          <Route path="/nuevos-productos" element={<NewPage />}/>
-          <Route path="lista-categorias" element={<ListCategoryPage />}/>
+          <Route path="/catalogo" element={<CataloguePage />} />
+          <Route path="/catalogo/:id" element={<ProductCatalogue />} />
+          <Route path="/nuevos-productos" element={<NewPage />} />
+          <Route path="lista-categorias" element={<ListCategoryPage />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<NotFound />} />
-          <Route path="/ruta-privada" element={<NotAuthorized />}/>
+          <Route path="/ruta-privada" element={<NotAuthorized />} />
         </Routes>
       </AuthContextProvider>
     </>

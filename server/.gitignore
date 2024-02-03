@@ -3,3 +3,6 @@ node_modules
 
 #ignore the photos of productos in the file upload
 src/public/uploads
+
+#ignore the .env
+.env
