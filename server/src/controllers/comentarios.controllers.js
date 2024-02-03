@@ -3,10 +3,10 @@ import pool from '../database/database.js';
 //Get all comments of the table
 export const getComentarios = async (req, res) => {
     try {
-        const { id_producto } = req.query;
-        if (id_producto) {
+        const { id_producto, limit, offset } = req.query;
+        if (id_producto && limit && offset) {
             //Select all comments where the id_producto is the params query
-            const [result] = await pool.query('SELECT * FROM Comentarios WHERE id_producto = ?', [id_producto]);
+            const [result] = await pool.query(`SELECT * FROM Comentarios WHERE id_producto = ? ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`, [id_producto]);
             /* if (!result.length) return res.status(404).json({ "message": `Don't exist comments for the product with id ${id_producto}` }); */
             res.json(result);
         } else {

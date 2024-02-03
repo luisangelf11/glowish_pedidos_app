@@ -7,6 +7,10 @@ import { getProduct } from "../../api/products";
 import imgDesc from "../../assets/descuentoIcon.png";
 import { Toaster, toast } from "react-hot-toast";
 import { createComment, getCommentsForIdProduct } from "../../api/comments";
+import '../../assets/css/animation.css'
+import CardComment from "../../components/CardComment";
+import { deleteComment } from "../../api/comments";
+
 
 export default function ProductCatalogue() {
   const initialForm = {
@@ -37,7 +41,7 @@ export default function ProductCatalogue() {
 
   const getComments = async () => {
     try {
-      const res = await getCommentsForIdProduct(id);
+      const res = await getCommentsForIdProduct(id, 20, 0);
       setComments(res.data);
     } catch (err) {
       setError(true);
@@ -97,6 +101,7 @@ export default function ProductCatalogue() {
         await createComment(dataEndpoint, user.Token);
         toast.success(`¡Comentario pubilcado!`);
         getComments();
+        setComment({message: ''});
     }
     catch(err){
         setError(true);
@@ -117,13 +122,24 @@ export default function ProductCatalogue() {
     }
   };
 
+  const deleteC=async(Id)=>{
+    try{
+        let answer = confirm("¿Deseas eliminar este comentario?");
+        if(answer) await deleteComment(Id, user.Token);
+        getComments();
+    }   
+    catch(err){
+        console.log(err)
+    }
+  }
+
   return (
     <section className="flex flex-col h-screen">
       <MenuUser />
       {error === true ? (
         <ErrorData />
       ) : (
-        <article className="w-full gap-2 flex flex-col items-center mt-16">
+        <article className="w-full gap-2 flex flex-col items-center mt-16 scale-up-center">
           <article className="flex w-11/12 gap-2 justify-between border-b mt-8 p-4">
             <div>
               <img
@@ -229,7 +245,7 @@ export default function ProductCatalogue() {
               </div>
               {user !== null ? (
                 <button className="bg-red-500 text-sm p-2 cursor-pointer text-white rounded-sm transition-all hover:bg-red-400">
-                  <i className="fas fa-save p-1"></i>Guardar En El Carrito
+                  <i className="fas fa-cart-plus p-1"></i>Guardar En El Carrito
                 </button>
               ) : (
                 <Link
@@ -247,9 +263,12 @@ export default function ProductCatalogue() {
                 <h2 className="uppercase text-red-400 font-semibold text-center">
                   Este producto no tiene ningún comentario
                 </h2>
-              ) : (
-                comments.map((el, index) => <p key={index}>{el.Id}</p>)
-              )}
+              ) : <>
+                <h2 className="uppercase text-red-400 font-semibold text-center">Últimos 20 Comentarios</h2>
+               {comments.map((el, index) => <CardComment key={index} data={el} deleteC={deleteC}/>)}
+              </>
+
+              }
             </div>
             <form onSubmit={newComment} className="flex flex-col gap-2">
               <div>
@@ -261,12 +280,14 @@ export default function ProductCatalogue() {
                   onChange={handleChangeComments}
                   placeholder="Escribe un comentario"
                   className="border rounded-sm text-sm p-1 outline-none border-gray-400 w-56 focus:border-blue-500 focus:border-2 mt-1"
+                  maxLength={150}
                 ></textarea>
               </div>
               <button
                 onClick={newComment}
                 className="text-center bg-red-500 text-sm p-2 cursor-pointer text-white rounded-sm transition-all hover:bg-red-400"
               >
+                <i className="fas fa-paper-plane p-1"></i>
                 Comentar
               </button>
             </form>

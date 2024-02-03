@@ -6,3 +6,6 @@ export const login = async ({ email, password }) =>
 
 export const register = async(data)=>
     await axios.post(`http://localhost:3000/api/v1/usuarios`, data);    
+
+export const getUser = async(id)=>
+    await axios.get(`http://localhost:3000/api/v1/usuarios/${id}`);    
