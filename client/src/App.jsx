@@ -17,6 +17,7 @@ import FormCategorys from "./pages/categorys/FormCategorys";
 import NewPage from "./pages/catalogue/NewPage";
 import ListCategoryPage from "./pages/catalogue/ListCategoryPage";
 import ProductCatalogue from "./pages/catalogue/ProductCatalogue";
+import Profile from "./pages/Profile";
 
 
 function App() {
@@ -83,6 +84,14 @@ function App() {
               </AdminRoutes>
             </ProtectedRoute>
           } />
+          {/*This routes are protected for user client*/}
+          <Route path="/perfil" element={
+            <ProtectedRoute>
+              <ClientRoutes>
+                <Profile />
+              </ClientRoutes>
+            </ProtectedRoute>
+          }/>
           {/*This routes not are protected*/}
           <Route path="/catalogo" element={<CataloguePage />}/>
           <Route path="/catalogo/:id" element={<ProductCatalogue />}/>

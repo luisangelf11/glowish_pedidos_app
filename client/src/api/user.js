@@ -9,3 +9,9 @@ export const register = async(data)=>
 
 export const getUser = async(id)=>
     await axios.get(`http://localhost:3000/api/v1/usuarios/${id}`);    
+
+export const updateUser =async(id, data,token)=>    
+    await axios.put(`http://localhost:3000/api/v1/usuarios/${id}?accessToken=${token}`, data);    
+
+export const changePassword = async(id, data, token)=>    
+    await axios.put(`http://localhost:3000/api/v1/usuarios/${id}?newPassword=true&accessToken=${token}`, data);    

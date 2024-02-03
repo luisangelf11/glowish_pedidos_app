@@ -86,9 +86,10 @@ export const updateUsuario = async (req, res) => {
             if (newPassword === "false") return res.status(404).json({ "message": "The query is in false" });
             const { contrasena } = req.body;
             let password = await encryptPass(contrasena);
+            console.log(password)
             const [result] = await pool.query(`UPDATE Usuarios SET contrasena = ? WHERE id = ?`, [password, id]);
             if (!result.affectedRows) return res.status(404).json({ "message": `Error in the query (update the password for the user with Id ${id})` });
-            res.json(result);
+            res.json({"newPass": password});
         }
 
     }
@@ -123,8 +124,8 @@ export const signIn = async (req, res) => {
             if (signIn) {
                 //Create a new token for de new session
                 const token = generateToken(result[0]);
-                const {Id, Correo, Nombre, Apellido, Rol, Avatar} = result[0];
-                const user = { Id, Correo, Nombre, Apellido, Rol, Avatar, Token: token }
+                const {Id, Correo, Nombre, Apellido, Rol, Avatar, Telefono, Direccion} = result[0];
+                const user = { Id, Correo, Nombre, Apellido, Rol, Avatar, Direccion, Telefono,Token: token }
                 res.json(user);
             } else res.status(404).json({ "message": "E-mail or password is incorrect" });
         } else res.status(404).json({ "message": "The endpoint need a query for sign in" });
