@@ -19,6 +19,8 @@ import ListCategoryPage from "./pages/catalogue/ListCategoryPage";
 import ProductCatalogue from "./pages/catalogue/ProductCatalogue";
 import Profile from "./pages/Profile";
 import Help from "./pages/Help";
+import ColorsPage from "./pages/colors/ColorsPage";
+import FormColors from "./pages/colors/FormColors";
 
 function App() {
   return (
@@ -96,6 +98,27 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/colores" element={
+            <ProtectedRoute>
+              <AdminRoutes>
+                <ColorsPage />
+              </AdminRoutes>
+            </ProtectedRoute>
+          }/>
+        <Route path="/nuevo-color" element={
+          <ProtectedRoute>
+            <AdminRoutes>
+              <FormColors edit={false}/>
+            </AdminRoutes>
+          </ProtectedRoute>
+        }/>
+         <Route path="/editar-color/:id" element={
+          <ProtectedRoute>
+            <AdminRoutes>
+              <FormColors edit={true}/>
+            </AdminRoutes>
+          </ProtectedRoute>
+        }/>
           {/*This routes are protected for user client*/}
           <Route
             path="/perfil"
