@@ -21,6 +21,7 @@ import Profile from "./pages/Profile";
 import Help from "./pages/Help";
 import ColorsPage from "./pages/colors/ColorsPage";
 import FormColors from "./pages/colors/FormColors";
+import SizesPage from "./pages/sizes/sizesPage";
 
 function App() {
   return (
@@ -119,6 +120,15 @@ function App() {
             </AdminRoutes>
           </ProtectedRoute>
         }/>
+        <Route path="/sizes"
+        element={
+          <ProtectedRoute>
+            <AdminRoutes>
+              <SizesPage />
+            </AdminRoutes>
+          </ProtectedRoute>
+        }
+        />
           {/*This routes are protected for user client*/}
           <Route
             path="/perfil"
