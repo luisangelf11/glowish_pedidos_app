@@ -1,8 +1,9 @@
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import MenuAdmin from '../../components/MenuAdmin'
 import { Link } from 'react-router-dom';
 import {Toaster, toast} from 'react-hot-toast'
 import TableContent from './TableContent';
+import { getFilterSizes, getSizes } from '../../api/sizes';
 
 export default function SizesPage() {
 const [form, setForm] = useState({filter:''});
@@ -14,6 +15,33 @@ const handleChange =(e)=>{
         [e.target.name]: e.target.value
     });
 }
+const getData=async()=>{
+  try {
+    const res = await getSizes(10,0)
+    console.log(res.data)
+    setData(res.data)
+  } catch (error) {
+    toast.error(error.response.data.message)
+  }
+}
+
+const getFilter=async(id_producto)=>{
+  try {
+    const res = await getFilterSizes(id_producto)
+    console.log(res.data)
+    setData(res.data)
+  } catch (error) {
+    toast.error(error.response.data.message)
+  }
+}
+
+useEffect(()=>{
+  if(form.filter==="")getData()
+  else
+    getFilter(form.filter)
+},[form.filter])
+
+
   return (
     <section className="flex h-screen">
         <MenuAdmin/>
