@@ -143,7 +143,7 @@ export default function FormColors({edit}) {
             </div>
             <div className="flex flex-col">
               <label
-                htmlFor="color"
+                htmlFor="id_producto"
                 className="text-sm font-bold text-red-400"
               >
                 Id_producto:

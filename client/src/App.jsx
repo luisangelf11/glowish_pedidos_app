@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Router } from "react-router-dom";
 import HomePage from "./pages/home/HomePage";
 import LoginPage from "./pages/LoginPage";
 import NotFound from "./pages/NotFound";
@@ -22,6 +22,7 @@ import Help from "./pages/Help";
 import ColorsPage from "./pages/colors/ColorsPage";
 import FormColors from "./pages/colors/FormColors";
 import SizesPage from "./pages/sizes/sizesPage";
+import FormSize from "./pages/sizes/FormSize";
 
 function App() {
   return (
@@ -125,6 +126,24 @@ function App() {
           <ProtectedRoute>
             <AdminRoutes>
               <SizesPage />
+            </AdminRoutes>
+          </ProtectedRoute>
+        }
+        />
+        <Route path="/nuevo-sizes"
+        element={
+          <ProtectedRoute>
+                <AdminRoutes>
+              <FormSize edit={false} />
+            </AdminRoutes>
+          </ProtectedRoute>
+        }
+        />
+        <Route path="/editar-sizes/:id"
+        element={
+          <ProtectedRoute>
+                <AdminRoutes>
+              <FormSize edit={true} />
             </AdminRoutes>
           </ProtectedRoute>
         }

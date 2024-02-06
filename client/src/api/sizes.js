@@ -5,3 +5,6 @@ export const getSizes =async (limit, offset)=>
 
 export const getFilterSizes =async(id_producto)=>
     await axios.get (`http://localhost:3000/api/v1/sizes?id_producto=${id_producto}`)
+
+export const createSize = async(data, token)=>
+    await axios.post(`http://localhost:3000/api/v1/sizes?accessToken=${token}`, data)
