@@ -8,3 +8,6 @@ export const getFilterSizes =async(id_producto)=>
 
 export const createSize = async(data, token)=>
     await axios.post(`http://localhost:3000/api/v1/sizes?accessToken=${token}`, data)
+
+ export const deleteSize = async(id, token)=>
+    await axios.delete(`http://localhost:3000/api/v1/sizes/${id}?accessToken=${token}`)
