@@ -11,3 +11,9 @@ export const createSize = async(data, token)=>
 
  export const deleteSize = async(id, token)=>
     await axios.delete(`http://localhost:3000/api/v1/sizes/${id}?accessToken=${token}`)
+
+export const getSize = async(id)=>
+    await axios.get(`http://localhost:3000/api/v1/sizes/${id}`)
+
+export const updateSize = async(id, data, token)=>
+    await axios.put(`http://localhost:3000/api/v1/sizes/${id}?accessToken=${token}`, data)

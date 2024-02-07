@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MenuAdmin from '../../components/MenuAdmin'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { Toaster, toast } from 'react-hot-toast'
-import { createSize } from '../../api/sizes'
+import { createSize, getSize, updateSize } from '../../api/sizes'
 import { useAuthContext } from '../../context/authContext'
 
 export default function FormSize({ edit }) {
@@ -11,7 +11,27 @@ export default function FormSize({ edit }) {
     }
     const [form, setForm] = useState(initialForm)
     const { id } = useParams();
-    const {user} = useAuthContext();
+    const { user } = useAuthContext();
+
+    const navigate = useNavigate();
+
+    const getDataEdit = async () => {
+        try {
+            const res = await getSize(id)
+            setForm({
+                size: res.data.Size,
+                id_producto: res.data.Id_Producto,
+                estado: res.data.Estado
+            });
+        } catch (error) {
+            toast.error(`${err.response.data.message}`);
+        }
+    }
+
+    useEffect(() => {
+        if (edit === true) getDataEdit();
+    }, []
+    )
 
     const handleChange = (e) => {
         setForm({
@@ -20,15 +40,15 @@ export default function FormSize({ edit }) {
         });
     }
 
-    const validateData =()=>{
-        if(form.size === "" || form.estado === "" || form.id_producto === "")
+    const validateData = () => {
+        if (form.size === "" || form.estado === "" || form.id_producto === "")
             return false;
         else return true;
-      }
+    }
 
-      const addSize =async()=>{
-        try{
-           if(!validateData()) return toast.error(`Por favor, complete todos los campos`);
+    const addSize = async () => {
+        try {
+            if (!validateData()) return toast.error(`Por favor, complete todos los campos`);
             const dataValues = {
                 size: form.size,
                 id_producto: parseInt(form.id_producto),
@@ -38,16 +58,33 @@ export default function FormSize({ edit }) {
             toast.success(`¡El size fue creado correctamente!`);
             setForm(initialForm);
         }
-        catch(err){
+        catch (err) {
             toast.error(`${err.response.data.message}`);
         }
-      }
+    }
 
+    const editSize = async () => {
+        try {
+            const dataValues = {
+                size: form.size,
+                id_producto: parseInt(form.id_producto),
+                estado: form.estado
+            }
+            await updateSize(id, dataValues,user.Token);
+            toast.success(`¡El size fue actualizado correctamente! Redireccionando a sizes.`);
+            setTimeout(() => {
+                navigate("/sizes");
+              }, 3000);
+        } catch (error) {
+            toast.error(`${error.response.data.message}`);
+        }
+    }
 
-      const handleSubmit =(e)=>{
+    const handleSubmit = (e) => {
         e.preventDefault();
-        if(edit === false) addSize();
-      }
+        if (edit === false) addSize();
+        else if(edit === true) editSize();
+    }
 
     return (
         <section className="flex h-screen">
