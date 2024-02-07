@@ -23,6 +23,7 @@ import ColorsPage from "./pages/colors/ColorsPage";
 import FormColors from "./pages/colors/FormColors";
 import SizesPage from "./pages/sizes/sizesPage";
 import FormSize from "./pages/sizes/FormSize";
+import UserPage from "./pages/users/UserPage";
 
 function App() {
   return (
@@ -106,48 +107,59 @@ function App() {
                 <ColorsPage />
               </AdminRoutes>
             </ProtectedRoute>
-          }/>
-        <Route path="/nuevo-color" element={
-          <ProtectedRoute>
-            <AdminRoutes>
-              <FormColors edit={false}/>
-            </AdminRoutes>
-          </ProtectedRoute>
-        }/>
-         <Route path="/editar-color/:id" element={
-          <ProtectedRoute>
-            <AdminRoutes>
-              <FormColors edit={true}/>
-            </AdminRoutes>
-          </ProtectedRoute>
-        }/>
-        <Route path="/sizes"
-        element={
-          <ProtectedRoute>
-            <AdminRoutes>
-              <SizesPage />
-            </AdminRoutes>
-          </ProtectedRoute>
-        }
-        />
-        <Route path="/nuevo-sizes"
-        element={
-          <ProtectedRoute>
+          } />
+          <Route path="/nuevo-color" element={
+            <ProtectedRoute>
+              <AdminRoutes>
+                <FormColors edit={false} />
+              </AdminRoutes>
+            </ProtectedRoute>
+          } />
+          <Route path="/editar-color/:id" element={
+            <ProtectedRoute>
+              <AdminRoutes>
+                <FormColors edit={true} />
+              </AdminRoutes>
+            </ProtectedRoute>
+          } />
+          <Route path="/sizes"
+            element={
+              <ProtectedRoute>
                 <AdminRoutes>
-              <FormSize edit={false} />
-            </AdminRoutes>
-          </ProtectedRoute>
-        }
-        />
-        <Route path="/editar-sizes/:id"
-        element={
-          <ProtectedRoute>
+                  <SizesPage />
+                </AdminRoutes>
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/nuevo-sizes"
+            element={
+              <ProtectedRoute>
                 <AdminRoutes>
-              <FormSize edit={true} />
-            </AdminRoutes>
-          </ProtectedRoute>
-        }
-        />
+                  <FormSize edit={false} />
+                </AdminRoutes>
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/editar-sizes/:id"
+            element={
+              <ProtectedRoute>
+                <AdminRoutes>
+                  <FormSize edit={true} />
+                </AdminRoutes>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route path="/usuarios"
+            element={
+              <ProtectedRoute>
+                <AdminRoutes>
+                  <UserPage  />
+                </AdminRoutes>
+              </ProtectedRoute>
+            }
+          />
+
           {/*This routes are protected for user client*/}
           <Route
             path="/perfil"
