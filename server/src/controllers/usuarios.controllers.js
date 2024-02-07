@@ -20,7 +20,7 @@ export const getUsuarios = async (req, res) => {
             //Filter with the correo
             let filter = `${correo}%`;
             const [result] = await pool.query(`SELECT * FROM Usuarios WHERE correo LIKE ? ORDER BY id DESC`, [filter]);
-            if (!result.length) return res.status(404).json({ "message": `The user with email ${correo} is not found` });
+            /* if (!result.length) return res.status(404).json({ "message": `The user with email ${correo} is not found` }); */
             res.json(result);
         }
     }

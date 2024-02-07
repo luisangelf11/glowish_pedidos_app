@@ -14,7 +14,7 @@ export default function RowsUsers({ element,  noRow }) {
         className={`${(noRow + 1) % 2 === 0 ? 'bg-slate-200': ''} transition-all cursor-pointer hover:bg-slate-100`}
       >
         <td className="text-left p-2 text-sm">{Id}</td>
-        <td className="text-left p-2 text-sm"><img src={Avatar && userIcon} alt="avatar" className='w-10 h-10 object-cover'/></td>
+        <td className="text-left p-2 text-sm"><img src={Avatar || userIcon} alt="avatar" className='w-10 h-10 object-cover rounded-full'/></td>
         <td className="text-left p-2 text-sm w-48">{Correo}</td>
         <td className="text-left p-2 text-sm">{Nombre} {Apellido}</td>
         <td className="text-left p-2 text-sm w-48">{Direccion}</td>

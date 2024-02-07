@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MenuAdmin from '../../components/MenuAdmin'
 import TableContent from './TableUsers';
+import { Toaster, toast } from 'react-hot-toast'
+import { getFilterUsers, getUsers } from '../../api/user';
 
 export default function UserPage() {
     const [form, setForm] = useState({ filter: '' })
@@ -12,6 +14,31 @@ export default function UserPage() {
         });
     }
 
+    const getData = async () => {
+        try {
+            const res = await getUsers(10, 0)
+            console.log(res.data)
+            setData(res.data)
+        } catch (error) {
+            toast.error(error.response.data.message)
+        }
+    }
+
+    const getFilter = async (correo) => {
+        try {
+            const res = await getFilterUsers(correo)
+            console.log(res.data)
+            setData(res.data)
+        } catch (error) {
+            toast.error(error.response.data.message)
+        }
+    }
+
+
+    useEffect(() => {
+       if(form.filter==="") getData()
+       else getFilter(form.filter)
+    }, [form.filter])
     return (
         <section className="flex h-screen">
             <MenuAdmin />
@@ -42,9 +69,9 @@ export default function UserPage() {
                     </div>
 
                 </div>
-                <TableContent tableHead={["Id", "Avatar", "Correo", "Nombre Completo", "Dirección", "Tel éfono"]}data={data}/>
+                <TableContent tableHead={["Id", "Avatar", "Correo", "Nombre Completo", "Dirección", "Tel éfono"]} data={data} />
             </section>
-
+            <Toaster position="top-center" />
         </section>
     )
 }
