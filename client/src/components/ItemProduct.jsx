@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import imgDesc from "../assets/descuentoIcon.png";
 import { useNavigate } from "react-router-dom";
+import Rating from "react-rating";
+import { getAVG } from "../api/ranking";
 
 export default function ItemProduct({ data }) {
+  const [ranking, setRanking] = useState(0);
   const {
     Id,
     Nombre,
@@ -13,6 +16,16 @@ export default function ItemProduct({ data }) {
     Descuento,
     Categoria,
   } = data;
+
+  const getRanking = async (id) => {
+    try {
+      const res = await getAVG(id);
+      if (res.data.Promedio) setRanking(res.data.Promedio);
+      else setRanking(0);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const generateNewPrice = () => {
     let desc = parseFloat(Precio) * parseFloat(Descuento / 100);
@@ -26,9 +39,13 @@ export default function ItemProduct({ data }) {
 
   const navigate = useNavigate();
 
-  const handleClick =(e)=>{
+  const handleClick = (e) => {
     navigate(`/catalogo/${Id}`);
-  } 
+  };
+
+  useEffect(() => {
+    getRanking(Id);
+  }, []);
 
   return (
     <div
@@ -82,10 +99,21 @@ export default function ItemProduct({ data }) {
               {Categoria}
             </span>
           )}
+          <Rating
+            className="text-yellow-500 mt-4"
+            readonly={true}
+            initialRating={ranking}
+            emptySymbol={"far fa-star"}
+            fullSymbol={"fas fa-star"}
+            fractions={2}
+          />
         </div>
       </div>
       <div className="flex gap-2 justify-end items-end p-2">
-        <button onClick={handleClick} className="bg-red-500 p-2 w-10 rounded-md text-sm text-white transition-all hover:bg-red-400">
+        <button
+          onClick={handleClick}
+          className="bg-red-500 p-2 w-10 rounded-md text-sm text-white transition-all hover:bg-red-400"
+        >
           Ver
         </button>
       </div>

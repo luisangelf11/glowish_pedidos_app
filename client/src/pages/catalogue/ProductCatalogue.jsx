@@ -7,10 +7,15 @@ import { getProduct } from "../../api/products";
 import imgDesc from "../../assets/descuentoIcon.png";
 import { Toaster, toast } from "react-hot-toast";
 import { createComment, getCommentsForIdProduct } from "../../api/comments";
-import '../../assets/css/animation.css'
+import "../../assets/css/animation.css";
 import CardComment from "../../components/CardComment";
 import { deleteComment } from "../../api/comments";
-
+import Rating from "react-rating";
+import {
+  createRanking,
+  updateRanking,
+  validateRanking,
+} from "../../api/ranking";
 
 export default function ProductCatalogue() {
   const initialForm = {
@@ -23,11 +28,32 @@ export default function ProductCatalogue() {
   const [form, setForm] = useState(initialForm);
   const [comment, setComment] = useState({ message: "" });
   const [comments, setComments] = useState([]);
+  const [rank, setRank] = useState(0);
+  const [rankingState, setRankingState] = useState(false);
+  const [dataRanking, setDataRanking] = useState({});
 
   //Auth context
   const { user } = useAuthContext();
   //Params
   const { id } = useParams();
+
+  const getRankingData = async () => {
+    try {
+      if (user !== null) {
+        const res = await validateRanking(id, user.Id);
+        if (!res.data.length) {
+          setRankingState(false);
+          setRank(0);
+        } else {
+          setRank(res.data[0].Puntos);
+          setRankingState(true);
+          setDataRanking(res.data[0]);
+        }
+      }
+    } catch (error) {
+      setError(true);
+    }
+  };
 
   const getData = async () => {
     try {
@@ -45,7 +71,6 @@ export default function ProductCatalogue() {
       setComments(res.data);
     } catch (err) {
       setError(true);
-      console.log(err);
     }
   };
 
@@ -64,6 +89,7 @@ export default function ProductCatalogue() {
   };
 
   useEffect(() => {
+    getRankingData();
     getData();
     getComments();
   }, []);
@@ -89,25 +115,24 @@ export default function ProductCatalogue() {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
 
-  const generateComment =async()=>{
-    try{
-        if(comment.message === "") return toast.error(`No puedes enviar un comentario sin contenido.`);
-        const dataEndpoint = {
-            comentario: comment.message,
-            id_producto: parseInt(data.Id),
-            id_usuario: parseInt(user.Id),
-            fecha: dateNowSQL()
-        }
-        await createComment(dataEndpoint, user.Token);
-        toast.success(`¡Comentario pubilcado!`);
-        getComments();
-        setComment({message: ''});
+  const generateComment = async () => {
+    try {
+      if (comment.message === "")
+        return toast.error(`No puedes enviar un comentario sin contenido.`);
+      const dataEndpoint = {
+        comentario: comment.message,
+        id_producto: parseInt(data.Id),
+        id_usuario: parseInt(user.Id),
+        fecha: dateNowSQL(),
+      };
+      await createComment(dataEndpoint, user.Token);
+      toast.success(`¡Comentario pubilcado!`);
+      getComments();
+      setComment({ message: "" });
+    } catch (err) {
+      setError(true);
     }
-    catch(err){
-        setError(true);
-        console.log(err)
-    }
-  }
+  };
 
   const newComment = (e) => {
     e.preventDefault();
@@ -116,22 +141,58 @@ export default function ProductCatalogue() {
         return toast.error(
           `Necesitas iniciar sesión para poder hacer un comentario.`
         );
-        else generateComment();
+      else generateComment();
     } catch {
       setError(true);
     }
   };
 
-  const deleteC=async(Id)=>{
-    try{
-        let answer = confirm("¿Deseas eliminar este comentario?");
-        if(answer) await deleteComment(Id, user.Token);
-        getComments();
-    }   
-    catch(err){
-        console.log(err)
+  const deleteC = async (Id) => {
+    try {
+      let answer = confirm("¿Deseas eliminar este comentario?");
+      if (answer) await deleteComment(Id, user.Token);
+      getComments();
+    } catch (err) {
+      console.log(err);
     }
-  }
+  };
+
+  const editRank = async (value) => {
+    try {
+      const dataR = {
+        Puntos: value,
+      };
+      await updateRanking(dataRanking.Id, dataR, user.Token);
+      setDataRanking({
+        ...dataRanking,
+        Puntos: dataR.Puntos,
+      });
+      toast.success(`¡Tu puntuación de este producto fue modificada!`);
+      setRank(value);
+    } catch (err) {
+      setError(true);
+    }
+  };
+
+  const addRank = async (value) => {
+    try {
+      const dataR = {
+        id_producto: id,
+        id_usuario: user.Id,
+        puntos: value,
+      };
+      await createRanking(dataR, user.Token);
+      toast.success(`¡Agregaste una puntuación a este producto!`);
+      getRankingData();
+    } catch (err) {
+      setError(true);
+    }
+  };
+
+  const changeRanking = (value) => {
+    if (rankingState === true) editRank(value);
+    else addRank(value);
+  };
 
   return (
     <section className="flex flex-col h-screen">
@@ -141,12 +202,21 @@ export default function ProductCatalogue() {
       ) : (
         <article className="w-full gap-2 flex flex-col items-center mt-16 scale-up-center">
           <article className="flex w-11/12 gap-2 justify-between border-b mt-8 p-4">
-            <div>
+            <div className="flex flex-col items-center">
               <img
                 src={data.Imagen}
                 alt={data.Id}
                 onClick={handleClickImg}
                 className=" w-60 h-60 object-cover rounded-md hover:scale-75 cursor-pointer transition-all"
+              />
+              <Rating
+                className="text-yellow-500 mt-4"
+                initialRating={rank}
+                onChange={changeRanking}
+                emptySymbol={"far fa-star"}
+                fullSymbol={"fas fa-star"}
+                fractions={2}
+                readonly={user === null ? true: false}
               />
             </div>
             <div className="w-auto">
@@ -263,12 +333,16 @@ export default function ProductCatalogue() {
                 <h2 className="uppercase text-red-400 font-semibold text-center">
                   Este producto no tiene ningún comentario
                 </h2>
-              ) : <>
-                <h2 className="uppercase text-red-400 font-semibold text-center">Últimos 20 Comentarios</h2>
-               {comments.map((el, index) => <CardComment key={index} data={el} deleteC={deleteC}/>)}
-              </>
-
-              }
+              ) : (
+                <>
+                  <h2 className="uppercase text-red-400 font-semibold text-center">
+                    Últimos 20 Comentarios
+                  </h2>
+                  {comments.map((el, index) => (
+                    <CardComment key={index} data={el} deleteC={deleteC} />
+                  ))}
+                </>
+              )}
             </div>
             <form onSubmit={newComment} className="flex flex-col gap-2">
               <div>

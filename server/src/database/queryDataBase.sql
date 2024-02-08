@@ -131,7 +131,7 @@ CREATE TABLE Valoraciones(
 Id INT AUTO_INCREMENT PRIMARY KEY,
 Id_Producto INT,
 Id_Usuario INT,
-Puntos INT,
+Puntos FLOAT,
 FOREIGN KEY (Id_producto) REFERENCES Productos(Id),
 FOREIGN KEY (Id_Usuario) REFERENCES Usuarios(Id)
 );
@@ -142,3 +142,6 @@ ALTER TABLE Carrito
 ADD COLUMN Unidades INT,
 ADD COLUMN Size VARCHAR(15),
 ADD COLUMN Color VARCHAR(15);
+
+ALTER TABLE Valoraciones
+MODIFY COLUMN Puntos FLOAT;
