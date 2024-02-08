@@ -24,6 +24,7 @@ import FormColors from "./pages/colors/FormColors";
 import SizesPage from "./pages/sizes/sizesPage";
 import FormSize from "./pages/sizes/FormSize";
 import UserPage from "./pages/users/UserPage";
+import "./App.css"
 
 function App() {
   return (
