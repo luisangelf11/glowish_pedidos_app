@@ -17,3 +17,6 @@ export const getSize = async(id)=>
 
 export const updateSize = async(id, data, token)=>
     await axios.put(`http://localhost:3000/api/v1/sizes/${id}?accessToken=${token}`, data)
+
+export const getSizeDisponibles = async(id_producto)=>
+    await axios.get(`http://localhost:3000/api/v1/sizes-disponible?id_producto=${id_producto}`);    

@@ -33,6 +33,21 @@ export const getColor = async (req, res) => {
     }
 }
 
+//Get colors available
+export const getColorDisponibles =async(req, res)=>{
+    try{
+        const {id_producto} = req.query;
+        if(id_producto){
+            const [result] = await pool.query('SELECT * FROM Colores WHERE Id_Producto = ? AND Estado = ?', [id_producto, "Disponible"]);
+            res.json(result)
+        }else res.status(404).json({"message": "The params query is not exist"});
+    }
+    catch(err){
+        res.status(500).json({ "message": err.message });
+    }
+}
+
+
 //Create a new color
 export const createColor = async (req, res) => {
     try {

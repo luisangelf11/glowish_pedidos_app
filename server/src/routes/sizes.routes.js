@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { createSize, deleteSize, getSize, getSizes, updateSize } from '../controllers/sizes.controllers.js';
+import { createSize, deleteSize, getSize, getSizeDisponibles, getSizes, updateSize } from '../controllers/sizes.controllers.js';
 import { validateToken } from '../auth/authentication.js';
 
 //Initializations
@@ -10,6 +10,9 @@ router.get('/api/v1/sizes', getSizes);
 
 //Endpoint for get a size 
 router.get('/api/v1/sizes/:id', getSize);
+
+//Enpoint fro get all sizes for a product with units
+router.get(`/api/v1/sizes-disponible`, getSizeDisponibles);
 
 //Endpoint for create a new size
 router.post('/api/v1/sizes', validateToken, createSize);

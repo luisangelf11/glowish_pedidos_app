@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { createColor, deleteColor, getColor, getColores, updateColor } from '../controllers/colores.controllers.js';
+import { createColor, deleteColor, getColor, getColorDisponibles, getColores, updateColor } from '../controllers/colores.controllers.js';
 import { validateToken } from '../auth/authentication.js'
 
 //Initializations
@@ -10,6 +10,9 @@ router.get('/api/v1/colores', getColores);
 
 //Endpoint for get a color
 router.get('/api/v1/colores/:id', getColor);
+
+//Enpoint for get all colors of a producto
+router.get('/api/v1/colores-disponibles', getColorDisponibles);
 
 //Endpoint for create a new color
 router.post('/api/v1/colores', validateToken, createColor);

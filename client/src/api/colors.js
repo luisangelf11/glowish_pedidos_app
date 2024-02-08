@@ -17,3 +17,6 @@ export const updateColor = async(id, data, token)=>
     
 export const deleteColor =async(id, token)=>
     await axios.delete(`http://localhost:3000/api/v1/colores/${id}?accessToken=${token}`);    
+
+export const getColorsDisponibles = async(id_producto)=>
+    await axios.get(`http://localhost:3000/api/v1/colores-disponibles?id_producto=${id_producto}`);    

@@ -16,6 +16,8 @@ import {
   updateRanking,
   validateRanking,
 } from "../../api/ranking";
+import { getSizeDisponibles } from "../../api/sizes";
+import { getColorsDisponibles } from "../../api/colors";
 
 export default function ProductCatalogue() {
   const initialForm = {
@@ -31,11 +33,31 @@ export default function ProductCatalogue() {
   const [rank, setRank] = useState(0);
   const [rankingState, setRankingState] = useState(false);
   const [dataRanking, setDataRanking] = useState({});
+  const [sizes, setSizes] = useState([]);
+  const [colors, setColors] = useState([]);
 
   //Auth context
   const { user } = useAuthContext();
   //Params
   const { id } = useParams();
+
+  const getSizesOptions = async () => {
+    try {
+      const res = await getSizeDisponibles(id);
+      setSizes(res.data);
+    } catch {
+      setError(true);
+    }
+  };
+
+  const getColorsOptions = async () => {
+    try {
+      const res = await getColorsDisponibles(id);
+      setColors(res.data);
+    } catch {
+      setError(true);
+    }
+  };
 
   const getRankingData = async () => {
     try {
@@ -88,10 +110,13 @@ export default function ProductCatalogue() {
     });
   };
 
+  //Cycle life of component
   useEffect(() => {
     getRankingData();
     getData();
     getComments();
+    getSizesOptions();
+    getColorsOptions();
   }, []);
 
   const generateNewPrice = () => {
@@ -216,7 +241,7 @@ export default function ProductCatalogue() {
                 emptySymbol={"far fa-star"}
                 fullSymbol={"fas fa-star"}
                 fractions={2}
-                readonly={user === null ? true: false}
+                readonly={user === null ? true : false}
               />
             </div>
             <div className="w-auto">
@@ -277,6 +302,13 @@ export default function ProductCatalogue() {
                   className="border rounded-sm text-sm p-1 outline-none border-gray-400 w-56 focus:border-blue-500 focus:border-2"
                 >
                   <option value="">--SELECCIONE--</option>
+                  {sizes.length
+                    ? sizes.map((el, index) => (
+                        <option key={index} value={el.Size}>
+                          {el.Size}
+                        </option>
+                      ))
+                    : ""}
                 </select>
               </div>
               <div className="flex flex-col">
@@ -294,6 +326,13 @@ export default function ProductCatalogue() {
                   className="border rounded-sm text-sm p-1 outline-none border-gray-400 w-56 focus:border-blue-500 focus:border-2"
                 >
                   <option value="">--SELECCIONE--</option>
+                  {colors.length
+                    ? colors.map((el, index) => (
+                        <option key={index} value={el.Color}>
+                          {el.Color}
+                        </option>
+                      ))
+                    : ""}
                 </select>
               </div>
               <div className="flex flex-col">
@@ -353,7 +392,7 @@ export default function ProductCatalogue() {
                   value={comment.message}
                   onChange={handleChangeComments}
                   placeholder="Escribe un comentario"
-                  className="border rounded-sm text-sm p-1 outline-none border-gray-400 w-56 focus:border-blue-500 focus:border-2 mt-1"
+                  className="border rounded-sm h-32 text-sm p-1 outline-none border-gray-400 w-56 focus:border-blue-500 focus:border-2 mt-1"
                   maxLength={150}
                 ></textarea>
               </div>
