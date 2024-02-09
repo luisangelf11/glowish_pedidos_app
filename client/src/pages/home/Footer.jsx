@@ -15,32 +15,26 @@ export default function Footer() {
       <img className=" w-96 object-cover" src={imgFooter} alt="follow" data-aos="fade-in"/>
       <div className="flex items-center gap-4" data-aos="fade-in">
         <a
-          href="/"
-          className="text-red-500 bg-white rounded-full p-1 text-center text-xl w-10 h-10 transition-all hover:text-black"
+          href="https://www.youtube.com/@glowishfashion"
+          className="text-red-500 bg-white rounded-full p-1 text-center text-xl w-10 h-10 transition-all hover:text-black" target="_blank"
         >
           <i className="fa-brands fa-youtube"></i>
         </a>
         <a
-          href="/"
-          className="text-red-500 bg-white rounded-full p-1 text-center text-xl w-10 h-10 transition-all hover:text-black"
+          href="https://www.facebook.com/glowishfashion.lv"
+          className="text-red-500 bg-white rounded-full p-1 text-center text-xl w-10 h-10 transition-all hover:text-black" target="_blank"
         >
           <i className="fa-brands fa-facebook-f"></i>
         </a>
         <a
-          href="/"
-          className="text-red-500 bg-white rounded-full p-1 text-center text-xl w-10 h-10 transition-all hover:text-black"
-        >
-          <i className="fa-brands fa-threads"></i>
-        </a>
-        <a
-          href="/"
-          className="text-red-500 bg-white rounded-full p-1 text-center text-xl w-10 h-10 transition-all hover:text-black"
+          href="https://www.instagram.com/glowishfashion.lv/"
+          className="text-red-500 bg-white rounded-full p-1 text-center text-xl w-10 h-10 transition-all hover:text-black" target="_blank"
         >
           <i className="fa-brands fa-square-instagram"></i>
         </a>
         <a
-          href="/"
-          className="text-red-500 bg-white rounded-full p-1 text-center text-xl w-10 h-10 transition-all hover:text-black"
+          href="https://www.tiktok.com/@glowishfashion.lv"
+          className="text-red-500 bg-white rounded-full p-1 text-center text-xl w-10 h-10 transition-all hover:text-black" target="_blank"
         >
           <i className="fa-brands fa-tiktok"></i>
         </a>
