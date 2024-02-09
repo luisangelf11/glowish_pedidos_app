@@ -8,6 +8,7 @@ import { useAuthContext } from "../../context/authContext.jsx";
 import { createProduct, getProduct, updateProduct } from "../../api/products.js";
 import '../../assets/css/animation.css'
 import icoIMG from "../../assets/icoImg.jpg"
+import { useToken } from "../../hooks/useToken.js";
 
 export default function FormProduct({edit}) {
   const initialForm = {
@@ -29,6 +30,7 @@ export default function FormProduct({edit}) {
   const { user } = useAuthContext();
   const {id} = useParams();
   const navigate = useNavigate();
+  const {invalidToken} = useToken();
 
   const getCategorysData = async () => {
     try {
@@ -100,7 +102,11 @@ export default function FormProduct({edit}) {
       toast.success(`¡El producto se fue creado correctamente!`);
     }
     catch(err){
-      toast.error(`${err.response.data.message}`);
+      if(err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+      }else
+        toast.error(err.response.data.message);
     }
   }
 
@@ -126,7 +132,11 @@ export default function FormProduct({edit}) {
       }, 3000);
     }
     catch(err){
-      toast.error(`${err.response.data.message}`);
+      if(err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+      }else
+        toast.error(err.response.data.message);
     }
   }
 

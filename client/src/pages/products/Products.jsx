@@ -6,6 +6,7 @@ import { toast, Toaster } from "react-hot-toast";
 import '../../assets/css/animation.css'
 import {Link} from 'react-router-dom'
 import { useAuthContext } from "../../context/authContext";
+import { useToken } from "../../hooks/useToken";
 
 export default function Products() {
   //State
@@ -13,7 +14,7 @@ export default function Products() {
   const [form, setForm] = useState({filter: ''});
 
   const {user} = useAuthContext();
-
+  const {invalidToken} = useToken();
   const getData = async () => {
     try {
       const res = await getProducts(10, 0);
@@ -58,7 +59,13 @@ export default function Products() {
         setForm({filter: ''});
       }
     }catch(err){
-      toast.error(err.response.data.message);
+      console.log(err)
+      if(err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+        
+      }else
+        toast.error(err.response.data.message);
     }
   }
 
