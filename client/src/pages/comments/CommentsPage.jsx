@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MenuAdmin from '../../components/MenuAdmin'
 import { Toaster, toast } from 'react-hot-toast'
 import TableComments from './TableComments'
+import { deleteComment, getComments, getCommentsForIdProduct } from '../../api/comments'
+import { useAuthContext } from '../../context/authContext'
 
 export default function CommentsPage() {
   const [form, setForm] = useState({ filter: "" })
   const [data, setData] = useState([])
+  const {user} = useAuthContext()
 
   const handleChange = (e) => {
     setForm({
@@ -13,6 +16,47 @@ export default function CommentsPage() {
       [e.target.name]: e.target.value
     });
   }
+
+  const getData = async () => {
+    try {
+      const res = await getComments()
+      console.log(res.data)
+      setData(res.data)
+    } catch (error) {
+      toast.error(error.response.data.message)
+    }
+  }
+
+  const getFilter = async (id_producto) => {
+    try {
+      const res = await getCommentsForIdProduct(id_producto, 100,0)
+      console.log(res.data)
+      setData(res.data)
+    } catch (error) {
+      toast.error(error.response.data.message)
+    }
+  }
+  
+  useEffect(() => {
+    if (form.filter === "") getData()
+    
+    else   getFilter(form.filter) 
+  }, [form.filter])
+
+  const deleteData = async (id) => {
+    try {
+      let answer = confirm("¿Deseas eliminar este comentario?")
+      if (answer === true) {
+        await deleteComment(id, user.Token)
+        toast.success(`El comentario con Id ${id} fue eliminado correctamente`);
+        getData();
+        setForm({ filter: '' });
+      }
+    } catch (error) {
+      toast.error(error.response.data.message)
+    }
+  }
+
   return (
     <section className="flex h-screen">
       <MenuAdmin />
@@ -43,7 +87,7 @@ export default function CommentsPage() {
           </div>
 
         </div>
-        <TableComments tableHead={["Id", "Comentario", "Fecha", "Id_Producto", "Id_Usuario"]} data={data}  />
+        <TableComments tableHead={["Id", "Comentario", "Fecha", "Id_Producto", "Id_Usuario", "Acciones"]} data={data} deleteData={deleteData}  />
       </section>
       <Toaster position="top-center" />
     </section>
