@@ -11,12 +11,12 @@ export default function SizesPage() {
   const [data, setData] = useState([])
   const { user } = useAuthContext();
 
-  const handleChange = (e) => {
+ const handleChange = (e) => {
     setForm({
       ...form,
       [e.target.name]: e.target.value
     });
-  }
+  } 
   const getData = async () => {
     try {
       const res = await getSizes(10, 0)

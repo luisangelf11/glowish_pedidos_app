@@ -11,7 +11,7 @@ export const getComentarios = async (req, res) => {
             res.json(result);
         } else {
             //Select all comments in the table
-            const [result] = await pool.query(`SELECT * FROM Comentarios`);
+            const [result] = await pool.query(`SELECT * FROM Comentarios ORDER BY id DESC LIMIT 10 OFFSET 0`);
             if (!result.length) return res.status(404).json({ "message": `This table dont have data` });
             res.json(result);
         }

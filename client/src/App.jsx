@@ -25,6 +25,7 @@ import SizesPage from "./pages/sizes/sizesPage";
 import FormSize from "./pages/sizes/FormSize";
 import UserPage from "./pages/users/UserPage";
 import "./App.css"
+import CommentsPage from "./pages/comments/CommentsPage";
 
 function App() {
   return (
@@ -102,6 +103,18 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path="/comentarios"
+            element={
+              <ProtectedRoute>
+                <AdminRoutes>
+                  <CommentsPage />
+                </AdminRoutes>
+              </ProtectedRoute>
+            }
+          />
+
           <Route path="/colores" element={
             <ProtectedRoute>
               <AdminRoutes>
