@@ -30,6 +30,7 @@ import { OrderContextProvider } from "./context/orderContext";
 import CreateOrderPage from "./pages/orders/CreateOrderPage";
 import CartPage from "./pages/Cart/CartPage";
 import OrdersPage from "./pages/orders/OrdersPage";
+import DetailsPage from "./pages/details/DetailsPage";
 
 function App() {
   return (
@@ -196,6 +197,16 @@ function App() {
               <ProtectedRoute>
                 <AdminRoutes>
                   <OrdersPage />
+                </AdminRoutes>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/pedidos/:id"
+            element={
+              <ProtectedRoute>
+                <AdminRoutes>
+                  <DetailsPage />
                 </AdminRoutes>
               </ProtectedRoute>
             }

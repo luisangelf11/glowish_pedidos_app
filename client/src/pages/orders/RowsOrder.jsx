@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
 export default function RowsOrder({ element, noRow, editOrder }) {
     const { Id, Monto, Fecha, Estado, Id_Usuario } = element
@@ -19,14 +20,14 @@ export default function RowsOrder({ element, noRow, editOrder }) {
             <td className="text-center p-2 text-sm">{Monto}</td>
             <td className="text-center p-2 text-sm">{Id_Usuario}</td>
             <td className="text-center">
-                {Estado !== 'Entregado' ? <button className='bg-blue-600 w-16 hover:bg-blue-500 text-white rounded-md p-1 text-sm' onClick={()=> editOrder(Id, Estado)}>
+                {Estado !== 'Entregado' ? <button className='bg-blue-600 w-16 hover:bg-blue-500 text-white rounded-sm p-1 text-sm' onClick={()=> editOrder(Id, Estado)}>
                     {generateText()}
                 </button> : '--  --- --'}
             </td>
             <td className="text-center">
-                <button className='bg-green-600 w-16 hover:bg-green-500 text-white rounded-md p-1 text-sm'>
+                <Link to={`/pedidos/${Id}`} className='bg-green-600 w-16 hover:bg-green-500 text-white rounded-sm p-1 text-sm'>
                     Mostrar
-                </button>
+                </Link>
             </td>
         </tr>
     )

@@ -7,7 +7,7 @@ export const getDetalles = async (req, res) => {
         //if id_pedidio query exist execute this condition
         if (id_pedido) {
             const [result] = await pool.query('SELECT * FROM Detalle WHERE Id_Pedido = ?', [id_pedido]);
-            if (!result.length) return res.status(404).json({ "message": `Not found the details for order with Id ${id}` });
+            /* if (!result.length) return res.status(404).json({ "message": `Not found the details for order with Id ${id}` }); */
             res.json(result);
         } else {
             const [result] = await pool.query('SELECT * FROM Detalle');
