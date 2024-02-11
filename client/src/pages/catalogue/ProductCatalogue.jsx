@@ -18,6 +18,7 @@ import {
 } from "../../api/ranking";
 import { getSizeDisponibles } from "../../api/sizes";
 import { getColorsDisponibles } from "../../api/colors";
+import { createCart } from "../../api/cart";
 
 export default function ProductCatalogue() {
   const initialForm = {
@@ -152,6 +153,7 @@ export default function ProductCatalogue() {
       };
       await createComment(dataEndpoint, user.Token);
       toast.success(`¡Comentario pubilcado!`);
+      setComments([]);
       getComments();
       setComment({ message: "" });
     } catch (err) {
@@ -176,6 +178,7 @@ export default function ProductCatalogue() {
     try {
       let answer = confirm("¿Deseas eliminar este comentario?");
       if (answer) await deleteComment(Id, user.Token);
+      setComments([]);
       getComments();
     } catch (err) {
       console.log(err);
@@ -217,6 +220,40 @@ export default function ProductCatalogue() {
   const changeRanking = (value) => {
     if (rankingState === true) editRank(value);
     else addRank(value);
+  };
+
+  const validateFormCart = () => {
+    if (
+      parseInt(form.unidades) > data.Unidades ||
+      form.unidades === "" ||
+      form.size === "" ||
+      form.color === ""
+    )
+      return true;
+    else return false;
+  };
+
+  const addCart = async () => {
+    try {
+      const dataEndpoint = {
+        id_producto: data.Id,
+        id_usuario: user.Id,
+        unidades: form.unidades,
+        size: form.size,
+        color: form.color,
+      };
+      if(validateFormCart()) return toast.error(`Verifique que todos los campos esten llenos y que las unidades no sean mayores a las existentes.`);
+      const res = await createCart(dataEndpoint, user.Token);
+      toast.success(`¡Producto agregado al carrito!`);
+      setForm(initialForm);
+    } catch {
+      setError(true);
+    }
+  };
+
+  const handleCart = (e) => {
+    e.preventDefault();
+    addCart();
   };
 
   return (
@@ -283,7 +320,7 @@ export default function ProductCatalogue() {
                 </span>
               )}
             </div>
-            <form className="flex gap-2 flex-col">
+            <form onSubmit={handleCart} className="flex gap-2 flex-col">
               <h3 className="font-semibold p-2 text-red-400 uppercase">
                 Datos de compra
               </h3>

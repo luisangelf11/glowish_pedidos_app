@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import MenuUser from "../../components/MenuUser";
 import ItemOrder from "./ItemOrder";
-import { getCarts } from "../../api/cart";
+import { deleteCart, getCarts } from "../../api/cart";
 import { useAuthContext } from "../../context/authContext";
+import {toast, Toaster} from 'react-hot-toast'
 
 export default function CartPage() {
     const [data, setData] = useState([]);
@@ -23,6 +24,20 @@ export default function CartPage() {
         getData();
     }, []);
 
+    const deleteProductCart = async(id)=>{
+      try{
+        let answer = confirm(`¿Deseas eliminar este producto del carrito de compras?`);
+       if(answer){
+        await deleteCart(id, user.Token);
+        toast.success(`¡Producto eliminado del carrito!`);
+        getData();
+      } 
+      }
+      catch(err){
+        setError(true);
+      }
+    }
+
   return (
     <section className="flex flex-col  h-screen">
       <MenuUser />
@@ -36,9 +51,10 @@ export default function CartPage() {
           Carrito de compras
         </h2>
         <article className="w-full flex flex-col items-center">
-            {data.map((el, index)=> <ItemOrder key={index} data={el}/>)}
+            {data.map((el, index)=> <ItemOrder key={index} data={el} deleteProductCart={deleteProductCart}/>)}
         </article>
       </section>
+      <Toaster position="top-center"/>
     </section>
   );
 }

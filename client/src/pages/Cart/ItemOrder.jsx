@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getProduct } from "../../api/products";
 import { Link } from "react-router-dom";
 
-export default function ItemOrder({ data }) {
+export default function ItemOrder({ data, deleteProductCart }) {
   const { Id, Id_Producto, Unidades, Size, Color } = data;
   const initialValue = {
     id: Id,
@@ -42,7 +42,6 @@ export default function ItemOrder({ data }) {
 
   useEffect(() => {
     getData();
-    console.log(product);
   }, []);
 
   return (
@@ -97,7 +96,7 @@ export default function ItemOrder({ data }) {
         <button className="bg-yellow-600 p-2 w-10 rounded-md text-sm text-white transition-all hover:bg-yellow-500">
           <i className="fas fa-hand-point-up"></i>
         </button>
-        <button className="bg-red-700 p-2 w-10 rounded-md text-sm text-white transition-all hover:bg-red-600">
+        <button onClick={()=>deleteProductCart(product.id)} className="bg-red-700 p-2 w-10 rounded-md text-sm text-white transition-all hover:bg-red-600">
           <i className="fas fa-trash"></i>
         </button>
         <Link
