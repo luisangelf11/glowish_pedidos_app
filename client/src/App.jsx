@@ -26,6 +26,7 @@ import FormSize from "./pages/sizes/FormSize";
 import UserPage from "./pages/users/UserPage";
 import "./App.css"
 import CommentsPage from "./pages/comments/CommentsPage";
+import CartPage from "./pages/Cart/CartPage";
 
 function App() {
   return (
@@ -195,6 +196,13 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/carrito" element={
+            <ProtectedRoute>
+              <ClientRoutes>
+                <CartPage />
+              </ClientRoutes>
+            </ProtectedRoute>
+          }/>
           {/*This routes not are protected*/}
           <Route path="/catalogo" element={<CataloguePage />} />
           <Route path="/catalogo/:id" element={<ProductCatalogue />} />

@@ -7,15 +7,26 @@ export const getCarritos = async (req, res) => {
         //if the id_usuario query exist execute this code
         if (id_usuario) {
             const [result] = await pool.query('SELECT * FROM Carrito WHERE id_usuario = ?', [id_usuario]);
-            if (!result.length) return res.status(404).json({ "message": "This user dont have products in the shooping cart" });
+            /* if (!result.length) return res.status(404).json({ "message": "This user dont have products in the shooping cart" }); */
             res.json(result);
         } else {
             const [result] = await pool.query('SELECT * FROM Carrito');
-            if (!result.length) return res.status(404).json({ "message": "This table dont have data" });
+           /*  if (!result.length) return res.status(404).json({ "message": "This table dont have data" }); */
             res.json(result);
         }
     }
     catch (err) {
+        res.status(500).json({ "message": err.message });
+    }
+}
+
+//Get a cart shop
+export const getCarrito = async(req, res)=>{
+    try {
+        const {id} = req.params;
+        const [result] = await pool.query(`SELECT * FROM Carrito WHERE id = ?`, [id]);
+        res.json(result);
+    } catch (err) {
         res.status(500).json({ "message": err.message });
     }
 }
