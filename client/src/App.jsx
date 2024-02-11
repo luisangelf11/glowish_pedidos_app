@@ -26,9 +26,10 @@ import FormSize from "./pages/sizes/FormSize";
 import UserPage from "./pages/users/UserPage";
 import "./App.css";
 import CommentsPage from "./pages/comments/CommentsPage";
-import CartPage from "./pages/Cart/CartPage";
 import { OrderContextProvider } from "./context/orderContext";
 import CreateOrderPage from "./pages/orders/CreateOrderPage";
+import CartPage from "./pages/Cart/CartPage";
+import OrdersPage from "./pages/orders/OrdersPage";
 
 function App() {
   return (
@@ -189,7 +190,16 @@ function App() {
               </ProtectedRoute>
             }
           />
-
+          <Route
+            path="/pedidos"
+            element={
+              <ProtectedRoute>
+                <AdminRoutes>
+                  <OrdersPage />
+                </AdminRoutes>
+              </ProtectedRoute>
+            }
+          />
           {/*This routes are protected for user client*/}
           <Route
             path="/perfil"
@@ -211,28 +221,31 @@ function App() {
               </ProtectedRoute>
             }
           />
-      
-            <Route
-              path="/carrito"
-              element={
-                <OrderContextProvider>
-                  <ProtectedRoute>
-                    <ClientRoutes>
-                      <CartPage />
-                    </ClientRoutes>
-                  </ProtectedRoute>
-                </OrderContextProvider>
-              }
-            />
-            <Route path="/crear-pedido" element={
+
+          <Route
+            path="/carrito"
+            element={
               <OrderContextProvider>
-                  <ProtectedRoute>
-                    <ClientRoutes>
-                      <CreateOrderPage />
-                    </ClientRoutes>
-                  </ProtectedRoute>
+                <ProtectedRoute>
+                  <ClientRoutes>
+                    <CartPage />
+                  </ClientRoutes>
+                </ProtectedRoute>
               </OrderContextProvider>
-            }/>
+            }
+          />
+          <Route
+            path="/crear-pedido"
+            element={
+              <OrderContextProvider>
+                <ProtectedRoute>
+                  <ClientRoutes>
+                    <CreateOrderPage />
+                  </ClientRoutes>
+                </ProtectedRoute>
+              </OrderContextProvider>
+            }
+          />
           {/*This routes not are protected*/}
           <Route path="/catalogo" element={<CataloguePage />} />
           <Route path="/catalogo/:id" element={<ProductCatalogue />} />

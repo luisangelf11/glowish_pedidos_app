@@ -3,15 +3,19 @@ import pool from '../database/database.js';
 //Get all orders
 export const getPedidos = async(req, res)=>{
     try{
-        const {id_usuario, limit, offset } = req.query;
+        const {id_usuario, limit, offset, id } = req.query;
         //if id_usuario query exist execute this lines code
         if((!limit && !offset) && id_usuario){
             const [result] = await pool.query('SELECT * FROM Pedidos WHERE id_usuario = ?', [id_usuario]);
-            if(!result.length) return res.status(404).json({"message": `This user dont have orders`});
+            /* if(!result.length) return res.status(404).json({"message": `This user dont have orders`}); */
             res.json(result);
         }else if(limit && offset){
             const [result] = await pool.query(`SELECT * FROM Pedidos ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`);
-            if(!result.length) return res.status(404).json({"message": `This table dont have data`});
+            /* if(!result.length) return res.status(404).json({"message": `This table dont have data`}); */
+            res.json(result);
+        }else if(id){
+            let filter = `${id}%`
+            const [result] = await pool.query(`SELECT * FROM Pedidos WHERE id LIKE ?`, [filter]);
             res.json(result);
         }
     }
@@ -25,7 +29,7 @@ export const getPedido = async(req, res)=>{
     try{
         const {id} = req.params;
         const [result] = await pool.query('SELECT * FROM Pedidos WHERE id = ?', [id]);
-        if(!result.length) return res.status(404).json({"message": `The Id ${id} is not found in the table`});
+        /* if(!result.length) return res.status(404).json({"message": `The Id ${id} is not found in the table`}); */
         res.json(result[0]);
     }
     catch(err){
