@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getProduct } from "../../api/products";
 import { Link } from "react-router-dom";
+import {useOrderContext} from '../../context/orderContext'
 
 export default function ItemOrder({ data, deleteProductCart }) {
   const { Id, Id_Producto, Unidades, Size, Color } = data;
@@ -16,7 +17,9 @@ export default function ItemOrder({ data, deleteProductCart }) {
     color: Color,
     total: "",
   };
+  const {addOrder, deleteOrder} = useOrderContext();
   const [product, setProduct] = useState(initialValue);
+  const [selected, setSelected] = useState(false);
 
   const generateNewPrice = (precio, descuento) => {
     let desc = parseFloat(precio) * parseFloat(descuento / 100);
@@ -43,6 +46,17 @@ export default function ItemOrder({ data, deleteProductCart }) {
   useEffect(() => {
     getData();
   }, []);
+
+  const handleSelect = () => {
+    if (selected){
+      setSelected(false);
+      deleteOrder(product.id);
+    }
+    else {
+      setSelected(true);
+      addOrder(product);
+    }
+  };
 
   return (
     <div
@@ -93,10 +107,24 @@ export default function ItemOrder({ data, deleteProductCart }) {
         </div>
       </div>
       <div className="flex flex-col gap-2 justify-center items-center p-2">
-        <button className="bg-yellow-600 p-2 w-10 rounded-md text-sm text-white transition-all hover:bg-yellow-500">
-          <i className="fas fa-hand-point-up"></i>
+        <button
+          onClick={handleSelect}
+          className={`${
+            selected === false ? "bg-yellow-600" : "bg-green-600"
+          } p-2 w-10 rounded-md text-sm text-white transition-all ${
+            selected === false ? "hover:bg-yellow-500" : "hover:bg-green-500"
+          } `}
+        >
+          {selected === false ? (
+            <i className="fas fa-hand-point-up"></i>
+          ) : (
+            <i className="fas fa-check"></i>
+          )}
         </button>
-        <button onClick={()=>deleteProductCart(product.id)} className="bg-red-700 p-2 w-10 rounded-md text-sm text-white transition-all hover:bg-red-600">
+        <button
+          onClick={() => deleteProductCart(product.id)}
+          className="bg-red-700 p-2 w-10 rounded-md text-sm text-white transition-all hover:bg-red-600"
+        >
           <i className="fas fa-trash"></i>
         </button>
         <Link

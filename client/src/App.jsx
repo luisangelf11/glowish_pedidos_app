@@ -24,9 +24,11 @@ import FormColors from "./pages/colors/FormColors";
 import SizesPage from "./pages/sizes/sizesPage";
 import FormSize from "./pages/sizes/FormSize";
 import UserPage from "./pages/users/UserPage";
-import "./App.css"
+import "./App.css";
 import CommentsPage from "./pages/comments/CommentsPage";
 import CartPage from "./pages/Cart/CartPage";
+import { OrderContextProvider } from "./context/orderContext";
+import CreateOrderPage from "./pages/orders/CreateOrderPage";
 
 function App() {
   return (
@@ -116,28 +118,38 @@ function App() {
             }
           />
 
-          <Route path="/colores" element={
-            <ProtectedRoute>
-              <AdminRoutes>
-                <ColorsPage />
-              </AdminRoutes>
-            </ProtectedRoute>
-          } />
-          <Route path="/nuevo-color" element={
-            <ProtectedRoute>
-              <AdminRoutes>
-                <FormColors edit={false} />
-              </AdminRoutes>
-            </ProtectedRoute>
-          } />
-          <Route path="/editar-color/:id" element={
-            <ProtectedRoute>
-              <AdminRoutes>
-                <FormColors edit={true} />
-              </AdminRoutes>
-            </ProtectedRoute>
-          } />
-          <Route path="/sizes"
+          <Route
+            path="/colores"
+            element={
+              <ProtectedRoute>
+                <AdminRoutes>
+                  <ColorsPage />
+                </AdminRoutes>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/nuevo-color"
+            element={
+              <ProtectedRoute>
+                <AdminRoutes>
+                  <FormColors edit={false} />
+                </AdminRoutes>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/editar-color/:id"
+            element={
+              <ProtectedRoute>
+                <AdminRoutes>
+                  <FormColors edit={true} />
+                </AdminRoutes>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/sizes"
             element={
               <ProtectedRoute>
                 <AdminRoutes>
@@ -146,7 +158,8 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/nuevo-sizes"
+          <Route
+            path="/nuevo-sizes"
             element={
               <ProtectedRoute>
                 <AdminRoutes>
@@ -155,7 +168,8 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/editar-sizes/:id"
+          <Route
+            path="/editar-sizes/:id"
             element={
               <ProtectedRoute>
                 <AdminRoutes>
@@ -165,11 +179,12 @@ function App() {
             }
           />
 
-          <Route path="/usuarios"
+          <Route
+            path="/usuarios"
             element={
               <ProtectedRoute>
                 <AdminRoutes>
-                  <UserPage  />
+                  <UserPage />
                 </AdminRoutes>
               </ProtectedRoute>
             }
@@ -196,13 +211,28 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/carrito" element={
-            <ProtectedRoute>
-              <ClientRoutes>
-                <CartPage />
-              </ClientRoutes>
-            </ProtectedRoute>
-          }/>
+      
+            <Route
+              path="/carrito"
+              element={
+                <OrderContextProvider>
+                  <ProtectedRoute>
+                    <ClientRoutes>
+                      <CartPage />
+                    </ClientRoutes>
+                  </ProtectedRoute>
+                </OrderContextProvider>
+              }
+            />
+            <Route path="/crear-pedido" element={
+              <OrderContextProvider>
+                  <ProtectedRoute>
+                    <ClientRoutes>
+                      <CreateOrderPage />
+                    </ClientRoutes>
+                  </ProtectedRoute>
+              </OrderContextProvider>
+            }/>
           {/*This routes not are protected*/}
           <Route path="/catalogo" element={<CataloguePage />} />
           <Route path="/catalogo/:id" element={<ProductCatalogue />} />
