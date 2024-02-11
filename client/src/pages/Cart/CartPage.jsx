@@ -43,6 +43,7 @@ export default function CartPage() {
       if (answer) {
         await deleteCart(id, user.Token);
         toast.success(`¡Producto eliminado del carrito!`);
+        setData([])
         getData();
       }
     } catch (err) {
