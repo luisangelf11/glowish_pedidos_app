@@ -6,6 +6,8 @@ import Loader from "../../components/Loader";
 import { useAuthContext } from "../../context/authContext";
 import ItemOrder from "./ItemOrder";
 import Modal from "../../components/Modal";
+import { getDetails } from "../../api/details";
+import ItemDetail from "./ItemDetail";
 
 export default function ListOrdersPage() {
   const [error, setError] = useState(false);
@@ -13,6 +15,7 @@ export default function ListOrdersPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [modal, setModal] = useState(false);
   const [pedidoId, setPedidoId] = useState(0);
+  const [detail, setDatail] = useState([])
 
   const { user } = useAuthContext();
 
@@ -29,6 +32,15 @@ export default function ListOrdersPage() {
     }
   };
 
+  const getDetailOrder = async(id_pedido)=>{
+    try {
+        const res = await getDetails(id_pedido)
+        setDatail(res.data)
+    } catch {
+        setError(true);
+    }
+  }
+
   const handleClose = () => {
     setModal(false);
     setPedidoId(0);
@@ -36,8 +48,9 @@ export default function ListOrdersPage() {
 
   const openModal = (id) => {
     setModal(true);
-    setPedidoId(id)
-  }
+    setPedidoId(id);
+    getDetailOrder(id)
+  };
 
   useEffect(() => {
     getData();
@@ -60,7 +73,13 @@ export default function ListOrdersPage() {
           </h2>
           {modal && (
             <Modal onClose={handleClose} title={`Pedido: #${pedidoId}`}>
-              <table>adjkasdjkl</table>
+              <section>
+                {
+                   detail.length > 0 ? detail.map((el, index)=> <ItemDetail key={index} data={el}/>) :
+                   <p className="text-md m-16 text-center font-semibold text-gray-800">¡Este pedido no tiene ningún detalle!</p>
+                }
+                
+              </section>
             </Modal>
           )}
           {data.map((el, index) => (
