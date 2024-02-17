@@ -31,6 +31,7 @@ import CreateOrderPage from "./pages/orders/CreateOrderPage";
 import CartPage from "./pages/Cart/CartPage";
 import OrdersPage from "./pages/orders/OrdersPage";
 import DetailsPage from "./pages/details/DetailsPage";
+import ListOrdersPage from "./pages/orders/ListOrdersPage";
 
 function App() {
   return (
@@ -257,6 +258,13 @@ function App() {
               </OrderContextProvider>
             }
           />
+          <Route path="/lista-pedidos" element={
+            <ProtectedRoute>
+              <ClientRoutes>
+                <ListOrdersPage />
+              </ClientRoutes>
+            </ProtectedRoute>
+          }/>
           {/*This routes not are protected*/}
           <Route path="/catalogo" element={<CataloguePage />} />
           <Route path="/catalogo/:id" element={<ProductCatalogue />} />
