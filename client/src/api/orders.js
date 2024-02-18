@@ -11,3 +11,6 @@ export const getOrdersUser = async(id_usuario)=>
     
 export const updateOrder = async(id, data, token)=>
     await axios.put(`http://localhost:3000/api/v1/pedidos/${id}?accessToken=${token}`, data);    
+
+export const createOrder = async(data, token)=>
+    await axios.post(`http://localhost:3000/api/v1/pedidos?accessToken=${token}`, data);    
