@@ -3,7 +3,7 @@ import { getProduct } from "../../api/products";
 import { Link } from "react-router-dom";
 import {useOrderContext} from '../../context/orderContext'
 
-export default function ItemOrder({ data, deleteProductCart }) {
+export default function ItemOrder({ data, deleteProductCart, alertShow }) {
   const { Id, Id_Producto, Unidades, Size, Color } = data;
   const initialValue = {
     id: Id,
@@ -20,6 +20,7 @@ export default function ItemOrder({ data, deleteProductCart }) {
   const {addOrder, deleteOrder} = useOrderContext();
   const [product, setProduct] = useState(initialValue);
   const [selected, setSelected] = useState(false);
+  const [validateProduct, setValidateProduct] = useState({});
 
   const generateNewPrice = (precio, descuento) => {
     let desc = parseFloat(precio) * parseFloat(descuento / 100);
@@ -30,6 +31,7 @@ export default function ItemOrder({ data, deleteProductCart }) {
   const getData = async () => {
     try {
       const res = await getProduct(Id_Producto);
+      setValidateProduct(res.data);
       setProduct({
         ...product,
         nombre: res.data.Nombre,
@@ -47,15 +49,22 @@ export default function ItemOrder({ data, deleteProductCart }) {
     getData();
   }, []);
 
+  const validateStatusQuantityProduct = ()=>{
+    if(product.unidades > validateProduct.Unidades) return true;
+    else false;
+  }
+
   const handleSelect = () => {
-    if (selected){
-      setSelected(false);
-      deleteOrder(product.id);
-    }
-    else {
-      setSelected(true);
-      addOrder(product);
-    }
+    if(!validateStatusQuantityProduct()){
+      if (selected){
+        setSelected(false);
+        deleteOrder(product.id);
+      }
+      else {
+        setSelected(true);
+        addOrder(product);
+      }
+    }else alertShow();
   };
 
   return (

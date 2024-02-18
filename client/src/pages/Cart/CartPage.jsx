@@ -65,6 +65,10 @@ export default function CartPage() {
     }
   };
 
+  const alertShow = ()=>{
+    toast.error(`Este producto no cuenta con las unidades suficientes para ser vendido. Por favor, verifique cuantas unidades disponibles tiene este producto`);
+  }
+
   return (
     <section className="flex flex-col  h-screen">
       <MenuUser />
@@ -104,6 +108,7 @@ export default function CartPage() {
                 key={index}
                 data={el}
                 deleteProductCart={deleteProductCart}
+                alertShow={alertShow}
               />
             ))}
             {empty && <NoneData />}

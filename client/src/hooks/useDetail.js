@@ -1,4 +1,5 @@
 import { createDetail } from "../api/details";
+import { getProduct } from "../api/products";
 
 export const useDetail = () => {
     const generateDetailOrder = (list, pedidoId, token) => {
