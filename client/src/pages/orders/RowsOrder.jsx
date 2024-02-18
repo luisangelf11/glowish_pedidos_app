@@ -20,7 +20,7 @@ export default function RowsOrder({ element, noRow, editOrder }) {
             <td className="text-center p-2 text-sm">{Monto}</td>
             <td className="text-center p-2 text-sm">{Id_Usuario}</td>
             <td className="text-center">
-                {Estado !== 'Entregado' ? <button className='bg-blue-600 w-16 hover:bg-blue-500 text-white rounded-sm p-1 text-sm' onClick={()=> editOrder(Id, Estado)}>
+                {Estado !== 'Entregado' && Estado !== 'Cancelado' ? <button className='bg-blue-600 w-16 hover:bg-blue-500 text-white rounded-sm p-1 text-sm' onClick={()=> editOrder(Id, Estado)}>
                     {generateText()}
                 </button> : '--  --- --'}
             </td>

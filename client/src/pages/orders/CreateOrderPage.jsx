@@ -12,6 +12,7 @@ import { useAuthContext } from "../../context/authContext";
 import "../../assets/css/animation.css";
 import { useTimeNowSQL } from "../../hooks/useTimeNowSQL";
 import { createOrder, updateOrder } from "../../api/orders";
+import { useDetail } from "../../hooks/useDetail";
 
 export default function CreateOrderPage() {
   const [error, setError] = useState(false);
@@ -24,6 +25,7 @@ export default function CreateOrderPage() {
   const { order } = useOrderContext();
   const { user } = useAuthContext();
   const {dateNowSQL} = useTimeNowSQL();
+  const {generateDetailOrder} = useDetail();
 
   const navigate = useNavigate();
 
@@ -144,7 +146,10 @@ export default function CreateOrderPage() {
                   }}
                   createOrder={async () => {
                     try {
-                      const order = await createOrderCheckout();
+                      const order = await createOrderCheckout({
+                        id_pedido: orderData.id,
+                        monto: parseFloat(totalUSD)
+                      });
                       console.log(order.data.id);
                       return order.data.id;
                     } catch (err) {
@@ -152,12 +157,18 @@ export default function CreateOrderPage() {
                     }
                   }}
                   onApprove={(data, actions) => {
-                    console.log(data);
+                    //console.log(data);
+                    generateDetailOrder(order, orderData.id, user.Token)
                     actions.order.capture();
+                    toast.success(`!Pago completado! Redireccionando al carrito de compras`);
+                    setTimeout(()=>{
+                      navigate('/carrito');
+                    }, 3000);
                   }}
                   onCancel={(data) => {
                     console.log(data);
-                    toast.error(`El pago ${data.orderID} fue cancelado`);
+                    toast.error(`El pago ${data.orderID} fue cancelado. Redireccionando al carrito.`);
+                    cancelOrder();
                   }}
                 />
               </PayPalScriptProvider>

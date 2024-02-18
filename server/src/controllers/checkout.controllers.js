@@ -8,6 +8,7 @@ const client = new paypal.core.PayPalHttpClient(enviroment);
 
 export const createOrderCheckout = async (req, res) => {
     try {
+        const {id_pedido, monto} = req.body;
         const request = new paypal.orders.OrdersCreateRequest();
         request.requestBody({
             intent: 'CAPTURE',
@@ -15,21 +16,21 @@ export const createOrderCheckout = async (req, res) => {
                 {
                     amount: {
                         currency_code: 'USD',
-                        value: '100.00',
+                        value: monto,
                         breakdown: {
                             item_total: {
                                 currency_code: 'USD',
-                                value: '100.00'
+                                value: monto
                             }
                         }
                     },
                     items: [{
-                        name: "Book of react",
-                        description: 'Description',
+                        name: "Compra En Glowish Fashion App",
+                        description: `Esta transacción fue realizada desde Glowish Fashion App. Por el pago del pedido con ID ${id_pedido}`,
                         quantity: "1",
                         unit_amount: {
                             currency_code: "USD",
-                            value: "100.00"
+                            value: monto
                         }
                     }]
                 }

@@ -5,16 +5,20 @@ import { deleteCart, getCarts } from "../../api/cart";
 import { useAuthContext } from "../../context/authContext";
 import { toast, Toaster } from "react-hot-toast";
 import ErrorData from "../../components/ErrorData";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import NoneData from "../../components/NoneData";
 import Loader from "../../components/Loader";
+import { useOrderContext } from "../../context/orderContext";
 
 export default function CartPage() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(false);
   const [empty, setEmpty] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const { user } = useAuthContext();
+  const {order} = useOrderContext();
+  const navigate = useNavigate();
 
   const getData = async () => {
     try {
@@ -34,6 +38,16 @@ export default function CartPage() {
   useEffect(() => {
     getData();
   }, []);
+
+  const goToOrder =()=>{
+    if(order.length === 0) toast.error(`¡Necesitas agregar productos al pedido!`);
+    else {
+      toast.success(`Redirigiendo al generador de pedidos...`);
+      setTimeout(()=>{
+        navigate('/crear-pedido')
+      }, 3000);
+    }
+  }
 
   const deleteProductCart = async (id) => {
     try {
@@ -73,13 +87,13 @@ export default function CartPage() {
               Carrito de compras
             </h2>
             {empty === false ? (
-              <Link
-                to="/crear-pedido"
-                className="bg-blue-600 hover:bg-blue-500 text-white uppercase rounded-md p-2 font-semibold "
+              <button
+              onClick={goToOrder}
+                className="bg-blue-600 hover:bg-blue-500 text-white uppercase rounded-md p-2 font-semibold scale-up-center"
               >
                 <i className="fas fa-boxes p-1"></i>
                 Hacer Pedido
-              </Link>
+              </button>
             ) : (
               ""
             )}

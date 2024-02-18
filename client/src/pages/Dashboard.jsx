@@ -95,7 +95,7 @@ export default function Dashboard() {
               className="text-sm"
             >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="fecha" />
+              <XAxis dataKey="fecha_venta" />
               <YAxis />
               <Tooltip />
               <Legend />

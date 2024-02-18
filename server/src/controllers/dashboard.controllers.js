@@ -32,7 +32,7 @@ export const ordersStatus = async (req, res) => {
         FROM pedidos;
         `);
         const [users] = await pool.query(`SELECT COUNT(*) as total_clientes
-        FROM usuarios;
+        FROM usuarios WHERE rol = 'client';
         `);
         res.json({ total_pedidos_enviados: send[0].total_pedidos_enviados, total_pedidos_entregados: delivered[0].total_pedidos_entregados, total_pedidos: total[0].total_pedidos, total_clientes: users[0].total_clientes });
     }
@@ -61,9 +61,9 @@ export const besthUsers = async (req, res) => {
 //Get the top 5 date with more orders
 export const dateMoreOrders = async (req, res) => {
     try {
-        const [result] = await pool.query(`SELECT fecha, COUNT(*) as total_pedidos
+        const [result] = await pool.query(`SELECT STR_TO_DATE(fecha, '%Y-%m-%d') AS fecha_venta , COUNT(*) as total_pedidos
         FROM pedidos
-        GROUP BY fecha
+        GROUP BY fecha_venta
         ORDER BY total_pedidos DESC
         LIMIT 5;
         `);

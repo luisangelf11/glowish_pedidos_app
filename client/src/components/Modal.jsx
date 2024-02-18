@@ -20,11 +20,11 @@ export default function Modal({onClose, children, title}) {
               </div>
               <div className="flex items-center justify-end p-6 border-t border-solid rounded-b border-blueGray-200">
                 <button
-                  className="text-red-500 background-transparent font-bold uppercase px-6 py-2 outline-none focus:outline-none mr-1 text-3xl mb-1 ease-linear transition-all duration-150"
+                  className="text-red-500 background-transparent font-bold uppercase px-6 py-2 outline-none focus:outline-none mr-1 text-sm mb-1 ease-linear transition-all duration-150"
                   type="button"
                   onClick={onClose}
                 >
-                  <i className="fas fa-times-circle"></i>
+                  CERRAR
                 </button>
               </div>
             </div>

@@ -56,7 +56,15 @@ export default function DetailsPage() {
               <h3 className="text-red-400 uppercase font-bold">
                 Total del pedido:
               </h3>
-              <span className="font-semibold text-gray-600">{parseFloat(total).toFixed(2)}</span>
+              <span className="font-semibold text-gray-600">{parseFloat(total + 300).toFixed(2)}</span>
+            </div>
+          </div>
+          <div className="bg-white rounded-md p-2 shadow-md flex gap-2">
+            <div>
+              <h3 className="text-red-400 uppercase font-bold">
+                Nota:
+              </h3>
+              <span className="font-semibold text-gray-600 text-sm">Recuerde que el pago por envío es de $RD 300.00</span>
             </div>
           </div>
           <Link
