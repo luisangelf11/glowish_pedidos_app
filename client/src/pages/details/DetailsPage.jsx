@@ -4,6 +4,8 @@ import { useParams, Link } from "react-router-dom";
 import TableContent from "./TableContent";
 import { toast, Toaster } from "react-hot-toast";
 import { getDetails } from "../../api/details";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import ReportDetail from "../../reports/ReportDetail";
 
 export default function DetailsPage() {
   const [data, setData] = useState([]);
@@ -13,12 +15,12 @@ export default function DetailsPage() {
   const getData = async () => {
     try {
       const res = await getDetails(id);
-      let suma  =0;
-      res.data.forEach(el=>{
-          suma += el.SubTotal;
-        });
-        setTotal(suma);
-        setData(res.data);
+      let suma = 0;
+      res.data.forEach(el => {
+        suma += el.SubTotal;
+      });
+      setTotal(suma);
+      setData(res.data);
     } catch (err) {
       toast.success(err.response.data.message);
     }
@@ -67,12 +69,28 @@ export default function DetailsPage() {
               <span className="font-semibold text-gray-600 text-sm">Recuerde que el pago por envío es de $RD 300.00</span>
             </div>
           </div>
-          <Link
-            to="/pedidos"
-            className="bg-red-600 p-2 h-10 mt-4 cursor-pointer text-white rounded-sm transition-all hover:bg-red-500"
-          >
-            <i className="fas fa-hand-point-left p-1"></i>Regresar
-          </Link>
+          <div className="flex gap-2">
+            <Link
+              to="/pedidos"
+              className="bg-red-600 p-2 h-10 mt-4 cursor-pointer text-white rounded-sm transition-all hover:bg-red-500"
+            >
+              <i className="fas fa-hand-point-left p-1"></i>Regresar
+            </Link>
+            <PDFDownloadLink document={<ReportDetail id={id} />}
+              fileName="ReporteDetalle.pdf">
+              {({ loading, url, error, blob }) =>
+                loading ? (
+                  <button className="bg-blue-700 flex justify-center items-center p-1 h-10 mt-4 rounded-sm text-white font-semibold transition-all hover:bg-blue-600">
+                    <i className="fas fa-spinner p-2"></i>
+                  </button>
+                ) : (
+                  <button className="bg-blue-700 flex justify-center items-center p-1 h-10 mt-4 rounded-sm text-white font-semibold transition-all hover:bg-blue-600">
+                    <i className="fas fa-file p-2"></i>
+                  </button>
+                )
+              }
+            </PDFDownloadLink>
+          </div>
         </div>
       </section>
       <Toaster position="top-center" />
