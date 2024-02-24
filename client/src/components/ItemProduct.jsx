@@ -3,6 +3,10 @@ import imgDesc from "../assets/descuentoIcon.png";
 import { useNavigate } from "react-router-dom";
 import Rating from "react-rating";
 import { getAVG } from "../api/ranking";
+import { getColorsDisponibles } from "../api/colors";
+import { getSizeDisponibles } from "../api/sizes";
+import CircleColor from "./CircleColor";
+import TagsSizes from "./TagsSizes";
 
 export default function ItemProduct({ data }) {
   const [ranking, setRanking] = useState(0);
@@ -16,6 +20,21 @@ export default function ItemProduct({ data }) {
     Descuento,
     Categoria,
   } = data;
+
+  const [sizes, setSizes] = useState([]);
+  const [colors, setColors] = useState([]);
+
+  const getColorsAndSizes = async()=>{
+    try{
+      const resColors = await getColorsDisponibles(Id);
+      const resSizes = await getSizeDisponibles(Id);
+      setColors(resColors.data);
+      setSizes(resSizes.data);
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
 
   const getRanking = async (id) => {
     try {
@@ -45,6 +64,7 @@ export default function ItemProduct({ data }) {
 
   useEffect(() => {
     getRanking(Id);
+    getColorsAndSizes();
   }, []);
 
   return (
@@ -99,6 +119,12 @@ export default function ItemProduct({ data }) {
               {Categoria}
             </span>
           )}
+          <div className="mt-2 flex justify-start gap-2">
+            {colors.map((el, index)=> <CircleColor key={index} rgb={el.Rgb}/>)}
+          </div>
+          <div className="mt-2 flex justify-start gap-2">
+            {sizes.map((el, index)=> <TagsSizes key={index} name={el.Size}/>)}
+          </div>
           <Rating
             className="text-yellow-500 mt-4"
             readonly={true}
