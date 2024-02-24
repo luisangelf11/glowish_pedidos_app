@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import NoneData from "../../components/NoneData";
 import Loader from "../../components/Loader";
 import { useOrderContext } from "../../context/orderContext";
+import { useToken } from "../../hooks/useToken";
 
 export default function CartPage() {
   const [data, setData] = useState([]);
@@ -17,21 +18,25 @@ export default function CartPage() {
   const [loading, setLoading] = useState(false);
 
   const { user } = useAuthContext();
-  const {order} = useOrderContext();
+  const { order } = useOrderContext();
+  const { invalidToken } = useToken();
   const navigate = useNavigate();
 
   const getData = async () => {
     try {
       setLoading(true);
       const res = await getCarts(user.Id, user.Token);
-      setTimeout(() =>{
+      setTimeout(() => {
         if (!res.data.length) setEmpty(true);
         else setEmpty(false);
-        setLoading(false)
+        setLoading(false);
         setData(res.data);
-      } , 3000);
-    } catch {
-      setError(true);
+      }, 3000);
+    } catch (err) {
+      if (err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+      } else setError(true);
     }
   };
 
@@ -39,15 +44,16 @@ export default function CartPage() {
     getData();
   }, []);
 
-  const goToOrder =()=>{
-    if(order.length === 0) toast.error(`¡Necesitas agregar productos al pedido!`);
+  const goToOrder = () => {
+    if (order.length === 0)
+      toast.error(`¡Necesitas agregar productos al pedido!`);
     else {
       toast.success(`Redirigiendo al generador de pedidos...`);
-      setTimeout(()=>{
-        navigate('/crear-pedido')
+      setTimeout(() => {
+        navigate("/crear-pedido");
       }, 3000);
     }
-  }
+  };
 
   const deleteProductCart = async (id) => {
     try {
@@ -57,17 +63,22 @@ export default function CartPage() {
       if (answer) {
         await deleteCart(id, user.Token);
         toast.success(`¡Producto eliminado del carrito!`);
-        setData([])
+        setData([]);
         getData();
       }
     } catch (err) {
-      setError(true);
+      if (err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+      } else setError(true);
     }
   };
 
-  const alertShow = ()=>{
-    toast.error(`Este producto no cuenta con las unidades suficientes para ser vendido. Por favor, verifique cuantas unidades disponibles tiene este producto`);
-  }
+  const alertShow = () => {
+    toast.error(
+      `Este producto no cuenta con las unidades suficientes para ser vendido. Por favor, verifique cuantas unidades disponibles tiene este producto`
+    );
+  };
 
   return (
     <section className="flex flex-col  h-screen">
@@ -92,7 +103,7 @@ export default function CartPage() {
             </h2>
             {empty === false ? (
               <button
-              onClick={goToOrder}
+                onClick={goToOrder}
                 className="bg-blue-600 hover:bg-blue-500 text-white uppercase rounded-md p-2 font-semibold scale-up-center"
               >
                 <i className="fas fa-boxes p-1"></i>

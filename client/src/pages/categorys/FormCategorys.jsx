@@ -4,7 +4,12 @@ import { toast, Toaster } from "react-hot-toast";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../context/authContext";
 import MenuAdmin from "../../components/MenuAdmin";
-import { createCategory, getCategory, updateCategory } from "../../api/category";
+import {
+  createCategory,
+  getCategory,
+  updateCategory,
+} from "../../api/category";
+import { useToken } from "../../hooks/useToken";
 
 export default function FormCategorys({ edit }) {
   const initialForm = {
@@ -16,6 +21,7 @@ export default function FormCategorys({ edit }) {
   const { id } = useParams();
   const { user } = useAuthContext();
   const navigate = useNavigate();
+  const { invalidToken } = useToken();
 
   const handleChange = (e) => {
     setForm({
@@ -24,22 +30,21 @@ export default function FormCategorys({ edit }) {
     });
   };
 
-  const getDataEdit =async(id)=>{
+  const getDataEdit = async (id) => {
     try {
       const res = await getCategory(parseInt(id));
-      console.log(res.data)
+      console.log(res.data);
       setForm({
         nombre: res.data.Nombre,
-        descripcion: res.data.Descripcion
+        descripcion: res.data.Descripcion,
       });
-      
     } catch (err) {
       toast.error(`${err.response.data.message}`);
     }
-  }
+  };
 
-  useEffect(()=>{
-    if(edit === true) getDataEdit(id);
+  useEffect(() => {
+    if (edit === true) getDataEdit(id);
   }, []);
 
   const validateData = () => {
@@ -49,7 +54,8 @@ export default function FormCategorys({ edit }) {
 
   const addCategory = async () => {
     try {
-      if (!validateData()) return toast.error(`Por favor, complete todos los campos`);
+      if (!validateData())
+        return toast.error(`Por favor, complete todos los campos`);
       const data = {
         nombre: form.nombre,
         descripcion: form.descripcion,
@@ -59,7 +65,10 @@ export default function FormCategorys({ edit }) {
       setForm(initialForm);
       toast.success(`¡El producto se fue creado correctamente!`);
     } catch (err) {
-      toast.error(`${err.response.data.message}`);
+      if (err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+      } else toast.error(`${err.response.data.message}`);
     }
   };
 
@@ -79,7 +88,10 @@ export default function FormCategorys({ edit }) {
         navigate("/categorias");
       }, 3000);
     } catch (err) {
-      toast.error(`${err.response.data.message}`);
+      if (err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+      } else toast.error(`${err.response.data.message}`);
     }
   };
 

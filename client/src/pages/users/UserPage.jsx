@@ -49,7 +49,7 @@ export default function UserPage() {
                     style={{ width: "100%" }}
                 >
                     <div className="flex flex-col w-2/3">
-                        <h2 className="text-left p-2 uppercase text-red-500 font-bold text-xl text-center">
+                        <h2 className=" p-2 uppercase text-red-500 font-bold text-xl text-center">
                             Lista De Usuarios
                         </h2>
                         <form

@@ -4,6 +4,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom'
 import { Toaster, toast } from 'react-hot-toast'
 import { createSize, getSize, updateSize } from '../../api/sizes'
 import { useAuthContext } from '../../context/authContext'
+import {useToken} from '../../hooks/useToken'
 
 export default function FormSize({ edit }) {
     const initialForm = {
@@ -12,7 +13,7 @@ export default function FormSize({ edit }) {
     const [form, setForm] = useState(initialForm)
     const { id } = useParams();
     const { user } = useAuthContext();
-
+    const {invalidToken} = useToken();
     const navigate = useNavigate();
 
     const getDataEdit = async () => {
@@ -24,7 +25,7 @@ export default function FormSize({ edit }) {
                 estado: res.data.Estado
             });
         } catch (error) {
-            toast.error(`${err.response.data.message}`);
+            toast.error(`${error.response.data.message}`);
         }
     }
 
@@ -59,7 +60,11 @@ export default function FormSize({ edit }) {
             setForm(initialForm);
         }
         catch (err) {
-            toast.error(`${err.response.data.message}`);
+            if(err.response.status === 401) {
+                toast.error(`Acceso denegado, su sesión expiró`);
+                invalidToken();
+              }else
+                toast.error(err.response.data.message);
         }
     }
 
@@ -76,7 +81,11 @@ export default function FormSize({ edit }) {
                 navigate("/sizes");
               }, 3000);
         } catch (error) {
-            toast.error(`${error.response.data.message}`);
+            if(error.response.status === 401) {
+                toast.error(`Acceso denegado, su sesión expiró`);
+                invalidToken();
+              }else
+                toast.error(error.response.data.message);
         }
     }
 

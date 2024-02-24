@@ -4,12 +4,14 @@ import { Toaster, toast } from "react-hot-toast";
 import TableContent from "./TableContent";
 import { getFilterOrders, getOrders, updateOrder } from "../../api/orders";
 import { useAuthContext } from "../../context/authContext";
+import { useToken } from "../../hooks/useToken";
 
 export default function OrdersPage() {
   const [form, setForm] = useState({ filter: "" });
   const [data, setData] = useState([]);
 
-  const {user} = useAuthContext()
+  const { user } = useAuthContext();
+  const { invalidToken } = useToken();
 
   const getData = async () => {
     try {
@@ -41,24 +43,26 @@ export default function OrdersPage() {
     else getFilter(form.filter);
   }, [form.filter]);
 
-  const generateState =(estado)=>{
-    if(estado === 'Solicitado') return 'Enviado'
-    else if (estado === 'Enviado') return 'Entregado';
-  }
+  const generateState = (estado) => {
+    if (estado === "Solicitado") return "Enviado";
+    else if (estado === "Enviado") return "Entregado";
+  };
 
-  const editOrder = async(id, estado)=>{
-    try{
-        const dataEnpoint = {
-            estado: generateState(estado)
-        }
-        await updateOrder(id, dataEnpoint, user.Token);
-        toast.success(`¡El estado del pedido ${id} fue modificado!`);
-        getData();
+  const editOrder = async (id, estado) => {
+    try {
+      const dataEnpoint = {
+        estado: generateState(estado),
+      };
+      await updateOrder(id, dataEnpoint, user.Token);
+      toast.success(`¡El estado del pedido ${id} fue modificado!`);
+      getData();
+    } catch (err) {
+      if (err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+      } else toast.success(err.response.data.message);
     }
-    catch(err){
-      toast.success(err.response.data.message);
-    }
-  }
+  };
 
   return (
     <section className="flex h-screen">
@@ -99,7 +103,7 @@ export default function OrdersPage() {
             "Monto",
             "Id_Usuario",
             "Cambio de Estado",
-            "Detalle"
+            "Detalle",
           ]}
           data={data}
           editOrder={editOrder}

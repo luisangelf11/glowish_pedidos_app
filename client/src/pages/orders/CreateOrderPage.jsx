@@ -13,6 +13,7 @@ import "../../assets/css/animation.css";
 import { useTimeNowSQL } from "../../hooks/useTimeNowSQL";
 import { createOrder, updateOrder } from "../../api/orders";
 import { useDetail } from "../../hooks/useDetail";
+import { useToken } from "../../hooks/useToken.js";
 
 export default function CreateOrderPage() {
   const [error, setError] = useState(false);
@@ -24,8 +25,9 @@ export default function CreateOrderPage() {
 
   const { order } = useOrderContext();
   const { user } = useAuthContext();
-  const {dateNowSQL} = useTimeNowSQL();
-  const {generateDetailOrder} = useDetail();
+  const { dateNowSQL } = useTimeNowSQL();
+  const { generateDetailOrder } = useDetail();
+  const { invalidToken } = useToken();
 
   const navigate = useNavigate();
 
@@ -44,45 +46,52 @@ export default function CreateOrderPage() {
     getDataOrder();
     if (order.length === 0) navigate("/carrito");
   });
-  
 
   const generateOrder = async () => {
     try {
-       setPaypal(true);
-      toast.success(`Su pedido fue generado. Culmine el proceso pagando con su cuenta de paypal usando el botón inferior azul.`);
+      setPaypal(true);
+      toast.success(
+        `Su pedido fue generado. Culmine el proceso pagando con su cuenta de paypal usando el botón inferior azul.`
+      );
       const objOrder = {
-        estado: 'Solicitado',
+        estado: "Solicitado",
         fecha: dateNowSQL(),
         monto: parseFloat(subtotal + 300),
-        id_usuario: user.Id
-      }
-      const res = await createOrder(objOrder, user.Token)
-      setOrderData(res.data)
-    } catch{
-      setError(true);
+        id_usuario: user.Id,
+      };
+      const res = await createOrder(objOrder, user.Token);
+      setOrderData(res.data);
+    } catch (err) {
+      if (err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+      } else setError(true);
     }
   };
 
-  const cancelOrder =async()=>{
+  const cancelOrder = async () => {
     try {
       const objOrder = {
-        estado: 'Cancelado',
-      }
+        estado: "Cancelado",
+      };
       await updateOrder(orderData.id, objOrder, user.Token);
       toast.success(`¡Su pedido fue cancelado!`);
       setPaypal(false);
-      setTimeout(()=>{
-        navigate('/carrito');
+      setTimeout(() => {
+        navigate("/carrito");
       }, 3000);
-    } catch {
-      setError(true);
+    } catch (err) {
+      if (err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+      } else setError(true);
     }
-  }
+  };
 
-  const handleClick = ()=>{
-    if(paypal) cancelOrder();
+  const handleClick = () => {
+    if (paypal) cancelOrder();
     else generateOrder();
-  }
+  };
 
   return (
     <section className="flex flex-col  h-screen">
@@ -148,26 +157,31 @@ export default function CreateOrderPage() {
                     try {
                       const order = await createOrderCheckout({
                         id_pedido: orderData.id,
-                        monto: parseFloat(totalUSD)
+                        monto: parseFloat(totalUSD),
                       });
-                      console.log(order.data.id);
+                      //console.log(order.data.id);
                       return order.data.id;
                     } catch (err) {
+                      setError(true);
                       toast.error(err);
                     }
                   }}
                   onApprove={(data, actions) => {
                     //console.log(data);
-                    generateDetailOrder(order, orderData.id, user.Token)
+                    generateDetailOrder(order, orderData.id, user.Token);
                     actions.order.capture();
-                    toast.success(`!Pago completado! Redireccionando al carrito de compras`);
-                    setTimeout(()=>{
-                      navigate('/carrito');
+                    toast.success(
+                      `!Pago completado! Redireccionando al carrito de compras`
+                    );
+                    setTimeout(() => {
+                      navigate("/carrito");
                     }, 3000);
                   }}
                   onCancel={(data) => {
                     console.log(data);
-                    toast.error(`El pago ${data.orderID} fue cancelado. Redireccionando al carrito.`);
+                    toast.error(
+                      `El pago ${data.orderID} fue cancelado. Redireccionando al carrito.`
+                    );
                     cancelOrder();
                   }}
                 />

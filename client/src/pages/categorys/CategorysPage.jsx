@@ -3,41 +3,46 @@ import MenuAdmin from "../../components/MenuAdmin";
 import { Link } from "react-router-dom";
 import TableContent from "./TableContent";
 import { useAuthContext } from "../../context/authContext";
-import { deleteCategory, filterCategorys, getCategorysLimit } from "../../api/category";
-import {toast, Toaster} from 'react-hot-toast'
+import {
+  deleteCategory,
+  filterCategorys,
+  getCategorysLimit,
+} from "../../api/category";
+import { toast, Toaster } from "react-hot-toast";
+import { useToken } from "../../hooks/useToken";
 
 export default function CategorysPage() {
   const [form, setForm] = useState({
     filter: "",
   });
   const [data, setData] = useState([]);
-  const {user} = useAuthContext();
+  const { user } = useAuthContext();
+  const { invalidToken } = useToken();
 
-  const getData = async()=>{
+  const getData = async () => {
     try {
-        const res = await getCategorysLimit(10, 0);
-        setData(res.data);
-      } catch (err) {
-        toast.error(err.response.data.message);
-        setData([]);
-      }
-  }
+      const res = await getCategorysLimit(10, 0);
+      setData(res.data);
+    } catch (err) {
+      toast.error(err.response.data.message);
+      setData([]);
+    }
+  };
 
-  const filterData =async(name)=>{
-    try{
-        const res = await filterCategorys(name);
-        setData(res.data);
+  const filterData = async (name) => {
+    try {
+      const res = await filterCategorys(name);
+      setData(res.data);
+    } catch (err) {
+      setData([]);
+      console.log(err);
     }
-    catch(err){
-        setData([]);
-        console.log(err)
-    }
-  }
+  };
 
   useEffect(() => {
-    if(form.filter === '') getData();
-    else filterData(form.filter)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (form.filter === "") getData();
+    else filterData(form.filter);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.filter]);
 
   const handleChange = (e) => {
@@ -47,20 +52,22 @@ export default function CategorysPage() {
     });
   };
 
-  const deleteData =async(id)=>{
-    try{
+  const deleteData = async (id) => {
+    try {
       const response = confirm(`¿Deseas eliminar esta categoría?`);
-      if(response) {
+      if (response) {
         await deleteCategory(id, user.Token);
         toast.success(`La categoría con Id ${id} fue eliminada correctamente`);
         getData();
-        setForm({filter: ''});
+        setForm({ filter: "" });
       }
-    }catch(err){
-      toast.error(err.response.data.message);
+    } catch (err) {
+      if (err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+      } else toast.error(err.response.data.message);
     }
-  }
-
+  };
 
   return (
     <section className="flex h-screen">
@@ -100,7 +107,11 @@ export default function CategorysPage() {
             Nueva Categoría
           </Link>
         </div>
-        <TableContent data={data} tableHead={["Id", "Nombre", "Descripción", "Acciones"]} deleteData={deleteData}/>
+        <TableContent
+          data={data}
+          tableHead={["Id", "Nombre", "Descripción", "Acciones"]}
+          deleteData={deleteData}
+        />
         <Toaster position="top-center" />
       </section>
     </section>

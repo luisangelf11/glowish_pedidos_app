@@ -5,6 +5,7 @@ import TableContent from "./TableContent";
 import {Toaster, toast} from 'react-hot-toast'
 import { deleteColor, filterColors, getColors } from "../../api/colors";
 import { useAuthContext } from "../../context/authContext";
+import {useToken} from '../../hooks/useToken'
 
 export default function ColorsPage() {
   const [form, setForm] = useState({
@@ -12,6 +13,7 @@ export default function ColorsPage() {
   });
   const [data, setData] = useState([]);
   const {user} = useAuthContext();
+  const {invalidToken} = useToken();
 
   const getData =async()=>{
     try{
@@ -59,6 +61,10 @@ export default function ColorsPage() {
       }
     }
     catch(err){
+      if(err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+      }else
       toast.error(err.response.data.message);
     }
   }

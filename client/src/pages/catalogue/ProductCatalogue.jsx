@@ -19,6 +19,8 @@ import {
 import { getSizeDisponibles } from "../../api/sizes";
 import { getColorsDisponibles } from "../../api/colors";
 import { createCart } from "../../api/cart";
+import { useToken } from "../../hooks/useToken";
+import { useTimeNowSQL } from "../../hooks/useTimeNowSQL";
 
 export default function ProductCatalogue() {
   const initialForm = {
@@ -41,6 +43,10 @@ export default function ProductCatalogue() {
   const { user } = useAuthContext();
   //Params
   const { id } = useParams();
+
+  //Hooks
+  const { invalidToken } = useToken();
+  const { dateNowSQL } = useTimeNowSQL();
 
   const getSizesOptions = async () => {
     try {
@@ -130,17 +136,6 @@ export default function ProductCatalogue() {
     window.location.href = `${data.Imagen}`;
   };
 
-  function dateNowSQL() {
-    const today = new Date();
-    let day = today.getDate();
-    let month = 1 + today.getMonth();
-    let year = today.getFullYear();
-    let hours = today.getHours();
-    let minutes = today.getMinutes();
-    let seconds = today.getSeconds();
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  }
-
   const generateComment = async () => {
     try {
       if (comment.message === "")
@@ -157,7 +152,10 @@ export default function ProductCatalogue() {
       getComments();
       setComment({ message: "" });
     } catch (err) {
-      setError(true);
+      if (err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+      } else setError(true);
     }
   };
 
@@ -181,7 +179,10 @@ export default function ProductCatalogue() {
       setComments([]);
       getComments();
     } catch (err) {
-      console.log(err);
+      if (err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+      } else setError(true);
     }
   };
 
@@ -198,7 +199,10 @@ export default function ProductCatalogue() {
       toast.success(`¡Tu puntuación de este producto fue modificada!`);
       setRank(value);
     } catch (err) {
-      setError(true);
+      if (err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+      } else setError(true);
     }
   };
 
@@ -213,7 +217,10 @@ export default function ProductCatalogue() {
       toast.success(`¡Agregaste una puntuación a este producto!`);
       getRankingData();
     } catch (err) {
-      setError(true);
+      if (err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+      } else setError(true);
     }
   };
 
@@ -242,12 +249,18 @@ export default function ProductCatalogue() {
         size: form.size,
         color: form.color,
       };
-      if(validateFormCart()) return toast.error(`Verifique que todos los campos esten llenos y que las unidades no sean mayores a las existentes.`);
+      if (validateFormCart())
+        return toast.error(
+          `Verifique que todos los campos esten llenos y que las unidades no sean mayores a las existentes.`
+        );
       const res = await createCart(dataEndpoint, user.Token);
       toast.success(`¡Producto agregado al carrito!`);
       setForm(initialForm);
-    } catch {
-      setError(true);
+    } catch (err) {
+      if (err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+      } else setError(true);
     }
   };
 

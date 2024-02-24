@@ -3,98 +3,109 @@ import MenuAdmin from "../../components/MenuAdmin";
 import { toast, Toaster } from "react-hot-toast";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { createColor, getColor, updateColor } from "../../api/colors";
-import {useAuthContext} from '../../context/authContext'
+import { useAuthContext } from "../../context/authContext";
+import { useToken } from "../../hooks/useToken";
 
-export default function FormColors({edit}) {
-    const initialValues = {
-        color: '',
-        rgb: '',
-        estado: '',
-        id_producto: ''
+export default function FormColors({ edit }) {
+  const initialValues = {
+    color: "",
+    rgb: "",
+    estado: "",
+    id_producto: "",
+  };
+  const [form, setForm] = useState(initialValues);
+
+  const { id } = useParams();
+  const { user } = useAuthContext();
+  const navigate = useNavigate();
+  const { invalidToken } = useToken();
+
+  const getDataEdit = async () => {
+    try {
+      const res = await getColor(parseInt(id));
+      setForm({
+        color: res.data.Color,
+        rgb: res.data.Rgb,
+        estado: res.data.Estado,
+        id_producto: res.data.Id_Producto,
+      });
+    } catch (err) {
+      toast.error(`${err.response.data.message}`);
     }
-    const [form, setForm] = useState(initialValues);
+  };
 
-    const {id} = useParams();
-    const {user} = useAuthContext();
-    const navigate = useNavigate();
+  useEffect(() => {
+    if (edit === true) getDataEdit();
+  }, []);
 
-    const getDataEdit =async()=>{
-      try{
-        const res = await getColor(parseInt(id));
-        setForm({
-          color: res.data.Color,
-          rgb: res.data.Rgb,
-          estado: res.data.Estado,
-          id_producto: res.data.Id_Producto
-        });
-      }
-      catch(err){
-        toast.error(`${err.response.data.message}`);
-      }
-    }
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-    useEffect(()=>{
-      if(edit === true) getDataEdit();
-    }, []);
+  const validateData = () => {
+    if (
+      form.color === "" ||
+      form.rgb === "" ||
+      form.estado === "" ||
+      form.id_producto === ""
+    )
+      return false;
+    else return true;
+  };
 
-    const handleChange = (e) => {
-        setForm({
-          ...form,
-          [e.target.name]: e.target.value,
-        });
+  const addColor = async () => {
+    try {
+      if (!validateData())
+        return toast.error(`Por favor, complete todos los campos`);
+      const dataValues = {
+        color: form.color,
+        rgb: form.rgb,
+        id_producto: parseInt(form.id_producto),
+        estado: form.estado,
       };
+      const res = await createColor(dataValues, user.Token);
+      toast.success(`¡El color se fue creado correctamente!`);
+      setForm(initialValues);
+    } catch (err) {
+      if (err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+      } else toast.error(`${err.response.data.message}`);
+    }
+  };
 
-      const validateData =()=>{
-        if(form.color === "" || form.rgb === "" || form.estado === "" || form.id_producto === "")
-            return false;
-        else return true;
-      }
+  const editColor = async () => {
+    try {
+      const data = {
+        color: form.color,
+        rgb: form.rgb,
+        id_producto: parseInt(form.id_producto),
+        estado: form.estado,
+      };
+      const res = await updateColor(id, data, user.Token);
+      setForm(initialValues);
+      toast.success(
+        `¡El color fue modificado correctamente! Redireccionando a la tabla de colores.`
+      );
+      setTimeout(() => {
+        navigate("/colores");
+      }, 3000);
+    } catch (err) {
+      if (err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+      } else toast.error(`${err.response.data.message}`);
+    }
+  };
 
-      const addColor =async()=>{
-        try{
-           if(!validateData()) return toast.error(`Por favor, complete todos los campos`);
-            const dataValues = {
-                color: form.color,
-                rgb: form.rgb,
-                id_producto: parseInt(form.id_producto),
-                estado: form.estado
-            }
-            const res = await createColor(dataValues, user.Token);
-            toast.success(`¡El color se fue creado correctamente!`);
-            setForm(initialValues);
-        }
-        catch(err){
-            toast.error(`${err.response.data.message}`);
-        }
-      }
-
-      const editColor =async()=>{
-        try {
-          const data = {
-            color: form.color,
-            rgb: form.rgb,
-            id_producto: parseInt(form.id_producto),
-            estado: form.estado
-          };
-          const res = await updateColor(id, data, user.Token);
-          setForm(initialValues);
-          toast.success(
-            `¡El color fue modificado correctamente! Redireccionando a la tabla de colores.`
-          );
-          setTimeout(() => {
-            navigate("/colores");
-          }, 3000);
-        } catch (err) {
-          console.log(err);
-          toast.error(`${err.response.data.message}`);
-        }
-      }
-
-      const handleSubmit =(e)=>{
-        e.preventDefault();
-        if(edit === false) addColor();
-        else editColor();
-      }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (edit === false) addColor();
+    else editColor();
+  };
 
   return (
     <section className="flex h-screen">
@@ -103,16 +114,16 @@ export default function FormColors({edit}) {
         style={{ width: "86%" }}
         className="bg-gray-100 ml-auto gap-2 flex flex-col items-center justify-center"
       >
-        <form onSubmit={handleSubmit} className="scale-up-center bg-white w-2/3 shadow rounded-md flex flex-col gap-2 items-center p-2">
-        <h2 className="text-xl font-semibold p-2 text-red-500 uppercase">
+        <form
+          onSubmit={handleSubmit}
+          className="scale-up-center bg-white w-2/3 shadow rounded-md flex flex-col gap-2 items-center p-2"
+        >
+          <h2 className="text-xl font-semibold p-2 text-red-500 uppercase">
             {edit === false ? "Crear color" : `Editar color #${id}`}
           </h2>
           <div className="flex flex-col justify-center gap-4">
-          <div className="flex flex-col">
-              <label
-                htmlFor="color"
-                className="text-sm font-bold text-red-400"
-              >
+            <div className="flex flex-col">
+              <label htmlFor="color" className="text-sm font-bold text-red-400">
                 Nombre:
               </label>
               <input
@@ -126,10 +137,7 @@ export default function FormColors({edit}) {
               />
             </div>
             <div className="flex flex-col">
-              <label
-                htmlFor="rgb"
-                className="text-sm font-bold text-red-400"
-              >
+              <label htmlFor="rgb" className="text-sm font-bold text-red-400">
                 Rgb:
               </label>
               <input
@@ -159,7 +167,12 @@ export default function FormColors({edit}) {
               />
             </div>
             <div className="flex flex-col">
-              <label htmlFor="estado" className="text-sm font-bold text-red-400">Estado:</label>
+              <label
+                htmlFor="estado"
+                className="text-sm font-bold text-red-400"
+              >
+                Estado:
+              </label>
               <select
                 name="estado"
                 id="estado"

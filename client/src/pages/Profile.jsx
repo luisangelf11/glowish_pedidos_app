@@ -7,6 +7,7 @@ import { changePassword, updateUser } from "../api/user";
 import { toast, Toaster } from "react-hot-toast";
 import NewPassword from "../components/NewPassword";
 import "../assets/css/animation.css";
+import { useToken } from "../hooks/useToken";
 
 export default function Profile() {
   const { user, setUser } = useAuthContext();
@@ -22,6 +23,8 @@ export default function Profile() {
   const [municipalitys, setMunicipalitys] = useState([]);
   const [file, setFile] = useState(null);
   const [imgUrl, setImgUrl] = useState(user.Avatar);
+
+  const { invalidToken } = useToken();
 
   //Get all citys
   const getCitys = async () => {
@@ -88,7 +91,10 @@ export default function Profile() {
 
       toast.success(`¡Tus datos fuerón actualizados!`);
     } catch (err) {
-      toast.error(`${err.response.message}`);
+      if (err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+      } else toast.error(`${err.response.message}`);
     }
   };
 
