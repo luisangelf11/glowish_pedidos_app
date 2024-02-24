@@ -8,6 +8,7 @@ import { toast, Toaster } from "react-hot-toast";
 import NewPassword from "../components/NewPassword";
 import "../assets/css/animation.css";
 import { useToken } from "../hooks/useToken";
+import Modal from "../components/Modal";
 
 export default function Profile() {
   const { user, setUser } = useAuthContext();
@@ -23,6 +24,7 @@ export default function Profile() {
   const [municipalitys, setMunicipalitys] = useState([]);
   const [file, setFile] = useState(null);
   const [imgUrl, setImgUrl] = useState(user.Avatar);
+  const [modal, setModal] = useState(false);
 
   const { invalidToken } = useToken();
 
@@ -73,7 +75,6 @@ export default function Profile() {
         nombre: form.nombre,
         apellido: form.apellido,
         telefono: form.telefono,
-        avatar: imgUrl,
         direccion:
           form.provincia !== "" && form.municipio !== ""
             ? `${city.name}, ${municipality.name}`
@@ -86,7 +87,6 @@ export default function Profile() {
         Apellido: data.apellido,
         Telefono: data.telefono,
         Direccion: data.direccion,
-        Avatar: data.avatar,
       });
 
       toast.success(`¡Tus datos fuerón actualizados!`);
@@ -137,6 +137,30 @@ export default function Profile() {
     toast.error(`¡Los campos están vacíos o no coinciden!`);
   };
 
+  const closeModal = () => setModal(false);
+  const openModal = () => setModal(true);
+
+  const changeAvatar = async()=>{
+    try{
+      const data ={
+        avatar: imgUrl
+      }
+      await updateUser(user.Id, data, user.Token);
+      setUser({
+        ...user,
+        Avatar: data.avatar
+      });
+
+      toast.success(`¡Tu foto de perfil fue actualizada!`);
+    }
+    catch(err){
+      if (err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+      } else toast.error(`${err.response.message}`);
+    }
+  }
+
   return (
     <section className="flex flex-col h-screen">
       <MenuUser />
@@ -149,13 +173,13 @@ export default function Profile() {
         >
           Perfil de usuario
         </h2>
-        <article className="flex justify-around gap-20 w-full mt-2">
-          <div className="flex flex-col gap-2 items-center border-r p-2">
+        <article className="flex justify-center gap-20 w-full mt-2">
+          <div className="flex flex-col gap-2 items-center border-r p-8">
             <h3 className="text-center p-2 text-red-400 uppercase font-semibold">
               Datos del usuario
             </h3>
             <img
-              src={imgUrl || iconUser}
+              src={user.Avatar}
               alt="profile"
               className=" w-36 h-36 rounded-full object-cover"
             />
@@ -174,32 +198,12 @@ export default function Profile() {
               <i className="fas fa-phone p-1"></i>
               {user.Telefono}
             </p>
-            <form
-              onSubmit={uploadFile}
-              className="scale-up-center bg-white w-2/3 shadow rounded-md flex flex-col gap-2 items-center p-2"
+            <button
+              className="bg-blue-800 p-2 mt-2 cursor-pointer text-white rounded-sm transition-all hover:bg-blue-700"
+              onClick={openModal}
             >
-              <h3 className="font-semibold p-2 text-red-500 uppercase">
-                Foto De Perfil
-              </h3>
-              <div className="flex gap-2 items-center">
-                <label
-                  htmlFor="file"
-                  className="text-sm font-bold text-red-400"
-                >
-                  Imagen:
-                </label>
-                <input
-                  type="file"
-                  name="file"
-                  id="file"
-                  onChange={handleFileChange}
-                  className="border rounded-sm text-sm p-1 outline-none border-gray-400 w-56 focus:border-blue-500 focus:border-2"
-                />
-              </div>
-              <button className="bg-green-600 p-2 mt-2 cursor-pointer text-white rounded-sm transition-all hover:bg-green-500">
-                <i className="p-1 fas fa-upload"></i>Subir archivo
-              </button>
-            </form>
+              Cambiar Foto
+            </button>
           </div>
           <form
             onSubmit={handleSubmit}
@@ -313,6 +317,43 @@ export default function Profile() {
           />
         </article>
       </section>
+      {modal && (
+        <Modal title={"Cambiar foto de perfil"} onClose={closeModal}>
+          <div className="flex flex-col gap-2 items-center">
+          <img
+              src={imgUrl || iconUser}
+              alt="profile"
+              className=" w-28 h-28 rounded-full object-cover"
+            />
+            <form
+              onSubmit={uploadFile}
+              className="flex flex-col items-center border-b p-2"
+            >
+              <div className="flex flex-col gap-2 items-center">
+                <label
+                  htmlFor="file"
+                  className="text-sm font-bold text-red-400"
+                >
+                  Seleccione la imagen:
+                </label>
+                <input
+                  type="file"
+                  name="file"
+                  id="file"
+                  onChange={handleFileChange}
+                  className="border rounded-sm text-sm p-1 outline-none border-gray-400 w-56 focus:border-blue-500 focus:border-2"
+                />
+              </div>
+              <button className="bg-green-600 p-2 mt-2 cursor-pointer text-white rounded-sm transition-all hover:bg-green-500">
+                <i className="p-1 fas fa-upload"></i>Subir archivo
+              </button>
+            </form>
+            <button className="bg-blue-600 p-2 cursor-pointer text-white rounded-sm transition-all hover:bg-blue-500" onClick={changeAvatar}>
+              <i className="fas fa-save p-1"></i>Guardar cambios
+            </button>
+          </div>
+        </Modal>
+      )}
       <Toaster position="top-center" />
     </section>
   );

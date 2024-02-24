@@ -30,7 +30,7 @@ export default function NewPassword({ updatePass, passwordsNotSame }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col items-center gap-3 border-l p-4"
+      className="flex flex-col items-center gap-3 border-l p-8"
     >
       <h3 className="text-center p-2 text-red-400 uppercase font-semibold">
         Cambio de credenciales
