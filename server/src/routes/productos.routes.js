@@ -1,15 +1,18 @@
 import { Router } from 'express'
-import { createProducto, deleteProducto, getProducto, getProductos, getProductsCategorys, updateProducto } from '../controllers/productos.controllers.js';
+import { createProducto, deleteProducto, getProducto, getProductos, getProductsCategorys, getRandomProducts, updateProducto } from '../controllers/productos.controllers.js';
 import { validateToken } from '../auth/authentication.js';
 
 //Initializations
 const router = Router();
 
 //Endpoint for get products (pagination is active)
-router.get('/api/v1/productos',getProductos);
+router.get('/api/v1/productos', getProductos);
 
 //Endpoint for get a product
 router.get('/api/v1/productos/:id', getProducto);
+
+//Endpoint for get five products random
+router.get('/api/v1/productos-random', getRandomProducts);
 
 //Endpoint for get all products of a category
 router.get('/api/v1/productos-categoria', getProductsCategorys);

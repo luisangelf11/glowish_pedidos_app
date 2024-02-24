@@ -6,7 +6,7 @@ export const getPedidos = async(req, res)=>{
         const {id_usuario, limit, offset, id } = req.query;
         //if id_usuario query exist execute this lines code
         if((!limit && !offset) && id_usuario){
-            const [result] = await pool.query('SELECT * FROM Pedidos WHERE id_usuario = ?', [id_usuario]);
+            const [result] = await pool.query('SELECT * FROM Pedidos WHERE id_usuario = ? ORDER BY id DESC', [id_usuario]);
             /* if(!result.length) return res.status(404).json({"message": `This user dont have orders`}); */
             res.json(result);
         }else if(limit && offset){

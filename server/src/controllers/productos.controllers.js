@@ -32,6 +32,20 @@ export const getProductos = async (req, res) => {
     }
 }
 
+//Get five products random
+export const getRandomProducts =async(req, res)=>{
+    try{
+        const [result] = await pool.query(`SELECT *
+        FROM productos
+        ORDER BY RAND()
+        LIMIT 5`);
+        res.json(result);
+    }
+    catch(err){
+        res.status(500).json({"message": err.message});
+    }
+}
+
 //Get a product with the params id
 export const getProducto = async (req, res) => {
     try {

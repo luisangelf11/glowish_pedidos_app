@@ -1,5 +1,6 @@
 import React from 'react'
 import '../assets/css/animation.css'
+import '../assets/css/scrollStyle.css'
 
 export default function Modal({onClose, children, title}) {
   return (
@@ -15,7 +16,7 @@ export default function Modal({onClose, children, title}) {
                   {title}
                 </h3>
               </div>
-              <div className="relative p-6 flex-auto overflow-y-auto h-60">
+              <div className="relative p-6 flex-auto overflow-y-auto h-60 scrollNew">
                 {children}
               </div>
               <div className="flex items-center justify-end p-6 border-t border-solid rounded-b border-blueGray-200">

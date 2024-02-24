@@ -8,6 +8,9 @@ export const getProduct =async(id)=>
 
 export const getProductCategorys =async(id_categoria)=>
   await axios.get(`http://localhost:3000/api/v1/productos-categoria?id_categoria=${id_categoria}`);  
+
+export const getRandomProductFive = async()=>
+  await axios.get(`http://localhost:3000/api/v1/productos-random`);  
   
 export const filterProducts = async(name)=>
   await axios.get(`http://localhost:3000/api/v1/productos?name=${name}`); 
