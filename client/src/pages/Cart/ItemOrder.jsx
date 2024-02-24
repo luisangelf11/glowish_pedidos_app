@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getProduct } from "../../api/products";
 import { Link } from "react-router-dom";
-import {useOrderContext} from '../../context/orderContext'
+import { useOrderContext } from "../../context/orderContext";
 
 export default function ItemOrder({ data, deleteProductCart, alertShow }) {
   const { Id, Id_Producto, Unidades, Size, Color } = data;
@@ -17,7 +17,7 @@ export default function ItemOrder({ data, deleteProductCart, alertShow }) {
     color: Color,
     total: "",
   };
-  const {addOrder, deleteOrder} = useOrderContext();
+  const { addOrder, deleteOrder } = useOrderContext();
   const [product, setProduct] = useState(initialValue);
   const [selected, setSelected] = useState(false);
   const [validateProduct, setValidateProduct] = useState({});
@@ -49,22 +49,21 @@ export default function ItemOrder({ data, deleteProductCart, alertShow }) {
     getData();
   }, []);
 
-  const validateStatusQuantityProduct = ()=>{
-    if(product.unidades > validateProduct.Unidades) return true;
+  const validateStatusQuantityProduct = () => {
+    if (product.unidades > validateProduct.Unidades) return true;
     else false;
-  }
+  };
 
   const handleSelect = () => {
-    if(!validateStatusQuantityProduct()){
-      if (selected){
+    if (!validateStatusQuantityProduct()) {
+      if (selected) {
         setSelected(false);
         deleteOrder(product.id);
-      }
-      else {
+      } else {
         setSelected(true);
         addOrder(product);
       }
-    }else alertShow();
+    } else alertShow();
   };
 
   return (
@@ -113,23 +112,32 @@ export default function ItemOrder({ data, deleteProductCart, alertShow }) {
               {parseFloat(product.total).toFixed(2)}
             </span>
           </p>
+          {validateProduct.Unidades === 0 ? (
+            <p className="text-md text-red-500 font-bold p-1">¡AGOTADO!</p>
+          ) : (
+            ""
+          )}
         </div>
       </div>
       <div className="flex flex-col gap-2 justify-center items-center p-2">
-        <button
-          onClick={handleSelect}
-          className={`${
-            selected === false ? "bg-yellow-600" : "bg-green-600"
-          } p-2 w-10 rounded-md text-sm text-white transition-all ${
-            selected === false ? "hover:bg-yellow-500" : "hover:bg-green-500"
-          } `}
-        >
-          {selected === false ? (
-            <i className="fas fa-hand-point-up"></i>
-          ) : (
-            <i className="fas fa-check"></i>
-          )}
-        </button>
+        {validateProduct.Unidades === 0 ? (
+          ""
+        ) : (
+          <button
+            onClick={handleSelect}
+            className={`${
+              selected === false ? "bg-yellow-600" : "bg-green-600"
+            } p-2 w-10 rounded-md text-sm text-white transition-all ${
+              selected === false ? "hover:bg-yellow-500" : "hover:bg-green-500"
+            } `}
+          >
+            {selected === false ? (
+              <i className="fas fa-hand-point-up"></i>
+            ) : (
+              <i className="fas fa-check"></i>
+            )}
+          </button>
+        )}
         <button
           onClick={() => deleteProductCart(product.id)}
           className="bg-red-700 p-2 w-10 rounded-md text-sm text-white transition-all hover:bg-red-600"

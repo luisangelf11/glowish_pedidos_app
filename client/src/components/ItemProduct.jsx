@@ -68,12 +68,12 @@ export default function ItemProduct({ data }) {
           <p className="text-sm">{Descripcion}</p>
           {Descuento > 0 ? (
             <p className="p-1 font-semibold text-red-400">
-              <del>$RD {Precio.toFixed(2)}</del> <br />{" "}
-              <span>$RD {generateNewPrice().toFixed(2)}</span>
+              <del>RD$ {Precio.toFixed(2)}</del> <br />{" "}
+              <span>RD$ {generateNewPrice().toFixed(2)}</span>
             </p>
           ) : (
             <p className="p-1 font-semibold text-red-400">
-              <span>$RD {parseFloat(Precio).toFixed(2)}</span>
+              <span>RD$ {parseFloat(Precio).toFixed(2)}</span>
             </p>
           )}
           {Descuento > 0 ? (

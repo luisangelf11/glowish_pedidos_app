@@ -124,7 +124,7 @@ export default function FormProduct({edit}) {
       const res = await updateProduct(id, data, user.Token);
       console.log(res.data)
       setForm(initialForm);
-      setImgUrl(null);
+      setImgUrl(icoIMG);
       setFile(null);
       toast.success(`¡El producto fue modificado correctamente! Redireccionando a la tabla de productos.`);
       setTimeout(()=>{

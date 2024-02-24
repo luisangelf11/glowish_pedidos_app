@@ -55,12 +55,12 @@ export default function CardProductFive({ id }) {
         <p className="text-sm p-1">{product.Descripcion}</p>
         {product.Descuento > 0 ? (
           <p className="p-1 font-semibold text-red-400">
-            <del>$RD {product.Precio.toFixed(2)}</del> <br />{" "}
-            <span>$RD {generateNewPrice().toFixed(2)}</span>
+            <del>RD$ {product.Precio.toFixed(2)}</del> <br />{" "}
+            <span>RD$ {generateNewPrice().toFixed(2)}</span>
           </p>
         ) : (
           <p className="p-1 font-semibold text-red-400">
-            <span>$RD {parseFloat(product.Precio).toFixed(2)}</span>
+            <span>RD$ {parseFloat(product.Precio).toFixed(2)}</span>
           </p>
         )}
       </div>
