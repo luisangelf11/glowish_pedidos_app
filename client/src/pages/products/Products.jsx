@@ -9,14 +9,28 @@ import { useAuthContext } from "../../context/authContext";
 import { useToken } from "../../hooks/useToken";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import ReportProducts from "../../reports/ReportProducts";
+import MyAlert from "../../components/MyAlert";
 
 export default function Products() {
   //State
   const [data, setData] = useState([]);
   const [form, setForm] = useState({ filter: "" });
+  const [idToDelete, setIdToDelete] = useState(null);
+  const [myAlert, setMyAlert] = useState(false);
 
   const { user } = useAuthContext();
   const { invalidToken } = useToken();
+
+  const openAlert = (id) => {
+    setMyAlert(true);
+    setIdToDelete(id);
+  };
+
+  const closeAlert = () => {
+    setMyAlert(false);
+    setIdToDelete(null);
+  };
+
   const getData = async () => {
     try {
       const res = await getProducts(10, 0);
@@ -50,15 +64,15 @@ export default function Products() {
     });
   };
 
-  const deleteData = async (id) => {
+  const deleteData = async () => {
     try {
-      const response = confirm(`¿Deseas eliminar este producto?`);
-      if (response) {
-        await deleteProduct(id, user.Token);
-        toast.success(`El producto con Id ${id} fue eliminado correctamente`);
-        getData();
-        setForm({ filter: "" });
-      }
+      await deleteProduct(idToDelete, user.Token);
+      toast.success(
+        `El producto con Id ${idToDelete} fue eliminado correctamente`
+      );
+      getData();
+      setForm({ filter: "" });
+      closeAlert();
     } catch (err) {
       console.log(err);
       if (err.response.status === 401) {
@@ -98,31 +112,31 @@ export default function Products() {
               />
             </form>
           </div>
-         <div className="flex gap-2">
-         <Link
-            to="/nuevo-producto"
-            className="bg-green-700 flex justify-center items-center p-1 w-44 h-10 mt-10 rounded-sm text-white font-semibold transition-all hover:bg-green-600"
-          >
-            <i className="fas fa-plus p-1"></i>
-            Nuevo Producto
-          </Link>
-          <PDFDownloadLink
-            document={<ReportProducts />}
-            fileName="Reporte_Productos.pdf"
-          >
-            {({ loading, url, error, blob }) =>
-              loading ? (
-                <button className="bg-blue-700 flex justify-center items-center p-1 h-10 mt-10 rounded-sm text-white font-semibold transition-all hover:bg-blue-600">
-                  <i className="fas fa-spinner p-2"></i>
-                </button>
-              ) : (
-                <button className="bg-blue-700 flex justify-center items-center p-1 h-10 mt-10 rounded-sm text-white font-semibold transition-all hover:bg-blue-600">
-                  <i className="fas fa-file p-2"></i>
-                </button>
-              )
-            }
-          </PDFDownloadLink>
-         </div>
+          <div className="flex gap-2">
+            <Link
+              to="/nuevo-producto"
+              className="bg-green-700 flex justify-center items-center p-1 w-44 h-10 mt-10 rounded-sm text-white font-semibold transition-all hover:bg-green-600"
+            >
+              <i className="fas fa-plus p-1"></i>
+              Nuevo Producto
+            </Link>
+            <PDFDownloadLink
+              document={<ReportProducts />}
+              fileName="Reporte_Productos.pdf"
+            >
+              {({ loading, url, error, blob }) =>
+                loading ? (
+                  <button className="bg-blue-700 flex justify-center items-center p-1 h-10 mt-10 rounded-sm text-white font-semibold transition-all hover:bg-blue-600">
+                    <i className="fas fa-spinner p-2"></i>
+                  </button>
+                ) : (
+                  <button className="bg-blue-700 flex justify-center items-center p-1 h-10 mt-10 rounded-sm text-white font-semibold transition-all hover:bg-blue-600">
+                    <i className="fas fa-file p-2"></i>
+                  </button>
+                )
+              }
+            </PDFDownloadLink>
+          </div>
         </div>
         <TableContent
           data={data}
@@ -136,10 +150,18 @@ export default function Products() {
             "Categoría",
             "Acciones",
           ]}
-          deleteData={deleteData}
+          deleteData={openAlert}
         />
-        <Toaster position="top-center" />
       </section>
+      <Toaster position="top-center" />
+      {myAlert && (
+        <MyAlert
+          title={"Eliminar Comentario"}
+          text={"Estás apunto de eliminar este comentario. ¿Deseas continuar?"}
+          onClose={closeAlert}
+          onAction={deleteData}
+        />
+      )}
     </section>
   );
 }

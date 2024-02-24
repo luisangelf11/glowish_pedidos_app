@@ -6,10 +6,13 @@ import TableContent from "./TableContent";
 import { deleteSize, getFilterSizes, getSizes } from "../../api/sizes";
 import { useAuthContext } from "../../context/authContext";
 import { useToken } from "../../hooks/useToken";
+import MyAlert from "../../components/MyAlert";
 
 export default function SizesPage() {
   const [form, setForm] = useState({ filter: "" });
   const [data, setData] = useState([]);
+  const [myAlert, setMyAlert] = useState(false);
+  const [idToDelete, setIdToDelete] = useState(null);
   const { user } = useAuthContext();
   const { invalidToken } = useToken();
 
@@ -19,6 +22,17 @@ export default function SizesPage() {
       [e.target.name]: e.target.value,
     });
   };
+
+  const openAlert = (id) => {
+    setMyAlert(true);
+    setIdToDelete(id);
+  };
+
+  const closeAlert = () => {
+    setMyAlert(false);
+    setIdToDelete(null);
+  };
+
   const getData = async () => {
     try {
       const res = await getSizes(10, 0);
@@ -44,15 +58,13 @@ export default function SizesPage() {
     else getFilter(form.filter);
   }, [form.filter]);
 
-  const deleteData = async (id) => {
+  const deleteData = async () => {
     try {
-      let answer = confirm("¿Deseas eliminar este size?");
-      if (answer === true) {
-        await deleteSize(id, user.Token);
-        toast.success(`El size con Id ${id} fue eliminado correctamente`);
-        getData();
-        setForm({ filter: "" });
-      }
+      await deleteSize(idToDelete, user.Token);
+      toast.success(`El size con Id ${idToDelete} fue eliminado correctamente`);
+      getData();
+      setForm({ filter: "" });
+      closeAlert();
     } catch (error) {
       if (error.response.status === 401) {
         toast.error(`Acceso denegado, su sesión expiró`);
@@ -102,10 +114,18 @@ export default function SizesPage() {
         <TableContent
           tableHead={["Id", "Size", "Estado", "Id_Producto", "Acciones"]}
           data={data}
-          deleteData={deleteData}
+          deleteData={openAlert}
         />
       </section>
       <Toaster position="top-center" />
+      {myAlert && (
+        <MyAlert
+          title={"Eliminar Comentario"}
+          text={"Estás apunto de eliminar este comentario. ¿Deseas continuar?"}
+          onClose={closeAlert}
+          onAction={deleteData}
+        />
+      )}
     </section>
   );
 }

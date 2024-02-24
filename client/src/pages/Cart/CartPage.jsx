@@ -10,12 +10,15 @@ import NoneData from "../../components/NoneData";
 import Loader from "../../components/Loader";
 import { useOrderContext } from "../../context/orderContext";
 import { useToken } from "../../hooks/useToken";
+import MyAlert from "../../components/MyAlert";
 
 export default function CartPage() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(false);
   const [empty, setEmpty] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [myAlert, setMyAlert] = useState(false);
+  const [idToDelete, setIdToDelete] = useState(null);
 
   const { user } = useAuthContext();
   const { order } = useOrderContext();
@@ -55,17 +58,13 @@ export default function CartPage() {
     }
   };
 
-  const deleteProductCart = async (id) => {
+  const deleteProductCart = async () => {
     try {
-      let answer = confirm(
-        `¿Deseas eliminar este producto del carrito de compras?`
-      );
-      if (answer) {
-        await deleteCart(id, user.Token);
+        await deleteCart(idToDelete, user.Token);
         toast.success(`¡Producto eliminado del carrito!`);
         setData([]);
         getData();
-      }
+      setMyAlert(false);
     } catch (err) {
       if (err.response.status === 401) {
         toast.error(`Acceso denegado, su sesión expiró`);
@@ -80,6 +79,16 @@ export default function CartPage() {
     );
   };
 
+  const closeAlert = ()=> {
+    setMyAlert(false)
+    setIdToDelete(null);
+  }
+
+  const openAlert =(id)=> {
+    setMyAlert(true)
+    setIdToDelete(id);
+  }
+
   return (
     <section className="flex flex-col  h-screen">
       <MenuUser />
@@ -90,7 +99,7 @@ export default function CartPage() {
           <div
             className="fixed flex flex-col items-center bg-white w-1/2"
             style={{
-              zIndex: 1000,
+              zIndex: 900,
             }}
           >
             <h2
@@ -120,10 +129,13 @@ export default function CartPage() {
                 data={el}
                 deleteProductCart={deleteProductCart}
                 alertShow={alertShow}
+                openAlert={openAlert}
               />
             ))}
             {empty && <NoneData />}
             {loading && <Loader />}
+          
+      {myAlert && <MyAlert title={"Eliminar del carrito"} text={"¿Estás seguro de que deseas eliminar este producto?"} onClose={closeAlert} onAction={deleteProductCart}/>}
           </article>
           <Toaster position="top-center" />
         </section>

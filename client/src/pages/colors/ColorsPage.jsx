@@ -2,41 +2,51 @@ import React, { useEffect, useState } from "react";
 import MenuAdmin from "../../components/MenuAdmin";
 import { Link } from "react-router-dom";
 import TableContent from "./TableContent";
-import {Toaster, toast} from 'react-hot-toast'
+import { Toaster, toast } from "react-hot-toast";
 import { deleteColor, filterColors, getColors } from "../../api/colors";
 import { useAuthContext } from "../../context/authContext";
-import {useToken} from '../../hooks/useToken'
+import { useToken } from "../../hooks/useToken";
+import MyAlert from "../../components/MyAlert";
 
 export default function ColorsPage() {
   const [form, setForm] = useState({
     filter: "",
   });
   const [data, setData] = useState([]);
-  const {user} = useAuthContext();
-  const {invalidToken} = useToken();
+  const [myAlert, setMyAlert] = useState(false);
+  const [idToDelete, setIdToDelete] = useState(null);
+  const { user } = useAuthContext();
+  const { invalidToken } = useToken();
 
-  const getData =async()=>{
-    try{
-        const res = await getColors(10, 0);
-        setData(res.data);
-    }
-    catch(err){
-        toast.error(err.response.data.message);
-        setData([]);
-    }
-  }
+  const openAlert = (id) => {
+    setMyAlert(true);
+    setIdToDelete(id);
+  };
 
-  const filterData =async(Id_Producto)=>{
-    try{
-        const res = await filterColors(Id_Producto);
-        setData(res.data);
-    }
-    catch(err){
-        setData([]);
-        console.log(err)
-    }
-  }
+  const closeAlert = () => {
+    setMyAlert(false);
+    setIdToDelete(null);
+  };
 
+  const getData = async () => {
+    try {
+      const res = await getColors(10, 0);
+      setData(res.data);
+    } catch (err) {
+      toast.error(err.response.data.message);
+      setData([]);
+    }
+  };
+
+  const filterData = async (Id_Producto) => {
+    try {
+      const res = await filterColors(Id_Producto);
+      setData(res.data);
+    } catch (err) {
+      setData([]);
+      console.log(err);
+    }
+  };
 
   const handleChange = (e) => {
     setForm({
@@ -45,29 +55,27 @@ export default function ColorsPage() {
     });
   };
 
-  useEffect(()=>{
-   if(form.filter === '') getData();
-   else filterData(form.filter);
+  useEffect(() => {
+    if (form.filter === "") getData();
+    else filterData(form.filter);
   }, [form.filter]);
 
-  const deleteData = async(id)=>{
-    try{
-      const response = confirm(`¿Deseas eliminar este color?`);
-      if(response) {
-        await deleteColor(id, user.Token);
-        toast.success(`El color con Id ${id} fue eliminado correctamente`);
-        getData();
-        setForm({filter: ''});
-      }
-    }
-    catch(err){
-      if(err.response.status === 401) {
+  const deleteData = async () => {
+    try {
+      await deleteColor(idToDelete, user.Token);
+      toast.success(
+        `El color con Id ${idToDelete} fue eliminado correctamente`
+      );
+      getData();
+      setForm({ filter: "" });
+      closeAlert();
+    } catch (err) {
+      if (err.response.status === 401) {
         toast.error(`Acceso denegado, su sesión expiró`);
         invalidToken();
-      }else
-      toast.error(err.response.data.message);
+      } else toast.error(err.response.data.message);
     }
-  }
+  };
 
   return (
     <section className="flex h-screen">
@@ -107,9 +115,28 @@ export default function ColorsPage() {
             Nuevo Color
           </Link>
         </div>
-        <TableContent tableHead={["Id", "Color", "Rgb", "Estado", "Id_Producto", "Acciones"]} data={data} deleteData={deleteData}/>
+        <TableContent
+          tableHead={[
+            "Id",
+            "Color",
+            "Rgb",
+            "Estado",
+            "Id_Producto",
+            "Acciones",
+          ]}
+          data={data}
+          deleteData={openAlert}
+        />
       </section>
       <Toaster position="top-center" />
+      {myAlert && (
+        <MyAlert
+          title={"Eliminar Comentario"}
+          text={"Estás apunto de eliminar este comentario. ¿Deseas continuar?"}
+          onClose={closeAlert}
+          onAction={deleteData}
+        />
+      )}
     </section>
   );
 }

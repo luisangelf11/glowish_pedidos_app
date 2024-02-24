@@ -10,14 +10,27 @@ import {
 } from "../../api/category";
 import { toast, Toaster } from "react-hot-toast";
 import { useToken } from "../../hooks/useToken";
+import MyAlert from "../../components/MyAlert";
 
 export default function CategorysPage() {
   const [form, setForm] = useState({
     filter: "",
   });
   const [data, setData] = useState([]);
+  const [myAlert, setMyAlert] = useState(false);
+  const [idToDelete, setIdToDelete] = useState(null);
   const { user } = useAuthContext();
   const { invalidToken } = useToken();
+
+  const openAlert = (id) => {
+    setMyAlert(true);
+    setIdToDelete(id);
+  };
+
+  const closeAlert = () => {
+    setMyAlert(false);
+    setIdToDelete(null);
+  };
 
   const getData = async () => {
     try {
@@ -54,13 +67,13 @@ export default function CategorysPage() {
 
   const deleteData = async (id) => {
     try {
-      const response = confirm(`¿Deseas eliminar esta categoría?`);
-      if (response) {
-        await deleteCategory(id, user.Token);
-        toast.success(`La categoría con Id ${id} fue eliminada correctamente`);
-        getData();
-        setForm({ filter: "" });
-      }
+      await deleteCategory(idToDelete, user.Token);
+      toast.success(
+        `La categoría con Id ${idToDelete} fue eliminada correctamente`
+      );
+      getData();
+      setForm({ filter: "" });
+      closeAlert();
     } catch (err) {
       if (err.response.status === 401) {
         toast.error(`Acceso denegado, su sesión expiró`);
@@ -110,9 +123,19 @@ export default function CategorysPage() {
         <TableContent
           data={data}
           tableHead={["Id", "Nombre", "Descripción", "Acciones"]}
-          deleteData={deleteData}
+          deleteData={openAlert}
         />
         <Toaster position="top-center" />
+        {myAlert && (
+          <MyAlert
+            title={"Eliminar Comentario"}
+            text={
+              "Estás apunto de eliminar este comentario. ¿Deseas continuar?"
+            }
+            onClose={closeAlert}
+            onAction={deleteData}
+          />
+        )}
       </section>
     </section>
   );

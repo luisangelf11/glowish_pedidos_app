@@ -3,10 +3,22 @@ import { useAuthContext } from "../context/authContext";
 import { Link } from "react-router-dom";
 import userIcon from '../assets/userIcon.jpg'
 import '../assets/css/animation.css'
+import MyAlert from "./MyAlert";
 
 export default function ProfileBar() {
   const [subMenu, setSubMenu]= useState(false);
+  const [alert, setAlert] = useState(false);
   const { user, logout } = useAuthContext();
+
+  const closeAlert = ()=> {
+    setAlert(false);
+    setSubMenu(true);
+  }
+  const openAlert =()=> {
+    setAlert(true);
+    setSubMenu(false);
+  }
+
   return user !== null ? (
     <div>
         <div className="flex gap-2 justify-center items-center p-2 cursor-pointer"  onClick={()=> setSubMenu(subMenu ? false : true)}>
@@ -15,6 +27,7 @@ export default function ProfileBar() {
             <h3 className="text-md text-red-400 font-semibold">{user.Nombre} {user.Apellido}</h3>
             <p className="text-sm font-semibold text-slate-500">{user.Correo}</p>
         </div>
+        {alert && <MyAlert title={"Cerrar Sesión"} text={"Estás apunto de cerrar tu sesión. ¿Deseas continuar?"} onClose={closeAlert} onAction={logout}/>}
     </div>
     {subMenu && <div style={{
       zIndex: 1000
@@ -25,7 +38,7 @@ export default function ProfileBar() {
             Carrito</Link>
         <Link to='/lista-pedidos' className="p-2 border-b w-full text-gray-600 transition-all hover:text-red-400"><i className="fas fa-truck p-1"></i> Pedidos</Link>
         <Link to='/ayuda' className="p-2 border-b w-full text-gray-600 transition-all hover:text-red-400"><i className="fas fa-question p-1"></i>Ayuda</Link>
-        <button onClick={()=> logout()} className="p-2 border-b w-full text-gray-600 transition-all hover:text-red-400 text-left"><i className="fas fa-sign-out-alt p-1"></i>Cerrar Sesión</button>
+        <button onClick={openAlert} className="p-2 border-b w-full text-gray-600 transition-all hover:text-red-400 text-left"><i className="fas fa-sign-out-alt p-1"></i>Cerrar Sesión</button>
     </div>}
     </div>
   ) : (

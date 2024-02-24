@@ -3,7 +3,7 @@ import { getProduct } from "../../api/products";
 import { Link } from "react-router-dom";
 import { useOrderContext } from "../../context/orderContext";
 
-export default function ItemOrder({ data, deleteProductCart, alertShow }) {
+export default function ItemOrder({ data,  alertShow, openAlert }) {
   const { Id, Id_Producto, Unidades, Size, Color } = data;
   const initialValue = {
     id: Id,
@@ -65,6 +65,7 @@ export default function ItemOrder({ data, deleteProductCart, alertShow }) {
       }
     } else alertShow();
   };
+
 
   return (
     <div
@@ -139,7 +140,7 @@ export default function ItemOrder({ data, deleteProductCart, alertShow }) {
           </button>
         )}
         <button
-          onClick={() => deleteProductCart(product.id)}
+          onClick={() => openAlert(product.id)}
           className="bg-red-700 p-2 w-10 rounded-md text-sm text-white transition-all hover:bg-red-600"
         >
           <i className="fas fa-trash"></i>

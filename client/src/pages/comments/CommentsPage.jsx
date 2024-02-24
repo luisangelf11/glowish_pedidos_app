@@ -9,10 +9,24 @@ import {
 } from "../../api/comments";
 import { useAuthContext } from "../../context/authContext";
 import { useToken } from "../../hooks/useToken";
+import MyAlert from "../../components/MyAlert";
 
 export default function CommentsPage() {
   const [form, setForm] = useState({ filter: "" });
   const [data, setData] = useState([]);
+  const [myAlert, setMyAlert] = useState(false);
+  const [idToDelete, setIdToDelete] = useState(null);
+
+  const openAlert = (id) => {
+    setMyAlert(true);
+    setIdToDelete(id);
+  };
+
+  const closeAlert = () => {
+    setMyAlert(false);
+    setIdToDelete(null);
+  };
+
   const { user } = useAuthContext();
   const { invalidToken } = useToken();
 
@@ -48,15 +62,15 @@ export default function CommentsPage() {
     else getFilter(form.filter);
   }, [form.filter]);
 
-  const deleteData = async (id) => {
+  const deleteData = async () => {
     try {
-      let answer = confirm("¿Deseas eliminar este comentario?");
-      if (answer === true) {
-        await deleteComment(id, user.Token);
-        toast.success(`El comentario con Id ${id} fue eliminado correctamente`);
-        getData();
-        setForm({ filter: "" });
-      }
+      await deleteComment(idToDelete, user.Token);
+      toast.success(
+        `El comentario con Id ${idToDelete} fue eliminado correctamente`
+      );
+      getData();
+      setForm({ filter: "" });
+      closeAlert();
     } catch (error) {
       if (error.response.status === 401) {
         toast.error(`Acceso denegado, su sesión expiró`);
@@ -106,10 +120,18 @@ export default function CommentsPage() {
             "Acciones",
           ]}
           data={data}
-          deleteData={deleteData}
+          deleteData={openAlert}
         />
       </section>
       <Toaster position="top-center" />
+      {myAlert && (
+        <MyAlert
+          title={"Eliminar Comentario"}
+          text={"Estás apunto de eliminar este comentario. ¿Deseas continuar?"}
+          onClose={closeAlert}
+          onAction={deleteData}
+        />
+      )}
     </section>
   );
 }

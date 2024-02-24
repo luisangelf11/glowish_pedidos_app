@@ -1,15 +1,19 @@
 import Logo from "../assets/GW.png";
 import { NavLink } from "react-router-dom";
 import { useAuthContext } from "../context/authContext";
+import { useState } from "react";
+import MyAlert from "./MyAlert";
 
 export default function MenuAdmin() {
   const {logout} = useAuthContext();
-  const handleClick =(e)=>{
-    const response = confirm(`¿Deseas cerrar sesión?`);
-   if(response) logout();
+  const [myAlert, setMyAlert] = useState(false);
 
-  }
+  const handleClick =(e)=>
+   setMyAlert(true);
+  
+  const closeAlert =()=> setMyAlert(false);
   return (
+    <>
     <nav className="bg-white flex flex-col justify-start items-center gap-2 fixed w-48 h-screen border-r">
       <img className=" w-28 h-28 p-1 object-cover" src={Logo} alt="logo" />
       <div>
@@ -138,5 +142,7 @@ export default function MenuAdmin() {
         Cerrar Sesión
       </button>
     </nav>
+      {myAlert && <MyAlert title={"Cerrar Sesión"} text={"Estás apunto de cerrar tu sesión. ¿Deseas continuar?"} onClose={closeAlert} onAction={logout}/>}
+      </>
   );
 }
