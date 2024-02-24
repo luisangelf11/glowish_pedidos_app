@@ -21,6 +21,7 @@ import { getColorsDisponibles } from "../../api/colors";
 import { createCart } from "../../api/cart";
 import { useToken } from "../../hooks/useToken";
 import { useTimeNowSQL } from "../../hooks/useTimeNowSQL";
+import MyAlert from "../../components/MyAlert";
 
 export default function ProductCatalogue() {
   const initialForm = {
@@ -38,6 +39,19 @@ export default function ProductCatalogue() {
   const [dataRanking, setDataRanking] = useState({});
   const [sizes, setSizes] = useState([]);
   const [colors, setColors] = useState([]);
+  const [idToDelete, setIdToDelete] = useState(null);
+  const [myAlert, setMyAlert] = useState(false);
+
+  //Functiosn alerts
+  const closeAlert =()=>{
+    setMyAlert(false);
+    setIdToDelete(null);
+  }
+
+  const openAlert =(id)=>{
+    setMyAlert(true);
+    setIdToDelete(id);
+  }
 
   //Auth context
   const { user } = useAuthContext();
@@ -172,12 +186,13 @@ export default function ProductCatalogue() {
     }
   };
 
-  const deleteC = async (Id) => {
+  const deleteC = async () => {
     try {
-      let answer = confirm("¿Deseas eliminar este comentario?");
-      if (answer) await deleteComment(Id, user.Token);
+       await deleteComment(idToDelete, user.Token);
+       toast.success(`¡Su comentario fue eliminado correctamente!`);
       setComments([]);
       getComments();
+      closeAlert();
     } catch (err) {
       if (err.response.status === 401) {
         toast.error(`Acceso denegado, su sesión expiró`);
@@ -301,12 +316,12 @@ export default function ProductCatalogue() {
               <p className="text-sm">{data.Descripcion}</p>
               {data.Descuento > 0 ? (
                 <p className="p-1 font-semibold text-red-400">
-                  <del>$RD {data.Precio.toFixed(2)}</del> <br />{" "}
-                  <span>$RD {generateNewPrice().toFixed(2)}</span>
+                  <del>RD$ {data.Precio.toFixed(2)}</del> <br />{" "}
+                  <span>RD$ {generateNewPrice().toFixed(2)}</span>
                 </p>
               ) : (
                 <p className="p-1 font-semibold text-red-400">
-                  <span>$RD {parseFloat(data.Precio).toFixed(2)}</span>
+                  <span>RD$ {parseFloat(data.Precio).toFixed(2)}</span>
                 </p>
               )}
               {data.Descuento > 0 ? (
@@ -428,7 +443,7 @@ export default function ProductCatalogue() {
                     Últimos 20 Comentarios
                   </h2>
                   {comments.map((el, index) => (
-                    <CardComment key={index} data={el} deleteC={deleteC} />
+                    <CardComment key={index} data={el} deleteC={openAlert} />
                   ))}
                 </>
               )}
@@ -458,6 +473,7 @@ export default function ProductCatalogue() {
         </article>
       )}
       <Toaster position="top-center" />
+      {myAlert && <MyAlert title={"Eliminar comentario"} text={"¿Estás seguro de eliminar este comentario?"} onClose={closeAlert} onAction={deleteC}/>}
     </section>
   );
 }

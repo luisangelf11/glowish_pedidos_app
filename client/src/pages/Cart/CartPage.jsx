@@ -95,9 +95,9 @@ export default function CartPage() {
       {error ? (
         <ErrorData />
       ) : (
-        <section className="w-full gap-2 flex flex-col items-center mt-16">
+        <section className="w-full flex flex-col items-center mt-14">
           <div
-            className="fixed flex flex-col items-center bg-white w-1/2"
+            className="fixed flex flex-col h-36 items-center bg-white w-full"
             style={{
               zIndex: 900,
             }}

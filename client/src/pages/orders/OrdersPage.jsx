@@ -101,7 +101,9 @@ export default function OrdersPage() {
             "Fecha",
             "Estado",
             "Monto",
-            "Id_Usuario",
+            "Id_Cliente",
+            "Cliente",
+            "Destino",
             "Cambio de Estado",
             "Detalle",
           ]}
