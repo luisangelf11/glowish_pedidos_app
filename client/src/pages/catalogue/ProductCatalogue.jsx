@@ -263,6 +263,7 @@ export default function ProductCatalogue() {
         unidades: form.unidades,
         size: form.size,
         color: form.color,
+        seleccionado: true,
       };
       if (validateFormCart())
         return toast.error(

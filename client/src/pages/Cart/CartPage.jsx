@@ -8,7 +8,6 @@ import ErrorData from "../../components/ErrorData";
 import { useNavigate } from "react-router-dom";
 import NoneData from "../../components/NoneData";
 import Loader from "../../components/Loader";
-import { useOrderContext } from "../../context/orderContext";
 import { useToken } from "../../hooks/useToken";
 import MyAlert from "../../components/MyAlert";
 
@@ -21,7 +20,6 @@ export default function CartPage() {
   const [idToDelete, setIdToDelete] = useState(null);
 
   const { user } = useAuthContext();
-  const { order } = useOrderContext();
   const { invalidToken } = useToken();
   const navigate = useNavigate();
 
@@ -48,22 +46,18 @@ export default function CartPage() {
   }, []);
 
   const goToOrder = () => {
-    if (order.length === 0)
-      toast.error(`¡Necesitas agregar productos al pedido!`);
-    else {
       toast.success(`Redirigiendo al generador de pedidos...`);
       setTimeout(() => {
         navigate("/crear-pedido");
       }, 3000);
-    }
   };
 
   const deleteProductCart = async () => {
     try {
-        await deleteCart(idToDelete, user.Token);
-        toast.success(`¡Producto eliminado del carrito!`);
-        setData([]);
-        getData();
+      await deleteCart(idToDelete, user.Token);
+      toast.success(`¡Producto eliminado del carrito!`);
+      setData([]);
+      getData();
       setMyAlert(false);
     } catch (err) {
       if (err.response.status === 401) {
@@ -73,21 +67,23 @@ export default function CartPage() {
     }
   };
 
+  const userOut = () => toast.error(`Acceso denegado, su sesión expiró`);
+
   const alertShow = () => {
     toast.error(
       `Este producto no cuenta con las unidades suficientes para ser vendido. Por favor, verifique cuantas unidades disponibles tiene este producto`
     );
   };
 
-  const closeAlert = ()=> {
-    setMyAlert(false)
+  const closeAlert = () => {
+    setMyAlert(false);
     setIdToDelete(null);
-  }
+  };
 
-  const openAlert =(id)=> {
-    setMyAlert(true)
+  const openAlert = (id) => {
+    setMyAlert(true);
     setIdToDelete(id);
-  }
+  };
 
   return (
     <section className="flex flex-col  h-screen">
@@ -130,12 +126,20 @@ export default function CartPage() {
                 deleteProductCart={deleteProductCart}
                 alertShow={alertShow}
                 openAlert={openAlert}
+                userOut={userOut}
               />
             ))}
             {empty && <NoneData />}
             {loading && <Loader />}
-          
-      {myAlert && <MyAlert title={"Eliminar del carrito"} text={"¿Estás seguro de que deseas eliminar este producto?"} onClose={closeAlert} onAction={deleteProductCart}/>}
+
+            {myAlert && (
+              <MyAlert
+                title={"Eliminar del carrito"}
+                text={"¿Estás seguro de que deseas eliminar este producto?"}
+                onClose={closeAlert}
+                onAction={deleteProductCart}
+              />
+            )}
           </article>
           <Toaster position="top-center" />
         </section>

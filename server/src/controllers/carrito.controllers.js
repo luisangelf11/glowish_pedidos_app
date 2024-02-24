@@ -11,7 +11,7 @@ export const getCarritos = async (req, res) => {
             res.json(result);
         } else {
             const [result] = await pool.query('SELECT * FROM Carrito');
-           /*  if (!result.length) return res.status(404).json({ "message": "This table dont have data" }); */
+            /*  if (!result.length) return res.status(404).json({ "message": "This table dont have data" }); */
             res.json(result);
         }
     }
@@ -21,9 +21,9 @@ export const getCarritos = async (req, res) => {
 }
 
 //Get a cart shop
-export const getCarrito = async(req, res)=>{
+export const getCarrito = async (req, res) => {
     try {
-        const {id} = req.params;
+        const { id } = req.params;
         const [result] = await pool.query(`SELECT * FROM Carrito WHERE id = ?`, [id]);
         res.json(result);
     } catch (err) {
@@ -34,8 +34,8 @@ export const getCarrito = async(req, res)=>{
 //Create a new shopping cart
 export const createCarrito = async (req, res) => {
     try {
-        const { id_usuario, id_producto, unidades, color, size } = req.body;
-        const [result] = await pool.query('INSERT INTO Carrito (id_producto, id_usuario, unidades, color, size) VALUES (?, ?, ?, ?, ?)', [id_producto, id_usuario, unidades, color, size]);
+        const { id_usuario, id_producto, unidades, color, size, seleccionado } = req.body;
+        const [result] = await pool.query('INSERT INTO Carrito (id_producto, id_usuario, unidades, color, size, seleccionado) VALUES (?, ?, ?, ?, ?, ?)', [id_producto, id_usuario, unidades, color, size, seleccionado]);
         if (!result.affectedRows) return res.status.json({ "message": "Error in the query (create a new shopping cart)" });
         res.json({
             id: result.insertId,
@@ -58,6 +58,22 @@ export const updateCarrito = async (req, res) => {
     }
     catch (err) {
         res.status(500).json({ "message": err.message });
+    }
+}
+
+export const getCarritosSeleccionado = async (req, res) => {
+    try {
+        const { id_usuario } = req.query;
+        if (id_usuario) {
+            const [result] = await pool.query(`SELECT c.Id_Producto as Id_Producto, c.Unidades as Unidades, c.Size as Size, c.Color as Color, p.Nombre as Nombre, p.Precio as Precio, p.Descuento as Descuento, p.Imagen as Imagen
+            FROM carrito AS c
+            JOIN productos AS p ON c.id_producto = p.id
+            WHERE c.seleccionado = true
+            AND p.unidades > 0 AND c.id_usuario = ?`, [id_usuario]);
+            res.json(result);
+        } else return res.status(400).json({ "message": `The query params is not exist!` });
+    } catch (error) {
+        res.status(500).json({ "message": error.message });
     }
 }
 

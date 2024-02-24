@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { getProduct } from "../../api/products";
 import { Link } from "react-router-dom";
-import { useOrderContext } from "../../context/orderContext";
+import { updateCart } from "../../api/cart";
+import { useAuthContext } from "../../context/authContext";
+import { useToken } from "../../hooks/useToken";
 
-export default function ItemOrder({ data,  alertShow, openAlert }) {
-  const { Id, Id_Producto, Unidades, Size, Color } = data;
+export default function ItemOrder({ data, alertShow, openAlert, userOut }) {
+  const { Id, Id_Producto, Unidades, Size, Color, Seleccionado } = data;
   const initialValue = {
     id: Id,
     id_producto: Id_Producto,
@@ -17,10 +19,12 @@ export default function ItemOrder({ data,  alertShow, openAlert }) {
     color: Color,
     total: "",
   };
-  const { addOrder, deleteOrder } = useOrderContext();
   const [product, setProduct] = useState(initialValue);
-  const [selected, setSelected] = useState(false);
+  const [select, setSelect] = useState(Seleccionado);
   const [validateProduct, setValidateProduct] = useState({});
+
+  const { user } = useAuthContext();
+  const { invalidToken } = useToken();
 
   const generateNewPrice = (precio, descuento) => {
     let desc = parseFloat(precio) * parseFloat(descuento / 100);
@@ -54,18 +58,26 @@ export default function ItemOrder({ data,  alertShow, openAlert }) {
     else false;
   };
 
-  const handleSelect = () => {
-    if (!validateStatusQuantityProduct()) {
-      if (selected) {
-        setSelected(false);
-        deleteOrder(product.id);
-      } else {
-        setSelected(true);
-        addOrder(product);
-      }
-    } else alertShow();
+  const changeSelect = async () => {
+    try {
+      const newSelect = {
+        seleccionado: Seleccionado === 0 ? 1 : 0,
+      };
+      await updateCart(Id, newSelect, user.Token);
+      if(select === 0)setSelect(1);
+      else setSelect(0)
+    } catch (error) {
+      if (error.response.status === 401) {
+        userOut();
+        invalidToken();
+      } else console.log(error);
+    }
   };
 
+  const handleSelect = () => {
+    if (!validateStatusQuantityProduct()) changeSelect();
+    else alertShow();
+  };
 
   return (
     <div
@@ -127,12 +139,14 @@ export default function ItemOrder({ data,  alertShow, openAlert }) {
           <button
             onClick={handleSelect}
             className={`${
-              selected === false ? "bg-yellow-600" : "bg-green-600"
+              select === 0 ? "bg-yellow-600" : "bg-green-600"
             } p-2 w-10 rounded-md text-sm text-white transition-all ${
-              selected === false ? "hover:bg-yellow-500" : "hover:bg-green-500"
+              select === 0
+                ? "hover:bg-yellow-500"
+                : "hover:bg-green-500"
             } `}
           >
-            {selected === false ? (
+            {select === 0 ? (
               <i className="fas fa-hand-point-up"></i>
             ) : (
               <i className="fas fa-check"></i>

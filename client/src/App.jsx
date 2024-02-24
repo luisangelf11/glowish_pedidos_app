@@ -26,7 +26,6 @@ import FormSize from "./pages/sizes/FormSize";
 import UserPage from "./pages/users/UserPage";
 import "./App.css";
 import CommentsPage from "./pages/comments/CommentsPage";
-import { OrderContextProvider } from "./context/orderContext";
 import CreateOrderPage from "./pages/orders/CreateOrderPage";
 import CartPage from "./pages/Cart/CartPage";
 import OrdersPage from "./pages/orders/OrdersPage";
@@ -237,34 +236,33 @@ function App() {
           <Route
             path="/carrito"
             element={
-              <OrderContextProvider>
-                <ProtectedRoute>
-                  <ClientRoutes>
-                    <CartPage />
-                  </ClientRoutes>
-                </ProtectedRoute>
-              </OrderContextProvider>
+              <ProtectedRoute>
+                <ClientRoutes>
+                  <CartPage />
+                </ClientRoutes>
+              </ProtectedRoute>
             }
           />
           <Route
             path="/crear-pedido"
             element={
-              <OrderContextProvider>
-                <ProtectedRoute>
-                  <ClientRoutes>
-                    <CreateOrderPage />
-                  </ClientRoutes>
-                </ProtectedRoute>
-              </OrderContextProvider>
+              <ProtectedRoute>
+                <ClientRoutes>
+                  <CreateOrderPage />
+                </ClientRoutes>
+              </ProtectedRoute>
             }
           />
-          <Route path="/lista-pedidos" element={
-            <ProtectedRoute>
-              <ClientRoutes>
-                <ListOrdersPage />
-              </ClientRoutes>
-            </ProtectedRoute>
-          }/>
+          <Route
+            path="/lista-pedidos"
+            element={
+              <ProtectedRoute>
+                <ClientRoutes>
+                  <ListOrdersPage />
+                </ClientRoutes>
+              </ProtectedRoute>
+            }
+          />
           {/*This routes not are protected*/}
           <Route path="/catalogo" element={<CataloguePage />} />
           <Route path="/catalogo/:id" element={<ProductCatalogue />} />

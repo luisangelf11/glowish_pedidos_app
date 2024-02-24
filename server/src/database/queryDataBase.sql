@@ -84,6 +84,7 @@ Id_Usuario INT,
 Unidades INT,
 Size VARCHAR(15),
 Color VARCHAR(15),
+Seleccionado BOOLEAN,
 FOREIGN KEY (Id_Producto) REFERENCES Productos(Id),
 FOREIGN KEY (Id_Usuario) REFERENCES Usuarios(Id)
 );
@@ -145,3 +146,6 @@ ADD COLUMN Color VARCHAR(15);
 
 ALTER TABLE Valoraciones
 MODIFY COLUMN Puntos FLOAT;
+
+ALTER TABLE Carrito
+ADD COLUMN Seleccionado BOOL;

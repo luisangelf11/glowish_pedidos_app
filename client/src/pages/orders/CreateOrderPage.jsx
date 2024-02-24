@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useOrderContext } from "../../context/orderContext";
 import MenuUser from "../../components/MenuUser";
 import ErrorData from "../../components/ErrorData";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
@@ -12,40 +11,55 @@ import { useAuthContext } from "../../context/authContext";
 import "../../assets/css/animation.css";
 import { useTimeNowSQL } from "../../hooks/useTimeNowSQL";
 import { createOrder, updateOrder } from "../../api/orders";
-import { useDetail } from "../../hooks/useDetail";
 import { useToken } from "../../hooks/useToken.js";
+import { getCartSelected } from "../../api/cart.js";
+import "../../assets/css/scrollStyle.css";
+import { createDetail } from "../../api/details.js";
 
 export default function CreateOrderPage() {
   const [error, setError] = useState(false);
-  const [data, setData] = useState([]);
+  const [order, setOrder] = useState([]);
   const [subtotal, setSubTotal] = useState(0);
   const [totalUSD, setTotalUSD] = useState(0);
   const [orderData, setOrderData] = useState({});
   const [paypal, setPaypal] = useState(false);
 
-  const { order } = useOrderContext();
   const { user } = useAuthContext();
   const { dateNowSQL } = useTimeNowSQL();
-  const { generateDetailOrder } = useDetail();
   const { invalidToken } = useToken();
 
   const navigate = useNavigate();
 
-  const getDataOrder = () => {
-    setData(order);
-    let suma = 0;
-    order.forEach((el) => {
-      suma += el.total;
-    });
-    let usd = Math.round(parseFloat(suma + 300) * 0.017);
-    setSubTotal(suma);
-    setTotalUSD(usd);
+  const generateNewPrice = (precio, descuento) => {
+    let desc = parseFloat(precio) * parseFloat(descuento / 100);
+    let newPrice = parseFloat(precio) - parseFloat(desc);
+    return newPrice;
+  };
+
+  const getDataOrder = async () => {
+    try {
+      const res = await getCartSelected(user.Id, user.Token);
+      setOrder(res.data);
+      let suma = 0;
+      res.data.forEach((el) => {
+        let total = generateNewPrice(el.Precio, el.Descuento) * el.Unidades;
+        suma += total;
+      });
+      let usd = Math.round(parseFloat(suma + 300) * 0.017);
+      setSubTotal(suma);
+      setTotalUSD(usd);
+      if (res.data.length === 0) navigate("/carrito");
+    } catch (err) {
+      if (err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+      } else setError(true);
+    }
   };
 
   useEffect(() => {
     getDataOrder();
-    if (order.length === 0) navigate("/carrito");
-  });
+  }, []);
 
   const generateOrder = async () => {
     try {
@@ -61,6 +75,7 @@ export default function CreateOrderPage() {
       };
       const res = await createOrder(objOrder, user.Token);
       setOrderData(res.data);
+      console.log(res.data)
     } catch (err) {
       if (err.response.status === 401) {
         toast.error(`Acceso denegado, su sesión expiró`);
@@ -93,6 +108,30 @@ export default function CreateOrderPage() {
     else generateOrder();
   };
 
+  const createDetailOrder = () => {
+    try {
+      order.forEach(async (element) => {
+        const data = {
+          id_producto: element.Id_Producto,
+          unidades: element.Unidades,
+          descuento: element.Descuento,
+          size: element.Size,
+          color: element.Color,
+          subtotal:
+            generateNewPrice(element.Precio, element.Descuento) *
+            element.Unidades,
+          id_pedido: orderData.id,
+        };
+        await createDetail(data, user.Token);
+      });
+    } catch (err) {
+      if (err.response.status === 401) {
+        toast.error(`Acceso denegado, su sesión expiró`);
+        invalidToken();
+      } else setError(true);
+    }
+  };
+
   return (
     <section className="flex flex-col  h-screen">
       <MenuUser />
@@ -108,8 +147,8 @@ export default function CreateOrderPage() {
           >
             Crear Pedido
           </h2>
-          <article className=" w-3/5 h-60 border-b p-2 overflow-y-auto">
-            {data.map((el, index) => (
+          <article className=" w-3/5 h-60 border-b p-2 overflow-y-auto scrollNew">
+            {order.map((el, index) => (
               <ItemCreateOrder key={index} data={el} />
             ))}
           </article>
@@ -168,14 +207,15 @@ export default function CreateOrderPage() {
                   }}
                   onApprove={(data, actions) => {
                     //console.log(data);
-                    generateDetailOrder(order, orderData.id, user.Token);
+                    /* generateDetailOrder(order, orderData.id, user.Token); */
+                    createDetailOrder();
                     actions.order.capture();
                     toast.success(
                       `!Pago completado! Redireccionando al carrito de compras`
                     );
                     setTimeout(() => {
                       navigate("/carrito");
-                    }, 3000);
+                    }, 5000);
                   }}
                   onCancel={(data) => {
                     console.log(data);

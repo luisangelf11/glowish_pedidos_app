@@ -36,6 +36,7 @@ export default function ListOrdersPage() {
     try {
         const res = await getDetails(id_pedido)
         setDatail(res.data)
+        console.log(res.data)
     } catch {
         setError(true);
     }

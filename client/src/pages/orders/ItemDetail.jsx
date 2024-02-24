@@ -25,8 +25,8 @@ export default function ItemDetail({ data }) {
       </div>
       <div className="text-sm text-gray-600 font-semibold">
         <p>Unidades: {Unidades}</p>
-        <p>Precio Unitario: $RD {parseFloat(product.Precio).toFixed(2)}</p>
-        <p>SubTotal: $RD {parseFloat(SubTotal).toFixed(2)}</p>
+        <p>Precio Unitario: RD$ {parseFloat(product.Precio).toFixed(2)}</p>
+        <p>SubTotal: RD$ {parseFloat(SubTotal).toFixed(2)}</p>
         <p>Color: {Color}</p>
         <p>Size: {Size}</p>
         <p>Descuento: {Descuento}%</p>
