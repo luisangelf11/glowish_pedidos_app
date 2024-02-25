@@ -31,6 +31,24 @@ export const getCarrito = async (req, res) => {
     }
 }
 
+//Get data mini-dashboard
+export const getDataMiniDashboard = async (req, res) => {
+    try {
+        const { id_usuario } = req.query;
+        if (id_usuario) {
+            const [result] = await pool.query(`
+            select  SUM(( p.precio - (p.precio * (p.descuento/ 100))) * c.unidades) 
+            as subTotal, COUNT(*) as seleccionados
+            from carrito as c join productos as p on c.id_producto = p.id 
+            where id_usuario = ? AND seleccionado = 1 AND p.unidades > 0;
+            `, [id_usuario]);
+            res.json(result[0]);
+        } else return res.status(404).json({ "message": `The query params is not exists` });
+    } catch (error) {
+        res.status(500).json({ "message": error.message })
+    }
+}
+
 //Create a new shopping cart
 export const createCarrito = async (req, res) => {
     try {

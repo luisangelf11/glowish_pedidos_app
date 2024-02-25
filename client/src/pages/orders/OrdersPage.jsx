@@ -15,7 +15,7 @@ export default function OrdersPage() {
 
   const getData = async () => {
     try {
-      const res = await getOrders(100, 0);
+      const res = await getOrders(10, 0);
       setData(res.data);
     } catch (err) {
       toast.success(err.response.data.message);

@@ -5,7 +5,7 @@ import { updateCart } from "../../api/cart";
 import { useAuthContext } from "../../context/authContext";
 import { useToken } from "../../hooks/useToken";
 
-export default function ItemOrder({ data, alertShow, openAlert, userOut }) {
+export default function ItemOrder({ data, alertShow, openAlert, userOut, dash }) {
   const { Id, Id_Producto, Unidades, Size, Color, Seleccionado } = data;
   const initialValue = {
     id: Id,
@@ -61,11 +61,12 @@ export default function ItemOrder({ data, alertShow, openAlert, userOut }) {
   const changeSelect = async () => {
     try {
       const newSelect = {
-        seleccionado: Seleccionado === 0 ? 1 : 0,
+        seleccionado: select === 0 ? 1 : 0,
       };
       await updateCart(Id, newSelect, user.Token);
-      if(select === 0)setSelect(1);
-      else setSelect(0)
+      if (select === 0) setSelect(1);
+      else setSelect(0);
+      dash();
     } catch (error) {
       if (error.response.status === 401) {
         userOut();
@@ -141,9 +142,7 @@ export default function ItemOrder({ data, alertShow, openAlert, userOut }) {
             className={`${
               select === 0 ? "bg-yellow-600" : "bg-green-600"
             } p-2 w-10 rounded-md text-sm text-white transition-all ${
-              select === 0
-                ? "hover:bg-yellow-500"
-                : "hover:bg-green-500"
+              select === 0 ? "hover:bg-yellow-500" : "hover:bg-green-500"
             } `}
           >
             {select === 0 ? (

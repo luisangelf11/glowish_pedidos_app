@@ -6,6 +6,9 @@ export const getCarts = async(id_usuario, token)=>
 export const getCart = async(id, token)=>
     await axios.get(`http://localhost:3000/api/v1/carrito/${id}?accessToken=${token}`); 
 
+export const getDashCart = async(id_usuario)=>
+    await axios.get(`http://localhost:3000/api/v1/carrito-dash?id_usuario=${id_usuario}`);    
+
 export const getCartSelected =async(id_usuario, token)=>
     await axios.get(`http://localhost:3000/api/v1/carrito-seleccionado?id_usuario=${id_usuario}&accessToken=${token}`);    
     

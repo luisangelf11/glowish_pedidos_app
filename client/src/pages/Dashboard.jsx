@@ -13,7 +13,7 @@ import { toast, Toaster } from "react-hot-toast";
 import { orderStatus, productColumn, topFiveDays, topUsers } from "../api/dashboard";
 import CardUser from "../components/CardUser";
 import '../assets/css/animation.css'
-
+import '../assets/css/scrollStyle.css'
 export default function Dashboard() {
   const [orders, setOrders] = useState({});
   const [data, setData] = useState([]);
@@ -102,7 +102,7 @@ export default function Dashboard() {
               <Bar dataKey="total_pedidos" fill="#F87171" />
             </BarChart>
           </div>
-          <div className="bg-white shadow-2xl rounded-md flex flex-col items-center p-4">
+          <div className="bg-white shadow-2xl rounded-md flex flex-col items-left p-4 overflow-y-auto scrollNew">
           <h3 className="text-md uppercase text-gray-600 font-semibold">Usuarios Destacados</h3>
           {users.map((el,index)=> <CardUser key={index} data={el} />)}
           </div>

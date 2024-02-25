@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createCarrito, deleteCarrito, getCarrito, getCarritos, getCarritosSeleccionado, updateCarrito } from '../controllers/carrito.controllers.js';
+import { createCarrito, deleteCarrito, getCarrito, getCarritos, getCarritosSeleccionado, getDataMiniDashboard, updateCarrito } from '../controllers/carrito.controllers.js';
 import { validateToken } from '../auth/authentication.js'
 
 //Initializations
@@ -10,6 +10,9 @@ router.get('/api/v1/carrito', validateToken, getCarritos);
 
 //Endpoint for get all shopping cart selected
 router.get('/api/v1/carrito-seleccionado', validateToken, getCarritosSeleccionado)
+
+//Endpoint for get mini-dashbaord
+router.get('/api/v1/carrito-dash', getDataMiniDashboard);
 
 //Endpoint for get a shopping cart
 router.get(`/api/v1/carrito/:id`, validateToken, getCarrito);

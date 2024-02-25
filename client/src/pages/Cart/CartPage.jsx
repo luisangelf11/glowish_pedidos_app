@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MenuUser from "../../components/MenuUser";
 import ItemOrder from "./ItemOrder";
-import { deleteCart, getCarts } from "../../api/cart";
+import { deleteCart, getCarts, getDashCart } from "../../api/cart";
 import { useAuthContext } from "../../context/authContext";
 import { toast, Toaster } from "react-hot-toast";
 import ErrorData from "../../components/ErrorData";
@@ -17,6 +17,7 @@ export default function CartPage() {
   const [empty, setEmpty] = useState(false);
   const [loading, setLoading] = useState(false);
   const [myAlert, setMyAlert] = useState(false);
+  const [dash, setDash] = useState({});
   const [idToDelete, setIdToDelete] = useState(null);
 
   const { user } = useAuthContext();
@@ -41,8 +42,19 @@ export default function CartPage() {
     }
   };
 
+  const getDash = async()=>{
+    try {
+      const res = await getDashCart(user.Id);
+      setDash(res.data);
+      console.log(res.data)
+    } catch  {
+      setError(true);
+    }
+  }
+
   useEffect(() => {
     getData();
+    getDash();
   }, []);
 
   const goToOrder = () => {
@@ -93,13 +105,13 @@ export default function CartPage() {
       ) : (
         <section className="w-full flex flex-col items-center mt-14">
           <div
-            className="fixed flex flex-col h-36 items-center bg-white w-full"
+            className="fixed flex flex-col h-auto items-center bg-white w-full"
             style={{
               zIndex: 900,
             }}
           >
             <h2
-              className="p-6 uppercase text-red-400 text-xl font-bold scale-up-center"
+              className="p-2 uppercase text-red-400 text-xl font-bold scale-up-center"
               style={{
                 letterSpacing: "10px",
               }}
@@ -107,13 +119,17 @@ export default function CartPage() {
               Carrito de compras
             </h2>
             {empty === false ? (
-              <button
+             <div className="p-2 border-b-2 flex-col flex items-center">
+               <button
                 onClick={goToOrder}
-                className="bg-blue-600 hover:bg-blue-500 text-white uppercase rounded-md p-2 font-semibold scale-up-center"
+                className="bg-blue-600 hover:bg-blue-500 text-white rounded-md p-2 font-semibold scale-up-center text-sm"
               >
                 <i className="fas fa-boxes p-1"></i>
                 Hacer Pedido
               </button>
+              <p className="text-gray-700 text-sm font-semibold p-1">Total a pagar: RD$ 
+              <span>{dash.subTotal === null ? '0': parseFloat(dash.subTotal).toFixed(2)}</span> | Seleccionados: <span>{dash.seleccionados}/{data.length}</span></p>
+             </div>
             ) : (
               ""
             )}
@@ -127,6 +143,7 @@ export default function CartPage() {
                 alertShow={alertShow}
                 openAlert={openAlert}
                 userOut={userOut}
+                dash={getDash}
               />
             ))}
             {empty && <NoneData />}
@@ -137,7 +154,7 @@ export default function CartPage() {
                 title={"Eliminar del carrito"}
                 text={"¿Estás seguro de que deseas eliminar este producto?"}
                 onClose={closeAlert}
-                onAction={deleteProductCart}
+                onAction={deleteProductCart} 
               />
             )}
           </article>
