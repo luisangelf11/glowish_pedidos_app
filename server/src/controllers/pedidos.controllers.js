@@ -24,6 +24,23 @@ export const getPedidos = async(req, res)=>{
     }
 }
 
+//Get orders with date
+export const getPedidoFecha = async(req, res)=>{
+    try {
+        const {from, to} = req.query;
+        if(from && to){
+            const [result] = await pool.query(`SELECT *
+            FROM pedidos
+            WHERE fecha BETWEEN ? AND ?;
+            `, [from, to]);
+            res.json(result);
+        }
+        else return res.status(404).json({"message": `The query params is not exist`});
+    } catch (error) {
+        res.status(500).json({"message": error.message});
+    }
+}
+
 //Get an order
 export const getPedido = async(req, res)=>{
     try{

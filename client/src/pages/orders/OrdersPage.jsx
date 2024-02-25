@@ -5,10 +5,14 @@ import TableContent from "./TableContent";
 import { getFilterOrders, getOrders, updateOrder } from "../../api/orders";
 import { useAuthContext } from "../../context/authContext";
 import { useToken } from "../../hooks/useToken";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import ReportOrders from "../../reports/ReportOrders";
 
 export default function OrdersPage() {
   const [form, setForm] = useState({ filter: "" });
+  const [formReport, setFormReport] = useState({ from: "", to: "" });
   const [data, setData] = useState([]);
+  const [createReport, setCreateReport] = useState(false);
 
   const { user } = useAuthContext();
   const { invalidToken } = useToken();
@@ -38,6 +42,13 @@ export default function OrdersPage() {
     });
   };
 
+  const handleChangeReport = (e) => {
+    setFormReport({
+      ...formReport,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   useEffect(() => {
     if (form.filter === "") getData();
     else getFilter(form.filter);
@@ -63,6 +74,8 @@ export default function OrdersPage() {
       } else toast.success(err.response.data.message);
     }
   };
+
+  const report =()=> setCreateReport(true);
 
   return (
     <section className="flex h-screen">
@@ -110,6 +123,55 @@ export default function OrdersPage() {
           data={data}
           editOrder={editOrder}
         />
+        <article className="flex justify-center gap-4 w-auto mt-4">
+          <div className="flex gap-2">
+            <label htmlFor="from" className="font-semibold text-gray-700 p-1">
+              Desde:
+            </label>
+            <input
+              type="date"
+              name="from"
+              className="border rounded-sm text-sm p-1 outline-none border-gray-400 w-56 focus:border-blue-500 focus:border-2 h-8"
+              value={formReport.from}
+              onChange={handleChangeReport}
+            />
+          </div>
+          <div className="flex gap-2">
+            <label htmlFor="to" className="font-semibold text-gray-700 p-1">
+              Hasta:
+            </label>
+            <input
+              type="date"
+              name="to"
+              className="border rounded-sm text-sm p-1 outline-none border-gray-400 w-56 focus:border-blue-500 focus:border-2 h-8"
+              value={formReport.to}
+              onChange={handleChangeReport}
+            />
+          </div>
+          <button className="bg-blue-700 flex justify-center items-center p-1 h-auto rounded-sm text-white font-semibold transition-all hover:bg-blue-600 text-sm" onClick={report}>
+            Crear reporte
+          </button>
+          {createReport && <PDFDownloadLink
+            document={
+              <ReportOrders from={formReport.from} to={formReport.to} />
+            }
+            fileName="Reporte_Pedidos.pdf"
+          >
+            {({ loading, url, error, blob }) =>
+              loading ? (
+                <button className="bg-blue-700 flex justify-center items-center p-1 h-10 rounded-sm text-white font-semibold transition-all hover:bg-blue-600">
+                  <i className="fas fa-spinner p-2"></i>
+                </button>
+              ) : (
+                <button className="bg-blue-700 flex justify-center items-center p-1 h-10  rounded-sm text-white font-semibold transition-all hover:bg-blue-600" onClick={()=> setTimeout(()=>{
+                  setCreateReport(false);
+                }, 3000)}>
+                  <i className="fas fa-file p-2"></i>
+                </button>
+              )
+            }
+          </PDFDownloadLink>}
+        </article>
       </section>
       <Toaster position="top-center" />
     </section>
