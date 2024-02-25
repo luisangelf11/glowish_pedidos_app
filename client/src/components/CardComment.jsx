@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getUser } from "../api/user";
 import userIcon from "../assets/userIcon.jpg";
 import { useAuthContext } from "../context/authContext";
+import { formatDistanceToNow } from 'date-fns';
 
 export default function CardComment({ data, deleteC }) {
   const { Fecha, Id_Usuario, Comentario, Id } = data;
@@ -62,7 +63,7 @@ export default function CardComment({ data, deleteC }) {
             ""
           )}
         </div>
-        <span className="text-sm text-gray-500"> {convertDateNowSQL(Fecha)}</span>
+        <span className="text-sm text-gray-500"> {formatDistanceToNow(new Date(Fecha), { addSuffix: true })}</span>
       </div>
     </div>
   );
