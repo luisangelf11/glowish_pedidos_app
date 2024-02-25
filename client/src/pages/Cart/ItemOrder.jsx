@@ -49,8 +49,15 @@ export default function ItemOrder({ data, alertShow, openAlert, userOut, dash })
     }
   };
 
+  const unSelectStatusQuantity =async()=>{
+    if(validateStatusQuantityProduct()) {
+      await updateCart(Id, {seleccionado: 0}, user.Token);
+    }
+  }
+
   useEffect(() => {
     getData();
+    unSelectStatusQuantity();
   }, []);
 
   const validateStatusQuantityProduct = () => {

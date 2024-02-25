@@ -122,13 +122,13 @@ export default function CartPage() {
              <div className="p-2 border-b-2 flex-col flex items-center">
                <button
                 onClick={goToOrder}
-                className="bg-blue-600 hover:bg-blue-500 text-white rounded-md p-2 font-semibold scale-up-center text-sm"
+                className="bg-blue-600 hover:bg-blue-500 text-white rounded-md p-2 scale-up-center text-sm"
               >
                 <i className="fas fa-boxes p-1"></i>
                 Hacer Pedido
               </button>
-              <p className="text-gray-700 text-sm font-semibold p-1">Total a pagar: RD$ 
-              <span>{dash.subTotal === null ? '0': parseFloat(dash.subTotal).toFixed(2)}</span> | Seleccionados: <span>{dash.seleccionados}/{data.length}</span></p>
+              {data.length > 0 ? <p className="text-gray-700 text-sm font-semibold p-1">Total a pagar: RD$ 
+              <span>{dash.subTotal === null ? '0': parseFloat(dash.subTotal).toFixed(2)}</span> | Seleccionados: <span>{dash.seleccionados}/{data.length}</span></p> : ''}
              </div>
             ) : (
               ""

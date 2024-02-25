@@ -23,7 +23,7 @@ export default function RowsOrder({ element, noRow, editOrder }) {
 
     useEffect(()=>{
         getUserOrder();
-    }, []);
+    }, [Id_Usuario]);
 
     return (
         <tr

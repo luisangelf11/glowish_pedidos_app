@@ -16,7 +16,7 @@ export default function DetailsPage() {
     try {
       const res = await getDetails(id);
       let suma = 0;
-      res.data.forEach(el => {
+      res.data.forEach((el) => {
         suma += el.SubTotal;
       });
       setTotal(suma);
@@ -51,22 +51,25 @@ export default function DetailsPage() {
           ]}
           data={data}
         />
-        <div className="flex justify-start gap-8 " style={{ width: "90%" }}>
-          <div className="bg-white rounded-md p-2 shadow-md flex gap-2">
-            <i className="fas fa-cash-register text-red-400 text-5xl p-1"></i>
+        <div className="flex justify-start gap-4 " style={{ width: "90%" }}>
+          <div className="bg-white rounded-md p-2 h-16 shadow-md flex gap-2">
+            <i className="fas fa-cash-register text-red-400 text-4xl p-1"></i>
             <div>
               <h3 className="text-red-400 uppercase font-bold">
                 Total del pedido:
               </h3>
-              <span className="font-semibold text-gray-600">{parseFloat(total + 300).toFixed(2)}</span>
+              <span className="font-semibold text-gray-600">
+                {parseFloat(total).toFixed(2)}
+              </span>
             </div>
           </div>
-          <div className="bg-white rounded-md p-2 shadow-md flex gap-2">
+          <div className="bg-white w-60 rounded-md p-2 shadow-md flex gap-2">
             <div>
-              <h3 className="text-red-400 uppercase font-bold">
-                Nota:
-              </h3>
-              <span className="font-semibold text-gray-600 text-sm">Recuerde que el pago por envío es de $RD 300.00</span>
+              <h3 className="text-red-400 uppercase font-bold">Nota:</h3>
+              <span className="font-semibold text-gray-600 text-sm">
+                Recuerde sumar el pago por envío que es de $RD 300.00 y si el
+                cliente es de La Vega es de RD$ 100.00
+              </span>
             </div>
           </div>
           <div className="flex gap-2">
@@ -76,8 +79,10 @@ export default function DetailsPage() {
             >
               <i className="fas fa-hand-point-left p-1"></i>Regresar
             </Link>
-            <PDFDownloadLink document={<ReportDetail id={id} />}
-              fileName="ReporteDetalle.pdf">
+            <PDFDownloadLink
+              document={<ReportDetail id={id} />}
+              fileName="ReporteDetalle.pdf"
+            >
               {({ loading, url, error, blob }) =>
                 loading ? (
                   <button className="bg-blue-700 flex justify-center items-center p-1 h-10 mt-4 rounded-sm text-white font-semibold transition-all hover:bg-blue-600">

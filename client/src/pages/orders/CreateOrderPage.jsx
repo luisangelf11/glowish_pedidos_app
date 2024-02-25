@@ -15,6 +15,7 @@ import { useToken } from "../../hooks/useToken.js";
 import { getCartSelected } from "../../api/cart.js";
 import "../../assets/css/scrollStyle.css";
 import { createDetail } from "../../api/details.js";
+import { useAddressMoney } from "../../hooks/useAddressMoney.js";
 
 export default function CreateOrderPage() {
   const [error, setError] = useState(false);
@@ -26,6 +27,7 @@ export default function CreateOrderPage() {
 
   const { user } = useAuthContext();
   const { dateNowSQL } = useTimeNowSQL();
+  const {getMoney} = useAddressMoney();
   const { invalidToken } = useToken();
 
   const navigate = useNavigate();
@@ -45,7 +47,7 @@ export default function CreateOrderPage() {
         let total = generateNewPrice(el.Precio, el.Descuento) * el.Unidades;
         suma += total;
       });
-      let usd = Math.round(parseFloat(suma + 300) * 0.017);
+      let usd = Math.round(parseFloat(suma + getMoney(user.Direccion)) * 0.017);
       setSubTotal(suma);
       setTotalUSD(usd);
       if (res.data.length === 0) navigate("/carrito");
@@ -70,12 +72,11 @@ export default function CreateOrderPage() {
       const objOrder = {
         estado: "Solicitado",
         fecha: dateNowSQL(),
-        monto: parseFloat(subtotal + 300),
+        monto: parseFloat(subtotal + getMoney(user.Direccion)),
         id_usuario: user.Id,
       };
       const res = await createOrder(objOrder, user.Token);
       setOrderData(res.data);
-      console.log(res.data)
     } catch (err) {
       if (err.response.status === 401) {
         toast.error(`Acceso denegado, su sesión expiró`);
@@ -155,13 +156,13 @@ export default function CreateOrderPage() {
           <article className="mt-4 p-2 border-b w-3/5 text-sm flex justify-around">
             <div>
               <p className="text-gray-600 font-semibold">
-                Costo de envío: $RD 300.00
+                Costo de envío: $RD {parseFloat(getMoney(user.Direccion)).toFixed(2)}
               </p>
               <p className="text-gray-600 font-semibold">
                 SubTotal de compra: $RD {parseFloat(subtotal).toFixed(2)}
               </p>
               <p className="text-gray-600 font-semibold">
-                Total neto: $RD {parseFloat(subtotal + 300).toFixed(2)}= $USD{" "}
+                Total neto: $RD {parseFloat(subtotal + getMoney(user.Direccion)).toFixed(2)}= $USD{" "}
                 {totalUSD.toFixed(2)}
               </p>
             </div>
