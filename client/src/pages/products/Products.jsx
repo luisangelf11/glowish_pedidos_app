@@ -156,8 +156,8 @@ export default function Products() {
       <Toaster position="top-center" />
       {myAlert && (
         <MyAlert
-          title={"Eliminar Comentario"}
-          text={"Estás apunto de eliminar este comentario. ¿Deseas continuar?"}
+          title={"Eliminar Producto"}
+          text={"Estás apunto de eliminar este producto. ¿Deseas continuar?"}
           onClose={closeAlert}
           onAction={deleteData}
         />

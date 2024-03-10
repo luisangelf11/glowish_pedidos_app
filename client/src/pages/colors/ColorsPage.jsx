@@ -131,8 +131,8 @@ export default function ColorsPage() {
       <Toaster position="top-center" />
       {myAlert && (
         <MyAlert
-          title={"Eliminar Comentario"}
-          text={"Estás apunto de eliminar este comentario. ¿Deseas continuar?"}
+          title={"Eliminar Color"}
+          text={"Estás apunto de eliminar este color. ¿Deseas continuar?"}
           onClose={closeAlert}
           onAction={deleteData}
         />

@@ -120,8 +120,8 @@ export default function SizesPage() {
       <Toaster position="top-center" />
       {myAlert && (
         <MyAlert
-          title={"Eliminar Comentario"}
-          text={"Estás apunto de eliminar este comentario. ¿Deseas continuar?"}
+          title={"Eliminar Size"}
+          text={"Estás apunto de eliminar este size. ¿Deseas continuar?"}
           onClose={closeAlert}
           onAction={deleteData}
         />

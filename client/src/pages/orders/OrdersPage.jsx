@@ -123,7 +123,7 @@ export default function OrdersPage() {
           data={data}
           editOrder={editOrder}
         />
-        <article className="flex justify-center gap-4 w-auto mt-4">
+        <article className="flex justify-center gap-4 w-auto mt-4 p-4">
           <div className="flex gap-2">
             <label htmlFor="from" className="font-semibold text-gray-700 p-1">
               Desde:

@@ -128,9 +128,9 @@ export default function CategorysPage() {
         <Toaster position="top-center" />
         {myAlert && (
           <MyAlert
-            title={"Eliminar Comentario"}
+            title={"Eliminar Categoría"}
             text={
-              "Estás apunto de eliminar este comentario. ¿Deseas continuar?"
+              "Estás apunto de eliminar esta categoría. ¿Deseas continuar?"
             }
             onClose={closeAlert}
             onAction={deleteData}

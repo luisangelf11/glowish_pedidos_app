@@ -179,7 +179,7 @@ export default function Profile() {
               Datos del usuario
             </h3>
             <img
-              src={user.Avatar}
+              src={user.Avatar || iconUser}
               alt="profile"
               className=" w-36 h-36 rounded-full object-cover"
             />
