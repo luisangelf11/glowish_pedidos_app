@@ -148,4 +148,4 @@ ALTER TABLE Valoraciones
 MODIFY COLUMN Puntos FLOAT;
 
 ALTER TABLE Carrito
-ADD COLUMN Seleccionado BOOL;
+MODIFY COLUMN Seleccionado BOOLEAN;

@@ -90,7 +90,8 @@ export default function CreateOrderPage() {
       const objOrder = {
         estado: "Cancelado",
       };
-      await updateOrder(orderData.id, objOrder, user.Token);
+      console.log(orderData)
+    /*   await updateOrder(orderData.id, objOrder, user.Token); */
       toast.success(`¡Su pedido fue cancelado!`);
       setPaypal(false);
       setTimeout(() => {
@@ -184,7 +185,7 @@ export default function CreateOrderPage() {
               <PayPalScriptProvider
                 options={{
                   clientId:
-                    "AZSnKN2nHdzqnu3nRXf1viTZQt7l8uALsSO1_B1WhvJIMEGjPoiWZdp2LThNf92oPgREKJFX41eM8zXi",
+                  import.meta.env.VITE_CLIENT_ID,
                 }}
               >
                 <PayPalButtons

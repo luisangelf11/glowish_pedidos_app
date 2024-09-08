@@ -1,7 +1,5 @@
 import paypal from '@paypal/checkout-server-sdk'
-
-const clientId = 'AZSnKN2nHdzqnu3nRXf1viTZQt7l8uALsSO1_B1WhvJIMEGjPoiWZdp2LThNf92oPgREKJFX41eM8zXi'
-const clientSecret = 'ENU7WghMz7e4JaEL7CQihqbAaaC_zb-Gk_8uA116Ov0xI-zzvR6SbrrPJiqm2s-dXn1lOiq6ACqieR4K'
+import {clientId, clientSecret} from '../config/config.js'
 
 const enviroment = new paypal.core.SandboxEnvironment(clientId, clientSecret);
 const client = new paypal.core.PayPalHttpClient(enviroment);
